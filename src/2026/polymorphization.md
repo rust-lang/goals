@@ -17,6 +17,8 @@ Implement experimental support in the Rust compiler for polymorphic code generat
 
 One of the major issues facing Rust users is slow build times, especially during the development cycle. Check builds, which skip codegen, allow users to iterate faster to fix compile errors, but a full build is still needed to run tests or manually try out a change. In full builds, monomorphization is a significant contributor to slow compilation times. Each instance of a generic function must have trait solving and const evaluation performed on its monomorphized body and, more importantly, go through LLVM's entire codegen pipeline. As the performance of Rust's frontend improves through parallel-rustc and other initiatives, monomorphization and codegen will become an even bigger bottleneck since they are already heavily parallelized.
 
+Another pain point is large binary sizes, not just in final release-mode binaries but also in (debug) artifact directories. The build directory for rust-lang/rust can easily surpass 100 GB, and I have seen extreme real-world cases of build directories containing up to 1 TB of data (often due to multiple configurations or rebuilds). Monomorphization is a significant contributor to these large binaries and build directories because it generates many instances per generic functions. It is possible to make use of link-time tools to eliminate instances that end up with identical code, but this requires extra analysis (further contributing to slow compile time) and only makes sense when generating final binaries for release.
+
 In the past, there was another project, also called "polymorphization", led by @davidtwco that attempted to make progress on this issue. However, it was restricted to eliminating only "unused" parameters that didn't participate in codegen. Moreover, the project faced roadblocks to success relating to the detection of which parameters are actually unused. [`TypeId` and its breaking of parametricity][typeid-poly] was a contributing factor, and [closures added complications][closures-poly-orig] as well.
 
 [typeid-poly-orig]: https://github.com/rust-lang/rust/issues/75325
@@ -25,8 +27,6 @@ In the past, there was another project, also called "polymorphization", led by @
 ### What we propose to do about it
 
 I plan to implement support for truly polymorphic code generation in Rustc. Unlike the previous polymorphization project, my design works for unused and used generic parameters alike, significantly expanding its potential benefits and sidestepping issues with determining whether parameters are relevant to codegen. The axiom is "monomorphic data, polymorphic code". In other words, unlike languages like Haskell and OCaml that generally rely on uniform representations (boxing) to enable polymorphic code generation, data layouts will stay the same under polymorphization, and only function ABIs will change. Polymorphized instances can coexist with monomorphized instances, enabling incremental improvements to the kinds of functions supported by polymorphization. In fact, polymorphization operates at the (type) parameter level, so some parameters can be polymorphized (becoming "erased types"), while others remain monomorphized, within a single function.
-
-I estimate that the full version of polymorphization could speed up codegen and linking by between 30% and 2x, by eliminating up to half of generated instances in many cases. Binary sizes should also be reduced as a result, without requiring link-time optimization, helping shrink the size of artifact directories containing debug builds. As mentioned, incremental progress can be made toward this full vision, providing checkpoints with smaller but noticeable speedups and binary size reductions.
 
 To avoid runtime layout computations, Rustc will still monomorphize parameters based on their data layout. Thus, for example, if we have `fn foo<T>(...)`, then `foo::<&u32>` and `foo::<&String>` become the same instance since in both cases their parameter is just a pointer, with a niche at zero. However, `foo::<usize>` is a separate instance because it lacks a niche. This matters because `foo`'s signature, body, or callees may construct types like `Option<T>` that attempt to make use of the niche. We may also consider disabling the niche optimization when polymorphization is enabled to make more instances shareable.
 
@@ -44,6 +44,10 @@ Recently, Swift has been walking back their embrace of full dynamism through the
 
 Finally, there is currently an accepted Rust Project Goal for a [Dictionary Passing Style Experiment](https://rust-lang.github.io/rust-project-goals/2026/dictionary-passing-style-experiment.html) in rustc, which is loosely related to this work. Currently, rustc recomputes the concrete impls to use at trait call sites in codegen. This project goal instead plans to compute this information ahead of time during type-checking and simply reuse it later during codegen. My work aims to eventually delay the _use_ of this information even further, to runtime, at least in debug builds.
 
+### Expected outcomes
+
+I estimate that the full version of polymorphization that I am working toward could speed up post-mono trait solving, codegen, and linking by between 30% and 2x, by eliminating up to half of generated instances in many cases. Binary sizes should also be reduced by a similar degree as a result, without requiring link-time optimization, helping shrink the size of artifact directories containing debug builds. As mentioned above, incremental progress can be made toward this full vision, providing checkpoints with smaller but noticeable speedups and binary size reductions.
+
 ### Work items over the next year
 
 | Task        | Owner(s) | Notes |
@@ -53,13 +57,36 @@ Finally, there is currently an accepted Rust Project Goal for a [Dictionary Pass
 | Support simple dyn-compatible traits | @camelid | |
 | Support some non-dyn-compatible traits | @camelid | |
 
+### Target timeline
+
+Assuming full funding starting in Month 1. Timeline is looser without funding.
+
+* Month 1-3:
+  * Split out and land PRs from the current draft to lay groundwark
+  * Rewrite MIR calls during polymorphization so that "sidecars" (kinda like supercharged vtables) can be added to function calls
+  * Start passing vtables/sidecars for drop glue, `TypeId`, and anything else observable on stable Rust that breaks parametricity (i.e. is related to the underlying type but doesn't appear as a bound)
+  * Figure out exclusion rules to avoid polymorphizing generic functions with non-Rust ABI
+  * Land working but highly-experimental `-Zpolymorphization` flag (may cause unsoundness and should be used with caution like any incomplete feature)
+* Month 4-6
+  * Determine minimal subset of trait bounds or other bounds that can be supported in sidecars
+  * Implement support for those trait bounds
+  * Determine how to correctly deal with specialization that affects stable code (e.g. originating in `std`)
+  * Investigate polymorphizing const parameters
+* Month 7-9
+  * Extend to more traits and bounds
+  * Evaluate compatibility with other unstable features
+  * Address design or implementation issues that arose
+* Month 10-12
+  * Continue to polish and move toward stabilization
+
 
 ## Team asks
 
 
 | Team       | Support level | Notes                                   |
 | ---------- | ------------- | --------------------------------------- |
-| [compiler] | medium        | reviewers who have expressed interest in helping: @davidtwco, @bjorn3, @oli-obk |
+| [compiler] | medium        | reviewers: @davidtwco, @bjorn3, @oli-obk, @workingjubilee, @cjgillot |
+| [types]    | small         | vibe check for erased types and which trait bounds to support |
 
 
 ## Funding
