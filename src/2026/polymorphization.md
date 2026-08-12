@@ -1,11 +1,12 @@
 # Polymorphic code generation experiment
 
 
-| Metadata         |                                                                                  |
-| :--------------- | -------------------------------------------------------------------------------- |
-| Point of contact | @camelid                                                                         |
-| Status           | Proposed                                                                         |
-| Tracking issue   |                                                                                  |
+| Metadata            |                                                                    |
+| :-----------------  | ------------------------------------------------------------------ |
+| Point of contact    | @camelid                                                           |
+| Status              | Proposed                                                           |
+| [compiler] champion | @camelid                                                           |
+| Tracking issue      |                                                                    |
 
 ## Summary
 
