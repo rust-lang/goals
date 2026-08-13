@@ -60,14 +60,15 @@ I estimate that the full version of polymorphization that I am working toward co
 
 ### Target timeline
 
-Assuming full funding starting in Month 1. Timeline is looser without funding.
+Assuming full funding starting in Month 1. Timeline is looser without funding, and either way may be affected by external factors like team availability.
 
 * Month 1-3:
-  * Split out and land PRs from the current draft to lay groundwark
-  * Rewrite MIR calls during polymorphization so that "sidecars" (kinda like supercharged vtables) can be added to function calls
-  * Start passing vtables/sidecars for drop glue, `TypeId`, and anything else observable on stable Rust that breaks parametricity (i.e. is related to the underlying type but doesn't appear as a bound)
+  * Split out and land PRs from the current draft to lay groundwork
+  * Rewrite MIR calls during polymorphization so that "sidecars" (like supercharged vtables) can be added to function calls
+  * Start passing sidecars for drop glue, `TypeId`, and anything else observable on stable Rust that breaks parametricity (i.e. is related to the underlying type but doesn't appear as a bound)
   * Figure out exclusion rules to avoid polymorphizing generic functions with non-Rust ABI
-  * Land working but highly-experimental `-Zpolymorphization` flag (may cause unsoundness and should be used with caution like any incomplete feature)
+  * Open compiler MCP for adding `-Zpolymorphize`
+  * Land working but highly-experimental `-Zpolymorphize` flag (may cause unsoundness and should be used with caution like any incomplete feature)
 * Month 4-6
   * Determine minimal subset of trait bounds or other bounds that can be supported in sidecars
   * Implement support for those trait bounds
@@ -78,7 +79,8 @@ Assuming full funding starting in Month 1. Timeline is looser without funding.
   * Evaluate compatibility with other unstable features
   * Address design or implementation issues that arose
 * Month 10-12
-  * Continue to polish and move toward stabilization
+  * Continue to polish
+  * Move toward stabilization
 
 
 ## Team asks
