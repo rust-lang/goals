@@ -8,6 +8,7 @@
 | Timespan | 2026-2027 |
 | Zulip channel | [#t-libs/wg-allocators][channel] |
 | [libs] champion | @nia-e | 
+| [lang] champion | @joshtriplett |
 | Funding contact | [Hexcat](https://hexcat.nl/) |
 
 [channel]: https://rust-lang.zulipchat.com/#narrow/channel/197181-t-libs.2Fwg-allocators
@@ -40,7 +41,7 @@ Much of this will consist of relatively straightforward implementation and revie
 | Base trait stabilization | @nia-e | |
 | Fallible collections | @nia-e | |
 | Deallocators and other trait extensions | @nia-e | |
-| Deeper language integration | @nia-e | Needs lang champion |
+| Deeper language integration | @nia-e | @nia-e, @joshtriplett |
 
 Following the stabilization of the base `Allocator` trait, most mentioned work can begin happening in parallel. The reconstituted allocator working group will be leading this effort.
 
