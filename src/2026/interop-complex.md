@@ -7,6 +7,7 @@
 | Other tracking issues | N/A                                                   |
 | Zulip channel         | N/A                                                   |
 | Funding contact       | [Trifecta Tech Foundation](https://trifectatech.org/) |
+| [compiler] champion | @folkertdev |
 
 
 ## Summary
