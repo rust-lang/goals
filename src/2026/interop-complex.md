@@ -82,7 +82,7 @@ This project goal focusses on the internal implementation, and leaves most of th
 
 | Purpose | Cost | Funded | Sponsor(s) |
 |---------|------|--------|------------|
-| implementation work | $12,000 | No | |
+| implementation work | $12,000 | Full | Google |
 
 ## Target timeline
 
