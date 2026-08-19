@@ -4,7 +4,6 @@
 | :--                   | :--                                                   |
 | Point of contact      | @folkertdev                                           |
 | Status                | Proposed                                              |
-| Tracking issue        | N/A                                                   |
 | Other tracking issues | N/A                                                   |
 | Zulip channel         | N/A                                                   |
 | Funding contact       | [Trifecta Tech Foundation](https://trifectatech.org/) |
