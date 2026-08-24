@@ -153,8 +153,7 @@ Support `dyn Trait` coercion for user-defined smart pointers.
 |-------------|---------------|----------------------------|
 | [lang]      | Medium        | Reviews, Lang/RfL meetings |
 | [lang-docs] | Medium        | Reviews, Lang/RfL meetings |
-| [libs]      | Small         | Reviews                    |
-| [libs-api]  | Small         | Stabilizations             |
+| [libs]      | Small         | Reviews, Stabilizations    |
 | [types]     | Large         | Review of type-system stabilization/implementation |
 
 ## Frequently asked questions

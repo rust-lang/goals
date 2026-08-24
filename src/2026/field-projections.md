@@ -130,8 +130,7 @@ Field projections is part of a larger idea called *beyond references*. There sho
 | [lang]     | Large         | Aiming for two design meetings; large language feature |
 | [compiler] | Medium        | Reviews of big changes needed; also looking for implementation help |
 | [types]    | Medium        | Collaborating on a-mir-formality on the borrow checker integration; small reviews of RFC and/or compiler PRs |
-| [libs]     | Small         | Small reviews of library PRs (implementing FP for core & std types) |
-| [libs-api] | Small         | Reviews of RFC |
+| [libs]     | Small         | Small reviews of library PRs (implementing FP for core & std types) and RFC |
 | [opsem]    | Small         | Small reviews of RFC and/or compiler PRs |
 
 The lang team support level is Large, since we could end up with an RFC review and decision at the end of the year. If not, then the input from t-lang is much more manageable and more in-line with Medium: the design meetings and the champion suffice as support.

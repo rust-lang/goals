@@ -8,7 +8,7 @@
 | Zulip channel         | [#t-lang/try][channel]             |
 | Highlight             | Try, never, extern types           |
 | [lang] champion       | @tmandry                           |
-| [libs-api] champion   | @Amanieu                           |
+| [libs] champion       | @Amanieu                           |
 | Tracking issue        | [rust-lang/goals#654] |
 
 [channel]: https://rust-lang.zulipchat.com/#narrow/channel/605325-t-lang.2Ftry
@@ -100,7 +100,7 @@ Because there are open design questions that haven't yet been resolved, we shoul
 | Task                                                               | Owner(s) | Notes |
 | ------------------------------------------------------------------ | -------- | ----- |
 | Design and implement answers to the remaining unresolved questions |          |       |
-| Lead design discussion with lang and libs-api teams                |          |       |
+| Lead design discussion with lang and libs teams                    |          |       |
 | Write and shepherd a stabilization report                          |          |       |
 
 ## Team asks
@@ -109,7 +109,7 @@ Because there are open design questions that haven't yet been resolved, we shoul
 | ---------- | ------------- | --------------------------------------- |
 | [compiler] | Small         |                                         |
 | [lang]     | Medium        |                                         |
-| [libs-api] | Medium        |                                         |
+| [libs]     | Medium        |                                         |
 | [types]    | Small         |                                         |
 
 ## Funding

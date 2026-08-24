@@ -83,7 +83,7 @@ We would like to establish a mechanism in the language to automatically derive t
 | [compiler] |               |                                         |
 | [infra]    |               |                                         |
 | [lang]     |  Medium | Team aligned already on the shape of the feature |
-| [libs-api]     |               |                                         |
+| [libs]     |               |                                         |
 | [opsem]    |               |                                         |
 | [types]    | Small | `r? types` when touching the type system. Expect that anything beyond "simple" types changes may be rejected or de-prioritized. [^types-small] |
 

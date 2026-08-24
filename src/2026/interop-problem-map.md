@@ -8,7 +8,7 @@
 | Zulip channel       | [t-lang/interop][channel]          |
 | [compiler] champion | @oli-obk                           |
 | [lang] champion     | @tmandry                           |
-| [libs-api] champion | @dtolnay                           |
+| [libs] champion     | @dtolnay                           |
 
 [channel]: https://rust-lang.zulipchat.com/#narrow/channel/427678-t-lang.2Finterop
 
@@ -85,7 +85,7 @@ Fundamentally, this goal is about organizing knowledge in a useful way. I will b
 |------------|---------------|--------------------------|
 | [compiler] | Small         | Reviews                  |
 | [lang]     | Small         | Reviews                  |
-| [libs-api] | Small         | Reviews                  |
+| [libs]     | Small         | Reviews                  |
 | [opsem]    | Small         | Problem statement review |
 
 

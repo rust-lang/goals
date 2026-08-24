@@ -120,7 +120,7 @@ Precise control over what closures capture and when, eliminating the need for aw
 | [compiler]  | Small         | Reviews |
 | [lang]      | Medium        |         |
 | [lang-docs] | Small         |         |
-| [libs-api]  | Small         | Reviews of RFC and API surface area |
+| [libs]  | Small         | Reviews of RFC and API surface area |
 
 ## Frequently asked questions
 

@@ -8,7 +8,7 @@
 | Highlight           | Try, never, extern types           |
 | [compiler] champion | @davidtwco                         |
 | [lang] champion     | @nikomatsakis                      |
-| [libs-api] champion | @Amanieu                           |
+| [libs] champion     | @Amanieu                           |
 | [types] champion    | @lcnr                              |
 
 ## Summary
@@ -115,7 +115,7 @@ the next logical step, enabling efficient matrix processing in Rust.
 | ---------- | ------------- | ------------------------------------------------------- |
 | [compiler] | Medium         | Standard reviews for stabilization and SVE work         |
 | [lang]     | Medium        | RFC decision for [RFC #3838], stabilization sign-off    |
-| [libs-api] | Medium        | Review RFC; review and approve stdarch SVE APIs         |
+| [libs]     | Medium        | Review RFC; review and approve stdarch SVE APIs         |
 | [types]    | Medium        | Type System implementation and stabilization sign-off   |
 
 ## Frequently asked questions

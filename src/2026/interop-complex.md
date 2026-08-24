@@ -78,7 +78,7 @@ This project goal focusses on the internal implementation, and leaves most of th
 | ---------- | ------------- | --------------------------------------- |
 | [compiler] | Medium        | This feature touches `callconv` code, which requires careful review |
 | [lang]     | Small         | These new types have a new ABI          |
-| [libs-api] | Small         | Just a vibe check on the names and minimal APIs |
+| [libs]     | Small         | Just a vibe check on the names and minimal APIs |
 
 ## Funding
 

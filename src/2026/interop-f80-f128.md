@@ -54,7 +54,7 @@ We will also continue to push `f128` forward, both on the LLVM and rustc side.
 | ---------- | ------------- | --------------------------------------- |
 | [compiler] | Medium        | The changes are not complicated, but touch some core types so this might need some design/refactoring to get right |
 | [lang]     | Small         | These new types have a new ABI          |
-| [libs-api] | Small         | Just a vibe check on the names and minimal APIs |
+| [libs] | Small             | Just a vibe check on the names and minimal APIs |
 
 ## Funding
 

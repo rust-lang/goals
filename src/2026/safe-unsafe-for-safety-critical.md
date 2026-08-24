@@ -45,7 +45,7 @@ Developers writing `unsafe` code can cite authoritative documentation for safety
 | Team        | Support level | Notes                                                                   |
 |-------------|---------------|-------------------------------------------------------------------------|
 | [opsem]     | Large         | Review unsafe patterns, establish safety contracts, guide documentation |
-| [libs-api]  | Small         | PR reviews for core/std public documentation; feedback on approach.     |
+| [libs]      | Small         | PR reviews for core/std public documentation; feedback on approach.     |
 | [lang]      | Small         | Feedback on language semantics questions as needed                      |
 | [lang-docs] | Small         | Standard PR reviews for Rust Reference                                  |
 
@@ -62,8 +62,3 @@ No. Most usages fall into ~20 pattern categories, of which 5-7 need new normativ
 ### How does this differ from cataloging undefined behavior?
 
 We document **safety contracts** (what you must do to be sound), not undefined behavior (what happens when you're unsound). The Rust Reference's UB list is intentionally non-exhaustive; we respect that approach.
-
-[t-opsem]: https://www.rust-lang.org/governance/teams/opsem
-[t-libs-api]: https://www.rust-lang.org/governance/teams/library#team-libs-api
-[t-lang]: https://www.rust-lang.org/governance/teams/lang
-[t-langdocs]: https://www.rust-lang.org/governance/teams/lang#team-lang-docs

@@ -6,7 +6,7 @@
 | Status              | Accepted                           |
 | Tracking issue      | [rust-lang/goals#633] |
 | Zulip channel       | N/A                                |
-| [libs-api] champion | @Amanieu                           |
+| [libs] champion     | @Amanieu                           |
 | [edition] champion  | @ehuss                             |
 | [compiler] champion | @yaahc                             |
 | [rustdoc] champion  | @GuillaumeGomez                    |
@@ -77,7 +77,7 @@ This would allow for major changes in the standard library API while still allow
 | ---------- | ------------- | ---------------------------------------------------------------------------- |
 | [compiler] | Medium        | Design discussions and implementation review.                                |
 | [lang]     | Small         | Review of the feature and lang implications.                                 |
-| [libs-api] | Large         | Determine what API changes should be made across editions.                   |
+| [libs]     | Large         | Determine what API changes should be made across editions.                   |
 | [edition]  | Large         | Review the feasibility of this proposal as well as the specific API changes. |
 | [rustdoc]  | Medium        | Figure out how such API changes should be presented in the API docs.         |
 | [types]    | Small         | Review of any changes to HIR ty lowering or method resolution                |

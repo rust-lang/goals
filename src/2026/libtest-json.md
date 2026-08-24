@@ -56,7 +56,7 @@ Most of that involves shifting responsibilities from the test harness to the tes
 | Team       | Support level | Notes                                   |
 | ---------- | ------------- | --------------------------------------- |
 | [cargo]    | Small         |                                         |
-| [libs-api]      | Small    |                                         |
+| [libs]     | Small    |                                         |
 | [testing-devex] | Small    | Design discussions and review           |
 
 ## Help wanted

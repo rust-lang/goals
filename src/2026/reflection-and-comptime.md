@@ -13,14 +13,14 @@
 | Zulip channel        | N/A                                |
 | [compiler] champion  | @oli-obk                           |
 | [lang] champion      | @scottmcm                          |
-| [libs-api] champion  | @joshtriplett                      |
+| [libs] champion      | @joshtriplett                      |
 
 
 ## Summary
 
 Finish the implemented reflection scheme based on `const fn` that can only be called at compile time.
 Validate it against existing reflection libraries by giving them a nightly feature that obsoletes having derives and makes the derives no-ops.
-Obtain T-lang and T-libs-api buy-in for the scheme and write an RFC.
+Obtain T-lang and T-libs buy-in for the scheme and write an RFC.
 This proposal is solely for producing const eval values, not for putting types back into the type system.
 That will be a follow-up once this proposal has a merged MVP.
 
@@ -101,7 +101,7 @@ Implement and validate `#[compile_time_only]` attribute for `const fn` that enab
 |------------|---------------|--------------------------------------------------------- |
 | [compiler] | Medium        | Standard reviews                                         |
 | [lang]     | Large         | Design meeting, experiment                               |
-| [libs-api] | Medium        | Reviews                                                  |
+| [libs]     | Medium        | Reviews                                                  |
 | [types]    | Small         | General discussion on any additional type-system changes |
 
 
