@@ -65,7 +65,7 @@ Most of that involves shifting responsibilities from the test harness to the tes
 
 | Task                              | Owner(s) or team(s)       | Notes |
 |-----------------------------------|---------------------------|-------|
-| Discussion and moral support      | ![Team][] [testing-devex], [cargo], [libs-api] |       |
+| Discussion and moral support      | ![Team][] [testing-devex], [cargo], [libs]     |       |
 | Prototype harness                 | @epage                    |       |
 | Prototype Cargo reporting support | @epage                    |       |
 | Write stabilization report        | @epage                    |       |

@@ -53,7 +53,7 @@ Based on the above analysis, the Rust org has been focused on driving async/sync
 
 #### The need for an aligned, high judgment group of async experts
 
-Progress on async-related issues within the Rust org has been slowed due to lack of coherence around a vision and clear steps. General purpose teams such as [lang][] and [libs-api][] have a hard time determining how to respond to, e.g., particular async stabilization requests, as they lack a means to judge whether any given decision is really the right step forward. Theoretically, the async working group could play this role, but it has not really been structured with this purpose in mind. For example, the [criteria for membership](https://rust-lang.github.io/wg-async/CHARTER.html#membership-requirements) is loose and the group would benefit from more representation from async ecosystem projects. This is an example of a larger piece of Rust "organizational debt", where the term "working group" has been used for many different purposes over the years.
+Progress on async-related issues within the Rust org has been slowed due to lack of coherence around a vision and clear steps. General purpose teams such as [lang][] and [libs][] have a hard time determining how to respond to, e.g., particular async stabilization requests, as they lack a means to judge whether any given decision is really the right step forward. Theoretically, the async working group could play this role, but it has not really been structured with this purpose in mind. For example, the [criteria for membership](https://rust-lang.github.io/wg-async/CHARTER.html#membership-requirements) is loose and the group would benefit from more representation from async ecosystem projects. This is an example of a larger piece of Rust "organizational debt", where the term "working group" has been used for many different purposes over the years.
 
 ### The next six months
 
@@ -83,7 +83,7 @@ Despite its limitations, the async working group serves several important functi
 
 * It provides a forum for discussion around async-related topics, including the `#async-wg` zulip stream as well as regular sync meetings. These forums don't necessarily get participation by the full set of voices that we would like, however.
 * It owns async-related repositories, such as the sources for the [async Rust book](https://rust-lang.github.io/async-book/) (in dire need of improvement), [arewewebyet](https://www.arewewebyet.org/), and the [futures-rs](https://rust-lang.github.io/futures-rs/) crate. Maintenance of these sites has varied though and often been done by a few individuals acting largely independently.
-* It advises the more general teams (typically [lang][] and [libs-api][]) on async-related matters. The authoring of the (mildly dated) [async vision doc](https://rust-lang.github.io/wg-async/vision/) took place under the auspices of the working group, for example. However, the group lacks decision making power and doesn't have a strong incentive to coalesce behind a shared vision, so it remains more a "set of individual voices" that does not provide the general purpose teams with clear guidance.
+* It advises the more general teams (typically [lang][] and [libs][]) on async-related matters. The authoring of the (mildly dated) [async vision doc](https://rust-lang.github.io/wg-async/vision/) took place under the auspices of the working group, for example. However, the group lacks decision making power and doesn't have a strong incentive to coalesce behind a shared vision, so it remains more a "set of individual voices" that does not provide the general purpose teams with clear guidance.
 
 We plan to propose one or more permanent teams to meet these same set of needs. The expectation is that these will be subteams under the [lang] and [libs] top-level teams.
 
@@ -216,7 +216,7 @@ Here is a detailed list of the work to be done and who is expected to do it. Thi
 | Task           | Owner(s) or team(s)         | Notes               |
 |----------------|-----------------------------|---------------------|
 | Author RFC     |                             |                     |
-| RFC decision   | ![Team][] [libs-api] [lang] |                     |
+| RFC decision   | ![Team][] [libs] [lang]     |                     |
 | Design meeting | ![Team][] [lang]            | 2 meetings expected |
 | Implementation |                             |                     |
 
@@ -245,15 +245,15 @@ Here is a detailed list of the work to be done and who is expected to do it. Thi
 
 ### Support needed from the project
 
-Agreement from [lang][], [libs][] [libs-api][] to prioritize the items marked ![Team][] in the table above.
+Agreement from [lang][] and [libs][] to prioritize the items marked ![Team][] in the table above.
 
 The expectation is that
 
 * async closures will occupy 2 design meetings from lang during H2
-* async iteration will occupy 2 design meetings from lang during H2 and likely 1-2 from libs API
+* async iteration will occupy 2 design meetings from lang during H2 and likely 1-2 from libs
 * misc matters will occupy 1 design meeting from lang during H2
 
-for a total of 4-5 meetings from lang and 1-2 from libs API.
+for a total of 4-5 meetings from lang and 1-2 from libs.
 
 ## Frequently asked questions
 

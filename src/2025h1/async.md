@@ -146,7 +146,7 @@ This section defines the specific work items that are planned and who is expecte
 |--------------------|------------------------------|---------------------|
 | Implementation     | @eholk                       |                     |
 | Author RFC         |                              |                     |
-| RFC decision       | ![Team][] [libs-api], [lang] |                     |
+| RFC decision       | ![Team][] [libs], [lang]     |                     |
 | Design meeting     | ![Team][] [lang]             | 2 meetings expected |
 
 ### Dynosaur 1.0

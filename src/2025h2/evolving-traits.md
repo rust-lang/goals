@@ -242,7 +242,7 @@ implementations.
 | Discussion and moral support | ![Team][] [types]    |                                                                      |
 | Author RFC                   | @cramertj            |                                                                      |
 | Implementation               | @cramertj & others   |                                                                      |
-| Stabilization decision       | ![Team][] [libs-api] | Stabilizing `Receiver`. Unblocked by implementation.                 |
+| Stabilization decision       | ![Team][] [libs]     | Stabilizing `Receiver`. Unblocked by implementation.                 |
 | Stabilization decision       | ![Team][] [lang]     | Stabilizing `arbitrary_self_types`. Unblocked by new `Receiver` API. |
 
 ### Definitions

@@ -79,12 +79,12 @@ These mismatches point to the limitations of such approaches. If we attempt to s
 
 ### The next 6 months
 
-We do not propose any specific deliverables over the next six months. We only propose a discussion with the Language, Compiler, and Libs-API teams that takes a serious look at the problem space and what it would take to solve it. This discussion should incorporate lessons from existing projects and lay the foundation for future explorations and engagements.
+We do not propose any specific deliverables over the next six months. We only propose a discussion with the Language, Compiler, and Libs teams that takes a serious look at the problem space and what it would take to solve it. This discussion should incorporate lessons from existing projects and lay the foundation for future explorations and engagements.
 
 Possible discussion topics include:
 
 * Coverage of rich C++ APIs, including those that make use of language features like templates, (partial) specialization, and argument-dependent lookup. (Lang + Compiler)
-* Seamless use of "vocabulary types" like strings, vectors, and hashmaps, including the various kinds of conversions in source and at the ABI level. (Lang + Libs-API)
+* Seamless use of "vocabulary types" like strings, vectors, and hashmaps, including the various kinds of conversions in source and at the ABI level. (Lang + Libs)
 * A standard IDL for describing a Rust API/ABI that can be produced by the Rust compiler. (Lang + Compiler)
 
 ### The "shiny future" we are working towards
@@ -119,8 +119,8 @@ In addition, it proposes the following axioms:
 
 | Task                         | Owner(s) or team(s)                    | Notes                                   |
 |------------------------------|----------------------------------------|-----------------------------------------|
-| Discussion and moral support | ![Team][] [lang], [compiler], [libs-api] |                                         |
-| Design meeting               | ![Team][] [lang], [compiler], [libs-api] | 2-3 meetings expected; all involve lang |
+| Discussion and moral support | ![Team][] [lang], [compiler], [libs]     |                                         |
+| Design meeting               | ![Team][] [lang], [compiler], [libs]     | 2-3 meetings expected; all involve lang |
 | Author design doc            | @tmandry                               |                                         |
 | Author design doc            | ![Help wanted][]                       |                                         |
 | Author design doc            | ![Help wanted][]                       |                                         |

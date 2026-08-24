@@ -85,7 +85,7 @@ The work here is proposed by @jkelleyrtp on behalf of Dioxus Labs. We have fundi
 | Overall program management | @jkelleyrtp                 |                     |
 | Author RFC                 | TBD                         |                     |
 | Design meeting             | ![Team][] [lang]            | 2 meetings expected |
-| RFC decision               | ![Team][] [lang] [libs-api] |                     |
+| RFC decision               | ![Team][] [lang] [libs]     |                     |
 | Nightly implementation     | @spastorino                 |                     |
 | Standard reviews           | ![Team]  [compiler]         |                     |
 | Blog post on Inside Rust   |                             |                     |
