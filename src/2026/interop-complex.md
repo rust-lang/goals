@@ -3,11 +3,13 @@
 | Metadata              |                                                       |
 | :--                   | :--                                                   |
 | Point of contact      | @folkertdev                                           |
-| Status                | Proposed                                              |
+| Status                | Accepted                                              |
 | Other tracking issues | N/A                                                   |
 | Zulip channel         | N/A                                                   |
 | Funding contact       | [Trifecta Tech Foundation](https://trifectatech.org/) |
-| [compiler] champion | @folkertdev |
+| [compiler] champion   | @folkertdev                                           |
+| Tracking issue        | [rust-lang/goals#761]                                 |
+
 
 
 ## Summary

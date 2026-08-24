@@ -1,15 +1,17 @@
 # Allocators 1.0
 
-| Metadata | |
-| :--- | --- |
-| Point of contact | @nia-e |
-| Status | Proposed |
-| What and why | Enabling use of custom allocators in the standard library |
-| Timespan | 2026-2027 |
-| Zulip channel | [#t-libs/wg-allocators][channel] |
-| [libs] champion | @nia-e | 
-| [lang] champion | @joshtriplett |
-| Funding contact | [Hexcat](https://hexcat.nl/) |
+| Metadata         |                                                           |
+| :--              | :--                                                       |
+| Point of contact | @nia-e                                                    |
+| Status           | Accepted                                                  |
+| What and why     | Enabling use of custom allocators in the standard library |
+| Timespan         | 2026-2027                                                 |
+| Zulip channel    | [#t-libs/wg-allocators][channel]                          |
+| [libs] champion  | @nia-e                                                    |
+| [lang] champion  | @joshtriplett                                             |
+| Funding contact  | [Hexcat](https://hexcat.nl/)                              |
+| Tracking issue   | [rust-lang/goals#762]                                     |
+
 
 [channel]: https://rust-lang.zulipchat.com/#narrow/channel/197181-t-libs.2Fwg-allocators
 

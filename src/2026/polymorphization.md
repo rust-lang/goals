@@ -4,9 +4,9 @@
 | Metadata            |                                                                    |
 | :-----------------  | ------------------------------------------------------------------ |
 | Point of contact    | @camelid                                                           |
-| Status              | Proposed                                                           |
+| Status              | Accepted                                                           |
 | [compiler] champion | @camelid                                                           |
-| Tracking issue      |                                                                    |
+| Tracking issue      | [rust-lang/goals#758]                                              |
 
 ## Summary
 
