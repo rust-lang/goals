@@ -2,7 +2,7 @@
 
 | Metadata              |                                    |
 | :--                   | :--                                |
-| Point of contact      | @tmandry                           |
+| Point of contact      | @MusicalNinjaDad                   |
 | Status                | Accepted                           |
 | Other tracking issues | [rust-lang/rust#84277]             |
 | Zulip channel         | [#t-lang/try][channel]             |
