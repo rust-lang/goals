@@ -1,13 +1,13 @@
 # Async statemachine optimisation
 
-| Metadata            |                                    |
-| :--                 | :--                                |
-| Contact    | @diondokter                        |
-| Status              | Accepted                           |
-| Roadmap             | Binary size reduction              |
-| Tracking issue      | [rust-lang/goals#623] |
-| Zulip channel       | N/A                                |
-| [compiler] champion | @eholk                             |
+| Metadata            |                                       |
+| :------------------ | :------------------------------------ |
+| Contact             | @diondokter                           |
+| Status              | Accepted                              |
+| Roadmap             | Binary size reduction                 |
+| Tracking issue      | [rust-lang/goals#623]                 |
+| Zulip channel       | N/A                                   |
+| [compiler] champion | @eholk                                |
 | Funding contact     | [Tweede golf](https://tweedegolf.nl/) |
 
 ## Summary
@@ -83,15 +83,24 @@ I've got 4 optimisations on my list so far. You can see them in the work items a
 
 ## Team asks
 
-| Team       | Support level | Notes                                                                                                           |
-| ---------- | ------------- | --------------------------------------------------------------------------------------------------------------- |
+| Team       | Support level | Notes                                                                                                                                |
+| ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | [compiler] | Medium        | Most will be review work, but pushing optimisations to the max will possibly touch on some controversial points that need discussion |
 
 ## Funding
 
-| Purpose | Cost | Funded | Sponsor(s) |
-|---------|------|--------|------------|
-| Contributor | $50,000 | No | |
+| Purpose     | Cost    | Funded | Sponsor(s)          |
+| ----------- | ------- | ------ | ------------------- |
+| Contributor | $50,000 | Full   | OpenAI, AWS, +1 TBA |
+
+## Target timeline
+
+The duration of the project is 6 months. Starting from the agreed start date ("Month 1"), the timeline we're targeting is:
+
+- Month 1-4: work on implementing the features
+- Month 4-6: work is done, keep engaging the project to get it accepted and merged
+
+The expected effort for the work is a little over 1 person-month, the long timeline is really due to not committing a full FTE and waiting on the project to deliberate and review the changes.
 
 ## Frequently asked questions
 
