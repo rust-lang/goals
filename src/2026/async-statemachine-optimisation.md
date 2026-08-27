@@ -100,7 +100,7 @@ The duration of the project is 6 months. Starting from the agreed start date ("M
 - Month 1-4: work on implementing the features
 - Month 4-6: work is done, keep engaging the project to get it accepted and merged
 
-The expected effort for the work is a little over 1 person-month, the long timeline is really due to not committing a full FTE and waiting on the project to deliberate and review the changes.
+The expected effort for the work is about 2.5 person-months, the long timeline is really due to not committing a full FTE and waiting on the project to deliberate and review the changes.
 
 ## Frequently asked questions
 
