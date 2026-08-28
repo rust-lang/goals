@@ -22,4 +22,15 @@ New goal proposal: "{title}" (goals#{number}).
 cc {recipients}
 """
 github_comment = "A [zulip topic]({zulip_topic_url}) was opened to discuss this issue."
+message_on_close = "goals#{number} has been merged or closed. Thanks for participating!"
+
+[notify-zulip."C-goals-meta"]
+zulip_stream = 478266 # #goals/meta
+topic = "goals#{number}: {title}"
+message_on_add = """\
+Nominated meta-issue: "{title}" (goals#{number}).
+
+cc {recipients}
+"""
+github_comment = "A [zulip topic]({zulip_topic_url}) was opened to discuss this issue."
 message_on_close = "goals#{number} has been closed. Thanks for participating!"
