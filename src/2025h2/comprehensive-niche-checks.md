@@ -12,7 +12,7 @@
 ## Summary
 
 Add runtime checks to rustc that check for valid niche values. This is an
-extension of a [previous project goal](https://rust-lang.github.io/goals/2025h1/null-enum-discriminant-debug-checks.html)
+extension of a [previous project goal](https://goals.rust-lang.org/2025h1/null-enum-discriminant-debug-checks.html)
 that added null pointer and enum checks and generally works towards checking for
 Undefined behavior at runtime (in debug builds / behind compiler flags).
 
@@ -94,7 +94,7 @@ Eventually we would like to check (sanitize) most items listed as
 
 ### Definitions
 
-For definitions for terms used above, see the [About > Team Asks](https://rust-lang.github.io/goals/about/team_asks.html) page.
+For definitions for terms used above, see the [About > Team Asks](https://goals.rust-lang.org/about/team_asks.html) page.
 
 * *Discussion and moral support* is the lowest level offering, basically committing the team to nothing but good vibes and general support for this endeavor.
 * *Author RFC* and *Implementation* means actually writing the code, document, whatever.

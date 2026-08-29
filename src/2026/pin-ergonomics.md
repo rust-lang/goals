@@ -28,7 +28,7 @@ We have an experiment for improving the ergonomics around pinning and some initi
 
 ### Work items over the next year
 
-We need to finish the borrow checker support, coersion and auto borrowing. It seems the [Reborrow traits goal](https://rust-lang.github.io/goals/2025h2/autoreborrow-traits.html) might help/solve auto borrowing?
+We need to finish the borrow checker support, coersion and auto borrowing. It seems the [Reborrow traits goal](https://goals.rust-lang.org/2025h2/autoreborrow-traits.html) might help/solve auto borrowing?
 
 But there's also broader work around describing the new borrowchk behavior and gathering feedback on it. In particular, the `&pin mut` borrow works differently from a normal `&mut` borrow.
 

@@ -18,7 +18,7 @@ Continue working towards Rust for Linux on stable. In particular, this goal is f
 
 ## Motivation
 
-Getting the Linux kernel to build with stable Rust and, more generally, supporting the needs of the Linux kernel to make Rust a success there, has been a priority for the Rust project and a previous flagship goal: [2024H2](https://rust-lang.github.io/goals/2024h2/rfl_stable.html), [2025H1](https://rust-lang.github.io/goals/2025h1/rfl.html).
+Getting the Linux kernel to build with stable Rust and, more generally, supporting the needs of the Linux kernel to make Rust a success there, has been a priority for the Rust project and a previous flagship goal: [2024H2](https://goals.rust-lang.org/2024h2/rfl_stable.html), [2025H1](https://goals.rust-lang.org/2025h1/rfl.html).
 
 One of the key areas are language features, given the impact they could have on the kernel if they were to change, especially those that may require changes on potentially many source files and/or that may not be easy to workaround with conditional compilation.
 

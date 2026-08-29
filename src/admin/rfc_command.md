@@ -65,8 +65,8 @@ After inlining, any remaining `.md` links in the document are rewritten to point
 
 | Original | Rewritten |
 |----------|-----------|
-| `./const-generics.md` | `https://rust-lang.github.io/goals/2026/const-generics.html` |
-| `../about/roadmaps.md` | `https://rust-lang.github.io/goals/about/roadmaps.html` |
+| `./const-generics.md` | `https://goals.rust-lang.org/2026/const-generics.html` |
+| `../about/roadmaps.md` | `https://goals.rust-lang.org/about/roadmaps.html` |
 
 Links within the same timeframe directory get the timeframe prefix; links that already contain a `/` or reference a parent directory are treated as absolute paths from the site root.
 

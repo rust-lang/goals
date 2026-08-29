@@ -25,7 +25,7 @@ Stabilize the [polonius alpha][alpha] borrow checking analysis, which resolves [
 
 ### The status quo
 
-Polonius is an improved version of the borrow checker that resolves common limitations and which is needed to support future patterns such as lending iterators. Over the past three goal periods ([2025h1](https://rust-lang.github.io/goals/2025h1/Polonius.html), [2025h2](https://rust-lang.github.io/goals/2025h2/polonius.html)), we have:
+Polonius is an improved version of the borrow checker that resolves common limitations and which is needed to support future patterns such as lending iterators. Over the past three goal periods ([2025h1](https://goals.rust-lang.org/2025h1/Polonius.html), [2025h2](https://goals.rust-lang.org/2025h2/polonius.html)), we have:
 
 * Identified an actionable subset of the full polonius analysis — the "alpha" version — that handles the most impactful cases while scaling well
 * Implemented and landed a [functional prototype][alpha] on nightly that passes perf runs and crater runs

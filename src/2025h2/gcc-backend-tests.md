@@ -9,7 +9,7 @@
 | [compiler] champion   | @WesleyWiser                            |
 | [infra] champion      | @marcoieni                              |
 | Tracking issue        | [rust-lang/goals#402]      |
- 
+
 
 [rustc-codegen-gcc]: https://rust-lang.zulipchat.com/#narrow/channel/386786-rustc-codegen-gcc
 [rust-lang/compiler-team#891]: https://github.com/rust-lang/compiler-team/issues/891
@@ -71,7 +71,7 @@ It is important for rust developers to be able to test how changes impact the GC
 
 ### Definitions
 
-For definitions for terms used above, see the [About > Team Asks](https://rust-lang.github.io/goals/about/team_asks.html) page.
+For definitions for terms used above, see the [About > Team Asks](https://goals.rust-lang.org/about/team_asks.html) page.
 
 * *Discussion and moral support* is the lowest level offering, basically committing the team to nothing but good vibes and general support for this endeavor.
 * *Author RFC* and *Implementation* means actually writing the code, document, whatever.

@@ -10,7 +10,7 @@ Propose a slate of (((#GOALS))) project goals for 2025H1, including 3 flagship g
     * prepare to support asynchronous (and synchronous) generators in the language.
 * Continue helping Rust support low-level projects by [**stabilizing compiler options and tooling used by the Rust-for-Linux project**](./rfl.md). In 2025H1 we plan to:
     * implement [RFC #3716] to allow stabilizing ABI-modifying compiler flags to control code generation, sanitizer integration, and so forth;
-    * taking the first step towards stabilizing [`build-std`](https://rust-lang.github.io/goals/2025h1/https://doc.rust-lang.org/cargo/reference/unstable.html#build-std) by [creating a stable way to rebuild core with specific compiler options](./build-std.html);
+    * taking the first step towards stabilizing [`build-std`](https://doc.rust-lang.org/cargo/reference/unstable.html#build-std) by [creating a stable way to rebuild core with specific compiler options](./build-std.html);
     * add rustdoc features to extract and customize rustdoc tests (`--extract-doctests`);
     * stabilize clippy configuration like `.clippy.toml` and `CLIPPY_CONF_DIR`;
     * stabilize compiler flags to extract dependency info (e.g., as via `-Zbinary-dep-depinfo=y`) and to configure no-std without requiring it in the source file (e.g., as via `-Zcrate-attr`);

@@ -12,7 +12,7 @@
 
 ## Summary
 
-Continue with stabilization and performance improvements to the parallel front-end, continuing from the [2025h2 goal](https://rust-lang.github.io/goals/2025h2/parallel-front-end.html).
+Continue with stabilization and performance improvements to the parallel front-end, continuing from the [2025h2 goal](https://goals.rust-lang.org/2025h2/parallel-front-end.html).
 
 ## Motivation
 

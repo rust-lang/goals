@@ -28,7 +28,7 @@ As a specification, it would describe the meaning of the programs supported.
 
 The plan is to build on top of the existing executable specification efforts,
 namely [a-mir-formality] and [MiniRust],
-by bridging the gap between surface Rust syntax 
+by bridging the gap between surface Rust syntax
 and these semantic models.
 We propose to bridge that gap by successively desugaring
 expressive syntactic constructs down to more basic ones,
@@ -67,7 +67,7 @@ of making some parts of Rust semantics executably-precise:
 Both have shown success, and MiniRust in particular is getting sufficiently complete and settled to be
 a candidate for becoming official source-of-truth.
 
-It's unclear how we'd do that however: 
+It's unclear how we'd do that however:
 we would first need to precisely define how to get from surface Rust syntax down to these semantic models.
 That's where this project comes in.
 
@@ -132,7 +132,7 @@ See for example the section that defines
 [functions](https://nadrieril.github.io/rust-via-desugarings/language/items/functions.md.html).
 
 [Later on](https://nadrieril.github.io/rust-via-desugarings/pipeline/funsig.md.html)
-you can see the implementation of some baby desugarings.  
+you can see the implementation of some baby desugarings.
 The real thing should be better structured and with better English text.
 
 LLM disclaimer: I let an LLM write the tooling for that demo (e.g. the mdbook preprocessors that
@@ -147,7 +147,7 @@ details on LLM use.
 
 For this goal period the objective
 will be to put the overall structure into place,
-most importantly figuring out 
+most importantly figuring out
 integration with a-mir-formality/MiniRust.
 
 Then we want to have enough structure in place to be able to end-to-end evaluate some real programs:
@@ -195,7 +195,7 @@ which includes opinions about how I'd like us to formalize trait solving and oth
 static semantics.
 
 This mixes two things: the first is this here project of making an executable spec
-based on desugarings, the second is a distinct [idea](https://rust-lang.github.io/goals/2026/dictionary-passing-style-experiment.html)
+based on desugarings, the second is a distinct [idea](https://goals.rust-lang.org/2026/dictionary-passing-style-experiment.html)
 about how we might go about formalizing trait solving.
 
 The two are rather independent, and this here proposal leaves all questions of specifying static

@@ -30,7 +30,7 @@ While the [`--timings`] flag provides per-build data on how long each unit takes
 this information:
 
 * You have to know you will care about a timings report and can't look it up afterwards
-* Exists primarily in HTML form, which is not suited for machine analysis  
+* Exists primarily in HTML form, which is not suited for machine analysis
 
 Additionally, Cargo does not track:
 
@@ -61,7 +61,7 @@ to make it possible to link related data within the same Cargo invocation.
 Two new unstable commands in `cargo report` will be introduced (command name TBD):
 
 * `cargo report rebuild-reasons`:
-  Show which crates were rebuilt for a specific Cargo run and why.  
+  Show which crates were rebuilt for a specific Cargo run and why.
 * `cargo report timing`:
   Display timing data for a specific build, including per-crate compile times.
 
@@ -99,7 +99,7 @@ This approach allows schema evolution without committing to a stable format.
 
 ### Definitions
 
-For definitions for terms used above, see the [About > Team Asks](https://rust-lang.github.io/goals/about/team_asks.html) page.
+For definitions for terms used above, see the [About > Team Asks](https://goals.rust-lang.org/about/team_asks.html) page.
 
 * *Discussion and moral support* is the lowest level offering, basically committing the team to nothing but good vibes and general support for this endeavor.
 * *Author RFC* and *Implementation* means actually writing the code, document, whatever.

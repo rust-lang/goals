@@ -22,7 +22,7 @@
 
 We aim to explore and refine the *virtual places* approach for field projections, document its design and interactions in the [beyond-refs wiki](https://rust-lang.github.io/beyond-refs/), implement it as an experiment in the compiler, and prepare RFCs based on the findings.
 
-This is a continuing goal, see [the goal document of the previous period](https://rust-lang.github.io/goals/2025h2/field-projections.html) for historical information.
+This is a continuing goal, see [the goal document of the previous period](https://goals.rust-lang.org/2025h2/field-projections.html) for historical information.
 
 ## Motivation
 
@@ -97,7 +97,7 @@ impl Struct {
 }
 ```
 
-The design axioms from the last period still apply and are fulfilled by the virtual places approach: 
+The design axioms from the last period still apply and are fulfilled by the virtual places approach:
 
 - **Effortless Syntax.** Using field projections in a non-generic context should look very similar to normal field accesses.
 - **Broad Solution.** Field projections should be very general and solve complex projection problems such as pin-projections and [`RcuMutex<T>`](https://hackmd.io/@rust-lang-team/S1I1aEc_lx#RCU-Read-Copy-Update).

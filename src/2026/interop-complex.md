@@ -103,6 +103,6 @@ The expected effort for the work is 1 person-month.
 
 ## Frequently asked questions
 
-### How does this goal interact with the [f80, f128 and c_longdouble](https://rust-lang.github.io/rust-project-goals/2026/interop-f80-f128.html) goal
+### How does this goal interact with the [f80, f128 and c_longdouble](https://goals.rust-lang.org/2026/interop-f80-f128.html) goal
 
 It is possible to have a `Complex<c_longdouble>`, which in some calling conventions needs custom ABI logic. It is a goal to make this combination work across targets. 

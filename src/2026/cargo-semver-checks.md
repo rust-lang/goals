@@ -13,7 +13,7 @@
 
 Design and implement `cargo-semver-checks` functionality that lies on the critical path for merging the tool into cargo itself. Continues the work of [the 2025h2 goal][2025h2-goal].
 
-[2025h2-goal]: https://rust-lang.github.io/goals/2025h2/cargo-semver-checks.html
+[2025h2-goal]: https://goals.rust-lang.org/2025h2/cargo-semver-checks.html
 
 ## Motivation
 
@@ -100,7 +100,7 @@ I (@obi1kenobi) will be working on this effort. The only other resource request 
 
 _This section is unchanged from [the 2024h2 goal][2024h2-goal]._
 
-[2024h2-goal]: https://rust-lang.github.io/goals/2024h2/cargo-semver-checks.html
+[2024h2-goal]: https://goals.rust-lang.org/2024h2/cargo-semver-checks.html
 
 
 ### Why not use semverver instead?

@@ -23,7 +23,7 @@ The FLS serves as one specification for the Rust language. For it to be useful a
 
 In 2025H2, the [FLS capabilities goal][fls-2025h2] explored options for sustainable FLS maintenance and established an FLS team. That exploratory work identified a six-week release cadence as achievable. This goal formalizes that cadence and demonstrates it in practice.
 
-[fls-2025h2]: https://rust-lang.github.io/goals/2025h2/FLS-up-to-date-capabilities.html
+[fls-2025h2]: https://goals.rust-lang.org/2025h2/FLS-up-to-date-capabilities.html
 
 ### What we propose to do about it
 

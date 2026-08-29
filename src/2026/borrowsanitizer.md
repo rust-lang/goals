@@ -23,17 +23,17 @@ Developers rely on Miri to validate their programs against Rust's latest [Tree B
 
 ### What we propose to do about it
 
-We are developing BorrowSanitizer to fix this tooling gap. Much like AddressSanitizer, MemorySanitizer, and other LLVM-based tools, BorrowSanitizer inserts 
-checks during compilation to detect errors at run-time. Its purpose is to find violations of Rust's newest [Tree Borrows](https://dl.acm.org/doi/10.1145/3735592) 
-aliasing model, as well as accesses out-of-bounds and use-after-free errors. 
+We are developing BorrowSanitizer to fix this tooling gap. Much like AddressSanitizer, MemorySanitizer, and other LLVM-based tools, BorrowSanitizer inserts
+checks during compilation to detect errors at run-time. Its purpose is to find violations of Rust's newest [Tree Borrows](https://dl.acm.org/doi/10.1145/3735592)
+aliasing model, as well as accesses out-of-bounds and use-after-free errors.
 
 BorrowSanitizer relies on changes to the Rust compiler, an LLVM instrumentation pass, and a runtime library. We modified the compiler to emit special "retag" intrinsics that indicate when
-references are created and updated. Our LLVM pass lowers these intrinsics into runtime calls that associate each pointer with "provenance" metadata (see [provenance RFC #3559](https://rust-lang.github.io/rfcs/3559-rust-has-provenance.html)). We validate provenance before memory accesses to detect undefined behavior. 
+references are created and updated. Our LLVM pass lowers these intrinsics into runtime calls that associate each pointer with "provenance" metadata (see [provenance RFC #3559](https://rust-lang.github.io/rfcs/3559-rust-has-provenance.html)). We validate provenance before memory accesses to detect undefined behavior.
 
-Our primary goal is for BorrowSanitizer to be useful in practice. This will require broad support for Rust, C, and C++ language features. We want to achieve better performance than Miri while fully supporting the different features of Tree Borrows. 
+Our primary goal is for BorrowSanitizer to be useful in practice. This will require broad support for Rust, C, and C++ language features. We want to achieve better performance than Miri while fully supporting the different features of Tree Borrows.
 
 ### Work items over the next year
-Throughout 2026, we will complete the remaining features needed for BorrowSanitizer to have parity with Miri for detecting aliasing violations. We will finish contributing the retag intrinsics described in [our previous project goal](https://rust-lang.github.io/goals/2025h2/codegen_retags.html) and evaluate when and how the rest of BorrowSanitizer should be integrated with the compiler.
+Throughout 2026, we will complete the remaining features needed for BorrowSanitizer to have parity with Miri for detecting aliasing violations. We will finish contributing the retag intrinsics described in [our previous project goal](https://goals.rust-lang.org/2025h2/codegen_retags.html) and evaluate when and how the rest of BorrowSanitizer should be integrated with the compiler.
 
 One topic for discussion is whether the BorrowSanitizer itself should live in a subtree of rust-lang/rust, with a new Github repo under rust-lang, or as an independent project.
 

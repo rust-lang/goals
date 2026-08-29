@@ -9,7 +9,7 @@
 
 **As of today, we are officially accepting proposals for Rust Project Goals targeting YYYYHN (the (TBD) half of YYYY).** If you'd like to participate in the process, or just to follow along, please check out the [YYYYHN goal page][YYYYHN]. It includes listings of the goals currently under consideration , more details about the goals program, and instructions for how to submit a goal.
 
-[YYYYHN]: https://rust-lang.github.io/goals/YYYYHN/index.html
+[YYYYHN]: https://goals.rust-lang.org/YYYYHN/index.html
 
 ## What is the project goals program and how does it work?
 
@@ -21,8 +21,8 @@ Every six months, the Rust project commits to a set of goals for the upcoming ha
 
 To get an idea what the final slate of goals looks like, check out the RFC from the previous round of goals, [RFC (TBD)][]. The RFC describes a set of goals, designates a few of them as roadmap goals, and summarizes the work expected from each team. The RFC is approved by (at least) the leads of each team, effectively committing their team to prove the support that is described.
 
-[goals]: https://rust-lang.github.io/goals/
-[open PRs]: https://rust-lang.github.io/goals/how_to/propose_a_goal.html
+[goals]: https://goals.rust-lang.org/
+[open PRs]: https://goals.rust-lang.org/how_to/propose_a_goal.html
 [May of 2024]: https://blog.rust-lang.org/inside-rust/2024/05/07/announcing-project-goals.html
 [RFC 3614]: https://github.com/rust-lang/rfcs/pull/3614
 [RFC (TBD)]: https://github.com/rust-lang/rfcs/pull/TBD
@@ -30,7 +30,7 @@ To get an idea what the final slate of goals looks like, check out the RFC from 
 
 ## Should I submit a goal?
 
-Opening a goal is an indication that you (or your company, etc) is willing to put up the resources needed to make it happen, at least if you get the indicated support from the teams. These resources are typically development time and effort, but they could be funding (in that case, we'd want to identify someone to take up the goal). If you pass that bar, then by all means, yes, open a goal. 
+Opening a goal is an indication that you (or your company, etc) is willing to put up the resources needed to make it happen, at least if you get the indicated support from the teams. These resources are typically development time and effort, but they could be funding (in that case, we'd want to identify someone to take up the goal). If you pass that bar, then by all means, yes, open a goal.
 
 Note though that controversial goals are likely to not be accepted. If you have an idea that you think people won't like, then you should find ways to lower the ask of the teams. For example, maybe the goal should be to perform experiments to help make the case for the idea, rather than jumping straight to implementation.
 

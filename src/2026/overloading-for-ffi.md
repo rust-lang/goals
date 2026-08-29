@@ -139,7 +139,7 @@ The first overload accepts anything which implicitly converts to a `ConvertibleF
 
 This is unlike Rust's trait system, which fails compilation at the trait implementation if it can overlap, even if the overlap is only in theory for a type that does not exist, and even if one implementation is in some sense a better match. It is not _possible_ to write a trait that models the above overload set for `Foo`. The `Foo(ConvertibleFromInt)` overload should apply to all types that implement something like `Into<ConvertibleFromInt>`, while the `Foo(int)` overload should take types that implement something like to `Into<c_int>`. Rust cannot prove these are disjoint, because they are not, and overlapping impls of the form `impl<T: Into<c_int>> Foo<T> for …` will fail to compile. ([playground](https://play.rust-lang.org/?version=nightly&mode=debug&edition=2024&gist=b6a131d2544aa927dcf81a39a49e482a))
 
-Similarly, it is not possible to implement an overload set that accepts multiple [`impl PinInit` arguments for in-place initialization](https://rust-lang.github.io/goals/2025h2/in-place-initialization.html) of non-rust-movable arguments, even if the `PinInit` trait used an associated type to try to disambiguate (unless/until traits get [disjoint associated types](https://github.com/rust-lang/rust/issues/20400)).
+Similarly, it is not possible to implement an overload set that accepts multiple [`impl PinInit` arguments for in-place initialization](https://goals.rust-lang.org/2025h2/in-place-initialization.html) of non-rust-movable arguments, even if the `PinInit` trait used an associated type to try to disambiguate (unless/until traits get [disjoint associated types](https://github.com/rust-lang/rust/issues/20400)).
 
 ### What about `extern "rust-call"`?
 

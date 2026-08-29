@@ -137,7 +137,7 @@ enum, it becomes an *open enum* and can now be safely used with C and
 - Bindgen generates `repr(C)` open `enum`s by default, and there's rarely a
   reason to select another variation.
 
-[safe-linking]: https://rust-lang.github.io/goals/2025h1/safe-linking.html
+[safe-linking]: https://goals.rust-lang.org/2025h1/safe-linking.html
 
 ### Work items over the next year
 

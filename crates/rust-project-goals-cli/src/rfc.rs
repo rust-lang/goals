@@ -101,11 +101,9 @@ fn rewrite_md_links(text: &str, timeframe: &str) -> String {
 
             let clean_path = path_stem.trim_start_matches("../");
             if clean_path.contains('/') || path_stem.starts_with("../") {
-                format!("](https://rust-lang.github.io/goals/{clean_path}.html{fragment})")
+                format!("](https://goals.rust-lang.org/{clean_path}.html{fragment})")
             } else {
-                format!(
-                    "](https://rust-lang.github.io/goals/{timeframe}/{clean_path}.html{fragment})"
-                )
+                format!("](https://goals.rust-lang.org/{timeframe}/{clean_path}.html{fragment})")
             }
         })
         .to_string()
@@ -122,10 +120,10 @@ fn rewrite_ref_link_urls(ref_links: &mut BTreeMap<String, String>, timeframe: &s
             let rest = caps.get(4).map_or("", |m| m.as_str());
             let clean_path = path_stem.trim_start_matches("../");
             if clean_path.contains('/') || path_stem.starts_with("../") {
-                *def = format!("{prefix}https://rust-lang.github.io/goals/{clean_path}.html{rest}");
+                *def = format!("{prefix}https://goals.rust-lang.org/{clean_path}.html{rest}");
             } else {
                 *def = format!(
-                    "{prefix}https://rust-lang.github.io/goals/{timeframe}/{clean_path}.html{rest}"
+                    "{prefix}https://goals.rust-lang.org/{timeframe}/{clean_path}.html{rest}"
                 );
             }
         }
@@ -701,9 +699,7 @@ fn issue<'doc>(timeframe: &str, document: &'doc GoalDocument) -> Result<GithubIs
 
 fn goal_document_link(timeframe: &str, document: &GoalDocument) -> String {
     let goal_file = document.link_path.file_stem().unwrap().to_str().unwrap();
-    format!(
-        "[{timeframe}/{goal_file}](https://rust-lang.github.io/goals/{timeframe}/{goal_file}.html)"
-    )
+    format!("[{timeframe}/{goal_file}](https://goals.rust-lang.org/{timeframe}/{goal_file}.html)")
 }
 
 fn issue_text(timeframe: &str, document: &GoalDocument) -> Result<String> {

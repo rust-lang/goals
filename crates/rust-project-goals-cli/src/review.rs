@@ -13,7 +13,7 @@ use rust_project_goals::{
 };
 use walkdir::WalkDir;
 
-const BASE_URL: &str = "https://rust-lang.github.io/goals";
+const BASE_URL: &str = "https://goals.rust-lang.org";
 
 /// Generate a review summary for the given team.
 pub fn review(team_name: &str, milestone: Option<&str>) -> Result<()> {

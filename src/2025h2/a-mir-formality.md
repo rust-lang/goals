@@ -76,7 +76,7 @@ This section outlines the work to be done and the specific asks from Rust teams.
 
 ### Definitions
 
-For definitions for terms used above, see the [About > Team Asks](https://rust-lang.github.io/goals/about/team_asks.html) page.
+For definitions for terms used above, see the [About > Team Asks](https://goals.rust-lang.org/about/team_asks.html) page.
 
 * *Standard reviews* refers to reviews for PRs against the repository; these PRs are not expected to be unduly large or complicated.
 * *Dedicated review* means identifying an individual (or group of individuals) who will review the changes, as they're expected to require significant context.

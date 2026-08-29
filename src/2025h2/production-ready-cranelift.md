@@ -11,15 +11,15 @@
 
 ## Summary
 
-This project aims to get the rust cranelift codegen backend to a production-ready state. Specifically, with this work completed, we'd be confident to recommend it as the default for local development, e.g. with `cargo test` or `cargo run`. 
+This project aims to get the rust cranelift codegen backend to a production-ready state. Specifically, with this work completed, we'd be confident to recommend it as the default for local development, e.g. with `cargo test` or `cargo run`.
 
 ## Motivation
 
-Compile-time performance consistently comes up as a limiting factor in the use and enjoyment of rust. Through extensive tracking and the hard work of T-perf and others, performance has gradually improved over the years. However, in practical terms, a 1% improvement here and there is not sufficient to truly improve users' workflows.  
+Compile-time performance consistently comes up as a limiting factor in the use and enjoyment of rust. Through extensive tracking and the hard work of T-perf and others, performance has gradually improved over the years. However, in practical terms, a 1% improvement here and there is not sufficient to truly improve users' workflows.
 
 The cranelift codegen backend (`rustc_codegen_cranelift`) is one of the most concrete ways we have to deliver a serious improvement to compile times in the typical development cycle.  In our measurements on larger projects (e.g. Zed, Tauri, hickory-dns), we currently see roughly a 20% reduction of code generation time, translating to around 5% speedup of total compilation time for clean builds.
 
-Currently, this backend still has some serious limitations that real-world code bases run into. This project goal aims to get the `rustc_codegen_cranelift` to a state where we can confidently recommend it for local development. 
+Currently, this backend still has some serious limitations that real-world code bases run into. This project goal aims to get the `rustc_codegen_cranelift` to a state where we can confidently recommend it for local development.
 
 ## Status quo
 
@@ -73,6 +73,6 @@ Note: the `wg-compiler-performance` ask is a nice to have, and it is clear to bo
 - and that `wg-compiler-performance` can accept the ask conditionally on the above external requirements it doesn't control
 
 [Trifecta Tech Foundation]: https://github.com/trifectatechfoundation
-[rustc-perf infra]: https://rust-lang.github.io/goals/2025h2/rustc-perf-improvements.html
+[rustc-perf infra]: https://goals.rust-lang.org/2025h2/rustc-perf-improvements.html
 
 ## Frequently asked questions

@@ -4,7 +4,7 @@ This file provides instructions for contributing to the `goals` repository.  It 
 
 ## Repository overview
 
-This repository hosts the Rust project's **goal proposals** -- a bottom-up process where contributors propose goals, Rust teams review them, and accepted goals are tracked to completion.  The repository is published as an mdBook site at <https://rust-lang.github.io/goals/>.
+This repository hosts the Rust project's **goal proposals** -- a bottom-up process where contributors propose goals, Rust teams review them, and accepted goals are tracked to completion.  The repository is published as an mdBook site at <https://goals.rust-lang.org/>.
 
 There are two kinds of content:
 

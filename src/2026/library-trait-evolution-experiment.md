@@ -25,7 +25,7 @@ We plan to collect different use-cases and requirements here, both from the stan
 
 Trait evolution and trait hierarchy refactoring is a long-time pain point for Rust crates and especially the standard library. As crates evolve and grow, needs to restructure trait hierarchy to accommodate richer functionality often arises, both in the standard library and the broader Rust ecosystem.
 
-This will be even more of an issue once we add new *implicit default auto trait bounds* to support [Immobile types and guaranteed destructors](https://rust-lang.github.io/goals/2026/move-trait.html) or the [Sized Hierarchy](https://rust-lang.github.io/goals/2026/scalable-vectors.html). For example in `trait Trait { fn foo<T>(); }` the generic parameter `T` will get an implicit `T: Move` bound whose removal is a breaking change. This makes immobile types a lot less useable with existing traits.
+This will be even more of an issue once we add new *implicit default auto trait bounds* to support [Immobile types and guaranteed destructors](https://goals.rust-lang.org/2026/move-trait.html) or the [Sized Hierarchy](https://goals.rust-lang.org/2026/scalable-vectors.html). For example in `trait Trait { fn foo<T>(); }` the generic parameter `T` will get an implicit `T: Move` bound whose removal is a breaking change. This makes immobile types a lot less useable with existing traits.
 
 ### Work items over the next year
 
@@ -33,7 +33,7 @@ This will be even more of an issue once we add new *implicit default auto trait 
 | Task        | Owner(s) | Notes |
 | ----------- | -------- | ----- |
 | Setup a Library Trait Evolution experiment and create its repository | @lcnr |
-| Collect and explore different use-cases in a single repository | @lcnr  |       
+| Collect and explore different use-cases in a single repository | @lcnr  |
 | Collaborate on the design and implementation of language features to solve these issues | @lcnr |
 
 

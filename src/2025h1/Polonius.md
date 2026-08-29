@@ -9,7 +9,7 @@
 [channel]: https://rust-lang.zulipchat.com/#narrow/channel/186049-t-types.2Fpolonius
 ## Summary
 
-Keep working on implementing a native rustc version of the [Polonius][pc3] next generation borrow checking algorithm, that would scale better than the previous [datalog] implementation, continuing from the [2024h2 goal](https://rust-lang.github.io/goals/2024h2/Polonius.html).
+Keep working on implementing a native rustc version of the [Polonius][pc3] next generation borrow checking algorithm, that would scale better than the previous [datalog] implementation, continuing from the [2024h2 goal](https://goals.rust-lang.org/2024h2/Polonius.html).
 
 [datalog]: https://github.com/rust-lang/polonius
 
@@ -64,8 +64,8 @@ Note: some of these are currently being worked on as part of the 2024h2 goal, an
 | Milestone                                                                          | Contributor    | Notes |
 | ---------------------------------------------------------------------------------- | -------------- | ----- |
 | Factoring out higher-ranked concerns from the main path                            | @amandasystems |       |
-| ↳ [x] rewrite invalid universe constraints with outlives `'static` constraints     |                | [PR 123720](https://github.com/rust-lang/rust/pull/123720) | 
-| ↳ [ ] completely remove placeholders                                               |                | in progress [PR 130227](https://github.com/rust-lang/rust/pull/130227) | 
+| ↳ [x] rewrite invalid universe constraints with outlives `'static` constraints     |                | [PR 123720](https://github.com/rust-lang/rust/pull/123720) |
+| ↳ [ ] completely remove placeholders                                               |                | in progress [PR 130227](https://github.com/rust-lang/rust/pull/130227) |
 | Location-sensitive prototype on nightly                                            | @lqd           | in progress |
 | ↳ [x] create structures for location-dependent outlives constraints                |                |             |
 | ↳ [x] build new constraint graph from typeck constraints and liveness constraints  |                |             |

@@ -81,7 +81,7 @@ Tracking issue [#136889](https://github.com/rust-lang/rust/issues/136889):
 
 ### Definitions
 
-For definitions for terms used above, see the [About > Team Asks](https://rust-lang.github.io/goals/about/team_asks.html) page.
+For definitions for terms used above, see the [About > Team Asks](https://goals.rust-lang.org/about/team_asks.html) page.
 
 * *Discussion and moral support* is the lowest level offering, basically committing the team to nothing but good vibes and general support for this endeavor.
 * *Author RFC* and *Implementation* means actually writing the code, document, whatever.

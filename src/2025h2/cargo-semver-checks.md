@@ -13,8 +13,8 @@
 
 Design and implement `cargo-semver-checks` functionality that lies on the critical path for merging the tool into cargo itself. Continues the work of [the 2025h1 goal][2025h1-goal].
 
-[2024h2-goal]: https://rust-lang.github.io/goals/2024h2/cargo-semver-checks.html
-[2025h1-goal]: https://rust-lang.github.io/goals/2025h1/cargo-semver-checks.html
+[2024h2-goal]: https://goals.rust-lang.org/2024h2/cargo-semver-checks.html
+[2025h1-goal]: https://goals.rust-lang.org/2025h1/cargo-semver-checks.html
 
 ## Motivation
 
@@ -50,7 +50,7 @@ Outside of these special cases of type-checking lints, some progress was made on
 The current plan is to make use of Rust's only stable API: "please compile this program for me."
 Whenever types in any public API location might appear to have changed, `cargo-semver-checks` would generate a witness program and check it via `cargo check`, such that compilation would _only_ succeed if the type change is backward-compatible.
 This is an extension of the same technique we used several years ago in our survey of SemVer compliance and breakage in the Rust ecosystem.
-One of Rust's Google Summer of Code participants is working toward making witness generation work end-to-end, and we're thrilled to be working together! 
+One of Rust's Google Summer of Code participants is working toward making witness generation work end-to-end, and we're thrilled to be working together!
 
 As part of the All Hands at RustWeek, we also made progress toward enabling cross-crate linting.
 We identified a set of changes in Rust tooling that, when implemented, will result in `cargo-semver-checks` being able to uniquely determine which crate and version a given item came from.

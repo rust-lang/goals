@@ -9,7 +9,7 @@
 [channel]: https://rust-lang.zulipchat.com/#narrow/channel/187679-t-compiler.2Fwg-parallel-rustc/
 ## Summary
 
-Continue to parallelize front-end stabilization and performance improvements, continuing from the [2024h2 goal](https://rust-lang.github.io/goals/2024h2/parallel-front-end.html).
+Continue to parallelize front-end stabilization and performance improvements, continuing from the [2024h2 goal](https://goals.rust-lang.org/2024h2/parallel-front-end.html).
 
 ## Motivation
 

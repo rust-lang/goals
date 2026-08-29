@@ -17,7 +17,7 @@ Develop the capabilities and capacity to keep the FLS up to date with the Rust l
 
 ## Motivation
 
-The FLS was graciously transferred from Ferrous Systems to the Rust Project. In 2025H1, a [Project goal](https://rust-lang.github.io/goals/2025h1/spec-fls-publish.html) to bring the FLS in and publish a version under the auspicious of the Rust Project was successfully [completed](https://github.com/rust-lang/goals/issues/265#issuecomment-3019529070). Let's now take this to the next level by ensuring that we can keep the FLS up to date with the Rust language in a sustainable manner by developing the necessary capacity and capabilities for doing so.
+The FLS was graciously transferred from Ferrous Systems to the Rust Project. In 2025H1, a [Project goal](https://goals.rust-lang.org/2025h1/spec-fls-publish.html) to bring the FLS in and publish a version under the auspicious of the Rust Project was successfully [completed](https://github.com/rust-lang/goals/issues/265#issuecomment-3019529070). Let's now take this to the next level by ensuring that we can keep the FLS up to date with the Rust language in a sustainable manner by developing the necessary capacity and capabilities for doing so.
 
 ### The status quo
 

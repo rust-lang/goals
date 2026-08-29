@@ -17,7 +17,7 @@ capable as proc macros while being easier to write and faster to compile.
 
 I'll also prototype extensions to the declarative macro system to make macros
 easier to write. I intend to collaborate with the ["Reflection and Comptime"
-goal](https://rust-lang.github.io/goals/2026/reflection-and-comptime.html),
+goal](https://goals.rust-lang.org/2026/reflection-and-comptime.html),
 and work with experimental implementations of comptime when available.
 
 The initial focus of this goal is the stabilization of declarative attribute
