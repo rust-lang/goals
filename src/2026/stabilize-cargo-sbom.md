@@ -8,6 +8,7 @@
 | Other tracking issues | [rust-lang/cargo#16565]                         |
 | Zulip channel         | N/A                                             |
 | [cargo] champion      | @weihanglo                                      |
+| Funding contact       | @Shnatsel |
 
 
 ## Summary
@@ -69,6 +70,12 @@ We will need:
 | Test Cargo's SBOM precursor | TBD | TBD |
 | Resolve issues in the SBOM precursor | TBD | TBD |
 | Convert cargo-cyclonedx to use the SBOM precursor | TBD | TBD |
+
+## Funding
+
+| Purpose | Cost | Funded | Sponsor(s) |
+|---------|------|--------|------------|
+| Contributor (3 months, part-time) | $40,000 | No | |
 
 ## Frequently asked questions
 
