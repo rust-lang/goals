@@ -19,11 +19,11 @@ Rework the way we represent and handle region constraints in the compiler to unb
 ### The status quo
 
 There are a number of things that we would like to do with the type system but currently cannot due to our region constraints and handling of not being advanced enough:
-- Marker traits: [#29864](https://github.com/rust-lang/rust/issues/29864)
-- Proving auto traits for futures/coroutines (without lots of spurrious errors): [#110338](https://github.com/rust-lang/rust/issues/110338)
-- Supporting implied bounds on uses of GATs (`where for<'a> T::Assoc<'a>: Trait`): [#153558](https://github.com/rust-lang/rust/issues/153558)
+- Marker traits: [#29864]
+- Proving auto traits for futures/coroutines (without lots of spurrious errors): [#110338]
+- Supporting implied bounds on uses of GATs (`where for<'a> T::Assoc<'a>: Trait`): [#153558]
 - Better handling of region constraints originating inside closures involving parent body regions
-- Fixing a variety of soundness bugs involving higher ranked types, binders (`for<'a>`), implied bounds, and more: [#25860](https://github.com/rust-lang/rust/issues/25860), [#84591](https://github.com/rust-lang/rust/issues/84591), [#100051](https://github.com/rust-lang/rust/issues/100051), [#100041](https://github.com/rust-lang/rust/issues/100041), [#129005](https://github.com/rust-lang/rust/issues/129005), [#161405](https://github.com/rust-lang/rust/issues/161405), [#152489](https://github.com/rust-lang/rust/issues/152489)
+- Fixing a variety of soundness bugs involving higher ranked types, binders (`for<'a>`), implied bounds, and more: [#25860], [#84591], [#100051], [#100041], [#129005], [#161405], [#152489]
 
 ### What we propose to do about it
 
