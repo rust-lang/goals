@@ -1,14 +1,14 @@
 # View types experiment
 
-| Metadata            |                                    |
-| :--                 | :--                                |
-| Contact    | @scrabsha                          |
-| Status              | Accepted                           |
-| Tracking issue      | [rust-lang/goals#702] |
-| Zulip channel       | N/A                                |
-| [compiler] champion | @oli-obk                           |
-| Funding contact     | [Hexcat](https://hexcat.nl/)       |
-
+| Metadata            |                              |
+| :------------------ | :--------------------------- |
+| Contact             | @scrabsha                    |
+| Status              | Accepted                     |
+| Tracking issue      | [rust-lang/goals#702]        |
+| Zulip channel       | N/A                          |
+| [compiler] champion | @oli-obk                     |
+| Funding contact     | [Hexcat](https://hexcat.nl/) |
+| Roadmap             | The Borrow Checker Within    |
 
 ## Summary
 

@@ -35,7 +35,6 @@ A type system where borrowing relationships are first-class: lifetimes name the 
 | --- | --- | --- |
 | (((ROADMAP ROWS: The Borrow Checker Within))) |
 | Full Polonius | Future | Extend the alpha analysis with full flow-sensitivity, handling patterns like linked-list traversal with conditional reborrowing that the alpha leaves imprecise |
-| Maximally minimal view types | Future | Declare which fields a function accesses (e.g., `&mut self {counter}`), enabling the compiler to allow simultaneous borrows of disjoint fields across function boundaries |
 | Place-based lifetime syntax | Future | Syntax for lifetimes that name the place they borrow from (e.g., `'map`, `'self.text`), making borrow relationships readable in function signatures |
 | Richer view types | Future | Extend view types to cover public APIs and field abstraction |
 | Internal references | Future | Structs that hold references into their own data (`&'self.text str`), eliminating the need for index-based workarounds and enabling `'static` self-referential types |
