@@ -43,11 +43,11 @@ Inaccurate SBOMs lead to false positives on vulnerability scans and/or complianc
 
 | Task        | Owner(s) | Notes |
 | ----------- | -------- | ----- |
-| Complete the RFC | @Shnatsel, @weihanglo |    |
-| Resolve known issues | @Shnatsel, @weihanglo |       |
+| Complete the RFC | @Shnatsel | @weihanglo can review and discuss blockers with [cargo] |
+| Resolve known issues | @Shnatsel | @weihanglo can review PRs and may help with issues that would benefit from maintainer attention |
 | Convert cargo-cyclonedx to use the SBOM precursor | @Shnatsel et al. | outside the Rust Project repositories, no Rust Project mentorship needed |
-| Resolve newly uncovered issues | @Shnatsel, @weihanglo |       |
-| Stabilize the MVP | @Shnatsel, @weihanglo |       |
+| Resolve newly uncovered issues | @Shnatsel |       |
+| Stabilize the MVP | @Shnatsel |       |
 
 I am in the process of applying for funding for this work, together with collaborators I'm not sure I can disclose. The amount of time we can dedicate to the project will depend on the outcome of that application. It is possible that the funding will only materialize in the second half of the year or not at all.
 
