@@ -42,7 +42,6 @@ The Rust compiler has made progress on compilation performance over the years, w
 | Relink-Don't-Rebuild (RDR) | 2026 | Avoid rebuilding downstream crates when only function bodies change, cutting rebuild times by 5-10x for common changes |
 | Incremental, efficient linking with Wild | 2026 and beyond | Integrate support for Wild, an innovative, Rust-based linker focused on performance and incremental link times |
 | TPDE backend integration | 2027 | TPDE is a fast compiler backend framework that compiles 10-20x faster than LLVM -O0 with similar code quality |
-| Compiler performance optimizations | 2026-2027 | Targeted improvements to hot paths in type checking, trait resolution, and code generation |
 | Better build parallelization | *Future* | Improve Cargo's ability to coordinate parallel compilation across and within crates |
 | Crate slicing | *Future* | Don't compile the entire crate, just the parts you need |
 
