@@ -21,7 +21,7 @@ There are two basic ways to speed up the Rust compiler.
 - Big improvements. Large projects like *pipelined compilation* and *the
   parallel backend* have given large speed-ups, e.g. 10-50% across a wide range
   of benchmarks. However, such projects can be difficult to complete. For
-  example, the parallel front-end was begin in 2018 and is still in progress,
+  example, the parallel front-end was begun in 2018 and is still in progress,
   having gone through multiple rounds of stasis and reanimation.
 
 - Small improvements. This is steady, incremental, profile-driven work. Each
