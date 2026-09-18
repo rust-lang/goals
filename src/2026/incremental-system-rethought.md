@@ -7,8 +7,9 @@
 | Tracking issue      | [rust-lang/goals#641] |
 | Roadmap             | Fast Builds                        |
 | [compiler] champion | @jackh726                          |
-| Zulip channel       | N/A                                |
+| Zulip channel       | [#t-compiler/incremental-systems-rethought][zulip] |
 
+[zulip]: https://rust-lang.zulipchat.com/#narrow/channel/635945-t-compiler.2Fincremental-systems-rethought
 
 ## Summary
 
