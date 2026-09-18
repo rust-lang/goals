@@ -1,12 +1,14 @@
 # Compiler performance optimizations
 
-| Metadata        |                               |
-| :-------------- | ----------------------------- |
-| Contact         | @nnethercote                  |
-| Funding contact | [Hexcat](https://hexcat.nl/)  |
-| Status          | Accepted                      |
-| Roadmap         | Fast Builds                   |
-| Timespan        | 2026-2027                     |
+| Metadata        |                              |
+| :--             | :--                          |
+| Contact         | @nnethercote                 |
+| Funding contact | [Hexcat](https://hexcat.nl/) |
+| Status          | Accepted                     |
+| Roadmap         | Fast Builds                  |
+| Timespan        | 2026-2027                    |
+| Tracking issue  | [rust-lang/goals#789]        |
+
 
 ## Summary
 
