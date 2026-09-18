@@ -9,6 +9,7 @@ topic = "goals#{number}: {title}"
 message_on_add = """\
 @*T-types* goals#{number} "{title}" has been nominated for team discussion.
 """
+github_comment = "A [#t-types/nominated topic]({zulip_topic_url}) was opened to discuss this issue."
 message_on_remove = "goals#{number}'s nomination has been removed. Thanks all for participating!"
 message_on_close = "goals#{number} has been closed. Thanks for participating!"
 message_on_reopen = "goals#{number} has been reopened. Pinging @*T-types*."
