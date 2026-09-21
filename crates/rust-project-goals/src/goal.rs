@@ -1608,6 +1608,9 @@ fn extract_metadata(sections: &[Section]) -> Result<Option<Metadata>> {
             None
         }
     } else {
+        if *status == Status::Accepted {
+            spanned::bail!(title, "accepted goals must have a `Tracking issue` row");
+        }
         None
     };
 
