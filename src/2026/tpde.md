@@ -2,7 +2,7 @@
 
 | Metadata         |                                                                                  |
 | :--------------- | -------------------------------------------------------------------------------- |
-| Point of contact | @ZuseZ4                                                                          |
+| Contact | @ZuseZ4                                                                          |
 | Status           | Proposed                                                                         |
 | What and why     | Significant speedup of debug builds                                              |
 | Roadmap          |                                                                                  |
