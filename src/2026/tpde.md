@@ -6,7 +6,6 @@
 | Status           | Proposed                                                                         |
 | What and why     | Significant speedup of debug builds                                              |
 | Roadmap          |                                                                                  |
-| Tracking issue   |                                                                                  |
 | Other tracking issues |             |
 | Zulip channel    | [gsoc/TPDE codegen backend for rustc][zulip] |
 
