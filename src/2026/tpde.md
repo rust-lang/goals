@@ -8,6 +8,7 @@
 | Roadmap          |                                                                                  |
 | Other tracking issues |             |
 | Zulip channel    | [gsoc/TPDE codegen backend for rustc][zulip] |
+| [compiler] champion | @ZuseZ4 |
 
 [zulip]: https://rust-lang.zulipchat.com/#narrow/channel/421156-gsoc/topic/Idea.3A.20TPDE.20codegen.20backend.20for.20rustc
 
