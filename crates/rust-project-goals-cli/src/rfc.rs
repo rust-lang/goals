@@ -642,20 +642,11 @@ fn initialize_issues<'doc>(
                 }
 
                 let link_text = goal_document_link(timeframe, &desired_issue.goal_document);
+
                 if !existing_issue.body.contains(&link_text) {
-                    // Let's update the tracking issue to the new goal description, while keeping
-                    // the old text in case we need it. It's surprisingly hard to get out of GH
-                    // otherwise.
-                    let body = format!(
-                        "{desired_body}\n---\nNote: we have updated the body to match the \
-                         {timeframe} goal. Your original text is preserved below. \
-                         <details>\n{existing_body}\n</details>",
-                        desired_body = desired_issue.body,
-                        existing_body = existing_issue.body,
-                    );
                     actions.insert(GithubAction::UpdateIssueBody {
                         number: existing_issue.number,
-                        body,
+                        body: desired_issue.body,
                     });
                 }
             }
