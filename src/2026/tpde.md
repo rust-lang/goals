@@ -13,8 +13,9 @@
 
 ## Summary
 
-This project is a copy of the GSoC project which hadn't been selected by Google last time.
+This project is a copy of the [GSoC project] which hadn't been selected by Google last time.
 
+[GSoC project]: https://github.com/rust-lang/google-summer-of-code/blob/3d1a0ed860a204e19f966d23efd135d2aa16864d/README.md#tpde-codegen-backend-for-rustc
 
 ## Motivation
 Compile times are the number one complain for a lot of users. We already have multiple ongoing projects to improve total compile times, e.g. via the parallel frontend, or Wild as a potential parallel linker. This project is orthogonal and focus purely on improving the compile times of debug builds, when using our LLVM backend.
