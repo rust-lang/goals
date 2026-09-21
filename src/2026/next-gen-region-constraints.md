@@ -20,7 +20,7 @@ Rework the way we represent and handle region constraints in the compiler to unb
 
 There are a number of things that we would like to do with the type system but currently cannot due to our region constraints and handling of not being advanced enough:
 - Marker traits: [#29864]
-- Proving auto traits for futures/coroutines (without lots of spurrious errors): [#110338]
+- Proving auto traits for futures/coroutines (without lots of spurious errors): [#110338]
 - Supporting implied bounds on uses of GATs (`where for<'a> T::Assoc<'a>: Trait`): [#153558]
 - Better handling of region constraints originating inside closures involving parent body regions
 - Fixing a variety of soundness bugs involving higher ranked types, binders (`for<'a>`), implied bounds, and more: [#25860], [#84591], [#100051], [#100041], [#129005], [#161405], [#152489]
@@ -37,7 +37,7 @@ Although we intend to significantly rework the way region constraints work in th
 we intend to do this incrementally with lots of small stabilizations along the way.
 
 As a first step we're pursuing a minimal form of tracking implied bounds on binders which only
-applies to some binders (couroutine witness types) and has very limited rules for how we take
+applies to some binders (coroutine witness types) and has very limited rules for how we take
 into account these implied bounds when handling region constraints.
 
 ### Work items over the next year
