@@ -62,7 +62,7 @@ The duration of the project is 6 months.
 | Purpose | Cost | Funded | Sponsor(s) |
 |---------|------|--------|------------|
 | Contributor - Nightly implementation | $6k + $1.2k overhead  | No | |
-| Reviewer - Nightly implementation | covered | covered | |
+| Reviewer - Nightly implementation | covered | Full | |
 
 
 ## Frequently asked questions
