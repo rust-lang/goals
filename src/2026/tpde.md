@@ -48,7 +48,7 @@ Distribute the TPDE library via rustup, and allow using it as a codegen backend 
 | Team       | Support level | Notes                                   |
 | ---------- | ------------- | --------------------------------------- |
 | [compiler] | Medium        | dedicated reviewer  (@ZuseZ4)           |
-| [bootstrap]| Small         | backup reviewer                         |
+| [bootstrap]| Small         | backup reviewer (@Kobzol) |
 
 ## Funding
 
