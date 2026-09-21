@@ -1,4 +1,4 @@
-name: Validate markdown
+name: Check goal documents
 
 on:
   push:
@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: extractions/setup-just@v2
-    - name: Build and check
-      run: just check
+    - uses: Swatinem/rust-cache@v2
+      with:
+        key: check
+        cache-bin: false
+    - run: make check

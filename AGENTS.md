@@ -35,7 +35,7 @@ crates/
 templates/              Handlebars templates for generated content
 book.toml               mdBook and preprocessor configuration
 rust-project-goals.toml Configuration for valid team ask types
-justfile                Task runner (just check, just serve, just build)
+Makefile                Task runner (make check, make serve, make build)
 ```
 
 ## Essential commands
@@ -53,9 +53,9 @@ The commands you need most often:
 | `cargo check --workspace` | Verify all Rust code compiles                           |
 | `cargo rpg check`         | Validate all goal and roadmap documents parse correctly |
 | `cargo test --workspace`  | Run unit tests                                          |
-| `just check`              | Same as `cargo rpg check`                               |
-| `just serve`              | Build the book and serve it locally (needs `GH_TOKEN`)  |
-| `just build`              | Build the mdBook site (needs `GH_TOKEN`)                |
+| `make check`              | Same as `cargo rpg check`                               |
+| `make serve`              | Build the book and serve it locally (needs `GH_TOKEN`)  |
+| `make build`              | Build the mdBook site (needs `GH_TOKEN`)                |
 
 **Before submitting any change**, at minimum run:
 
@@ -244,8 +244,8 @@ Three GitHub Actions workflows are defined.  The first two run on pushes and PRs
 
 | Workflow           | File              | What it runs                    | Trigger            |
 | ------------------ | ----------------- | ------------------------------- | ------------------ |
-| Validate markdown  | `check.yml`       | `just check`                    | push, PR           |
+| Validate markdown  | `check.yml`       | `make check`                    | push, PR           |
 | Compile Rust code  | `compile.yml`     | `cargo check --workspace`       | push, PR           |
-| Deploy mdBook      | `mdbook.yml`      | `just build` + deploy to Pages  | push, cron, manual |
+| Deploy mdBook      | `mdbook.yml`      | `make build` + deploy to Pages  | push, cron, manual |
 
-The first two are the gate checks for pull requests.  The `just check` command is equivalent to `cargo rpg check` (see the commands table above).
+The first two are the gate checks for pull requests.  The `make check` command is equivalent to `cargo rpg check` (see the commands table above).
