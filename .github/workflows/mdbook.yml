@@ -1,18 +1,11 @@
-# Sample workflow for building and deploying a mdBook site to GitHub Pages
-#
-# To get started with mdBook see: https://rust-lang.github.io/mdBook/index.html
-#
-name: Deploy mdBook site to Pages
+name: Deploy mdBook
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-  # Runs every day at 2pm
+  # Refreshes GitHub data every 30 minutes
   schedule:
     - cron: '0,30 * * * *'
 
@@ -29,7 +22,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Build job
   build:
     runs-on: ubuntu-latest
     env:
@@ -37,25 +29,25 @@ jobs:
       MDBOOK_MERMAID_VERSION: 0.17.0
     steps:
       - uses: actions/checkout@v4
-      - name: Install mdBook + preprocessors
-        run: |
-          curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf -y | sh
-          rustup update
-          cargo install --version ${MDBOOK_VERSION} mdbook
-          cargo install --version ${MDBOOK_MERMAID_VERSION} mdbook-mermaid
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: mdbook
+          cache-bin: false
+      - name: Install prebuilt mdBook + Mermaid
+        uses: taiki-e/install-action@v2
+        with:
+          tool: mdbook@${{ env.MDBOOK_VERSION }},mdbook-mermaid@${{ env.MDBOOK_MERMAID_VERSION }}
+          fallback: none
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-      - name: Build
-        run: make build
+      - run: make build
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./book/html
-
-  # Deployment job
   deploy:
     environment:
       name: github-pages
