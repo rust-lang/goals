@@ -1,7 +1,6 @@
-use std::collections::BTreeMap;
-use std::path::Path;
+use std::collections::{BTreeMap, BTreeSet};
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
-use std::{collections::BTreeSet, path::PathBuf};
 
 use spanned::{Error, Result, Spanned};
 
@@ -677,10 +676,7 @@ pub fn roadmaps_in_dir(directory_path: &Path) -> Result<Vec<RoadmapDocument>> {
 /// refer to the same person but would appear as duplicates in aggregated lists.
 pub fn validate_username_consistency(goals: &[GoalDocument]) -> Result<()> {
     // Map from lowercase username to (set of observed casings, list of files where each appears)
-    let mut seen: std::collections::BTreeMap<
-        String,
-        std::collections::BTreeMap<String, Vec<String>>,
-    > = std::collections::BTreeMap::new();
+    let mut seen: BTreeMap<String, BTreeMap<String, Vec<String>>> = BTreeMap::new();
 
     for goal in goals {
         let file = goal.path.display().to_string();
@@ -729,6 +725,33 @@ pub fn validate_username_consistency(goals: &[GoalDocument]) -> Result<()> {
     Ok(())
 }
 
+/// Validate that goal documents refer to unique tracking issues.
+pub fn validate_unique_tracking_issues(goals: &[GoalDocument]) -> Result<()> {
+    let mut goals_by_issue = BTreeMap::<&IssueId, Vec<&GoalDocument>>::new();
+
+    for goal in goals {
+        if let Some(issue) = &goal.metadata.tracking_issue {
+            goals_by_issue.entry(issue).or_default().push(goal);
+        }
+    }
+
+    for (issue, goals) in goals_by_issue {
+        if goals.len() > 1 {
+            spanned::bail_here!(
+                "Tracking issue {issue} is assigned to multiple goals: {goals}. \
+                 Each tracking issue may only be assigned to one goal.",
+                goals = goals
+                    .iter()
+                    .map(|goal| goal.path.display().to_string())
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            );
+        }
+    }
+
+    Ok(())
+}
+
 /// Validate that every `| Roadmap | theme |` declared by a goal has a corresponding
 /// `roadmap-*.md` file whose short title matches. Skipped when no roadmap documents exist
 /// in the directory (e.g. older milestones that used `| Flagship |`).
@@ -740,7 +763,7 @@ pub fn validate_roadmap_references(
         return Ok(());
     }
 
-    let roadmap_titles: std::collections::BTreeSet<String> = roadmaps
+    let roadmap_titles: BTreeSet<String> = roadmaps
         .iter()
         .map(|r| r.short_title.content.trim().to_string())
         .collect();
@@ -753,10 +776,7 @@ pub fn validate_roadmap_references(
 }
 
 /// Validate that every theme in `themes` has a corresponding roadmap document.
-fn validate_themes(
-    themes: &Themes,
-    roadmap_titles: &std::collections::BTreeSet<String>,
-) -> Result<()> {
+fn validate_themes(themes: &Themes, roadmap_titles: &BTreeSet<String>) -> Result<()> {
     for theme in themes.iter_spanned() {
         let theme_name = theme.content.trim();
         if !roadmap_titles.contains(theme_name) {
@@ -1608,6 +1628,9 @@ fn extract_metadata(sections: &[Section]) -> Result<Option<Metadata>> {
             None
         }
     } else {
+        if *status == Status::Accepted {
+            spanned::bail!(title, "accepted goals must have a `Tracking issue` row");
+        }
         None
     };
 

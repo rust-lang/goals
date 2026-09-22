@@ -1,4 +1,4 @@
-name: Validate markdown
+name: Check goal documents
 
 on:
   push:
@@ -6,16 +6,20 @@ on:
   pull_request:
     branches: [ "main" ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-    - uses: extractions/setup-just@v2
-    - name: Build and check
-      run: just check
+    - uses: Swatinem/rust-cache@v2
+      with:
+        key: check
+        cache-bin: false
+    - run: make check

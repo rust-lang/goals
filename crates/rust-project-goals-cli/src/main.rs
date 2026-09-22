@@ -229,6 +229,7 @@ fn check() -> Result<()> {
         let goals = rust_project_goals::goal::goals_in_dir(entry.path())?;
         let roadmaps = rust_project_goals::goal::roadmaps_in_dir(entry.path())?;
         rust_project_goals::goal::validate_username_consistency(&goals)?;
+        rust_project_goals::goal::validate_unique_tracking_issues(&goals)?;
         rust_project_goals::goal::validate_roadmap_references(&goals, &roadmaps)?;
     }
 

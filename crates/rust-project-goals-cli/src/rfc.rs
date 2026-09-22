@@ -475,42 +475,15 @@ fn initialize_labels(
 fn initialize_issues<'doc>(
     repository: &Repository,
     timeframe: &str,
-    goal_documents: &'doc [GoalDocument],
+    goals: &'doc [GoalDocument],
 ) -> Result<BTreeSet<GithubAction<'doc>>> {
+    goal::validate_unique_tracking_issues(goals)?;
+
     // the set of issues we want to exist
-    let desired_issues: BTreeSet<GithubIssue> = goal_documents
+    let desired_issues: BTreeSet<GithubIssue> = goals
         .iter()
         .map(|goal_document| issue(timeframe, goal_document))
         .collect::<Result<_>>()?;
-
-    // Check for duplicate tracking issues
-    let mut tracking_issue_counts = std::collections::HashMap::new();
-    for issue in &desired_issues {
-        if let Some(tracking_issue) = issue.tracking_issue {
-            let count = tracking_issue_counts
-                .entry(tracking_issue.number)
-                .or_insert(0);
-            *count += 1;
-        }
-    }
-
-    for (issue_number, count) in tracking_issue_counts {
-        if count > 1 {
-            let goals_with_issue: Vec<_> = desired_issues
-                .iter()
-                .filter(|issue| issue.tracking_issue.map(|ti| ti.number) == Some(issue_number))
-                .map(|issue| issue.goal_document.path.display().to_string())
-                .collect();
-
-            spanned::bail_here!(
-                "Tracking issue #{} is assigned to {} goals: {}. \
-                 Each tracking issue can only be assigned to one goal.",
-                issue_number,
-                count,
-                goals_with_issue.join(", ")
-            );
-        }
-    }
 
     // the list of existing issues in the target milestone
     let milestone_issues = list_issues_in_milestone(repository, timeframe)?;
