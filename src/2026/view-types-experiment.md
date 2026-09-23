@@ -1,14 +1,14 @@
 # View types experiment
 
-| Metadata            |                                    |
-| :--                 | :--                                |
-| Contact    | @scrabsha                          |
-| Status              | Accepted                           |
-| Tracking issue      | [rust-lang/goals#702] |
-| Zulip channel       | N/A                                |
-| [compiler] champion | @oli-obk                           |
-| Funding contact     | [Hexcat](https://hexcat.nl/)       |
-
+| Metadata            |                              |
+| :------------------ | :--------------------------- |
+| Contact             | @scrabsha                    |
+| Status              | Accepted                     |
+| Tracking issue      | [rust-lang/goals#702]        |
+| Zulip channel       | N/A                          |
+| [compiler] champion | @oli-obk                     |
+| Funding contact     | [Hexcat](https://hexcat.nl/) |
+| Roadmap             | The Borrow Checker Within    |
 
 ## Summary
 
@@ -207,6 +207,20 @@ To facilitate testing, the following syntaxes will be added:
   [Benno Lossin](https://github.com/BennoLossin) at Rust All Hands 2026)
 - `&mut { <fields> } Ty` (from
   [_Syntactic Musings on View Types_](https://blog.yoshuawuyts.com/syntactic-musings-on-view-types/))
+
+### Impact
+
+Encapsulation is notoriously hard to achieve in Rust compared to other
+languages. Programmers split big functions into multiple smaller functions, each
+with a clear purpose, and suddenly the code stops compiling, because the
+compiler cannot track complex borrows _across_ functions, while it could track
+them _within_ a function. Code that feels clean and natural to a programmer gets
+rejected by the compiler.
+
+View types address this by adding a syntax that allows programmers to express
+borrows of struct fields across functions. This means that more code that
+_feels_ straightforward and natural to write, actually compiles, making the
+language easier to learn and adopt.
 
 ### Work items over the next year
 
