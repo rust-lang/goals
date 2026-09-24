@@ -20,15 +20,21 @@ This project is a copy of the [GSoC project] which hadn't been selected by Googl
 
 ## Motivation
 
-Compile times are the number one complain for a lot of users. We already have multiple ongoing projects to improve total compile times, e.g. via the parallel frontend, or Wild as a potential parallel linker. This project is orthogonal and focus purely on improving the compile times of debug builds, when using our LLVM backend.
+Compile times are the number one complain for a lot of users. We already have multiple ongoing projects to improve total compile times, e.g. via the parallel frontend, or Wild as a potential parallel linker. This project is orthogonal and focus purely on improving the compile times of debug builds, when using our existing LLVM backend.
 
 ### The status quo
 
-LLVM is our default codegen backend, for both debug and release builds. LLVM is known to have very bad compile time performance in debug mode. TPDE is an experiment which accepts LLVM IR as input and tries to replace LLVM's debug compilation at a fraction of the compile time. TPDE can target x86-64 and AArch64, which covers our most popular targets. TPDE claims 10-20x faster compile times than LLVM O0. Earlier experiments using TPDE in Rust's LLVM codegen backend have shown very promising results, especially they were able to already compile larger and significant crates.
+LLVM is our default codegen backend, for both debug and release builds. LLVM is known to have very bad compile time performance in debug mode. 
+
+TPDE-llvm is an experiment which accepts LLVM IR as input and tries to replace LLVM's debug compilation at a fraction of the compile time. TPDE-llvm can target x86-64 and AArch64 elf, which covers our most popular targets. TPDE claims 10-20x faster compile times than LLVM O0. Earlier experiments using TPDE-llvm in Rust's LLVM codegen backend have shown very promising results, especially they were able to already compile larger and significant crates.
 
 ### What we propose to do about it
 
-Distribute the TPDE library via rustup, and allow using it as a codegen backend for LLVM. The goal is to support a sufficiently large subset of crates and demonstrate a significant speedup of debug builds on those crates, without major changes to the TPDE library itself. If the improvements we've seen replicate on such a larger scale, we can start talking about a follow-up project, to see what it takes to move TPDE from an experimental option for the LLVM backend to a stable one.
+Distribute the TPDE-llvm library via rustup, and allow using it as a codegen option of the existing LLVM backend. The goal is to support a sufficiently large subset of crates and demonstrate a significant speedup of debug builds on those crates, without major changes to the TPDE library itself. If the improvements we've seen replicate on such a larger scale, we can start talking about a follow-up project, to see what it takes to move TPDE-llvm from an experimental option for the LLVM backend to a stable one.
+
+
+### Our shiny future
+TPDE-LLVM has shown to be bug-free, and became an official sub-project of LLVM. Lessons learned were applied to major other non-elf targets. The debug compile times of backend dominated builds improved in the order of 50%. We can mix-and-match between LLVM O0, LLVM O3, and TPDE-llvm, depending on the needs of users.
 
 
 ### Work items over the next 6 month
@@ -69,4 +75,4 @@ The duration of the project is 6 months.
 
 ## Frequently asked questions
 Q: How does this compare to the Cranelift backend? 
-A: TPDE has shown larger compile time improvements than Cranelift, and it operates on LLVM IR, so it can be added to our default LLVM backend and does not require a new codegen backend.
+A: Cranelift requires maintaining it's own backend, whereas TPDE-llvm is a drop-in replacement for our LLVM backend. TPDE-llvm therefore reuses the existing LLVM codegen backend. Compile time improvements from TPDE-llvm seem to show significant additional compile time improvements over Cranelift, at the cost of not supporting all features of the LLVM backend. We expect to keep LLVM O0 as a fallback for such cases. We expect TPDE-llvm to handle almost all cases, and as such the compile-time cost of calling back to LLVM should be neglible.
