@@ -42,8 +42,8 @@ TPDE-LLVM has shown to be bug-free, and became an official sub-project of LLVM. 
 #### Usable implementation in nightly, with limitations.
 | Task        | Owner(s) | Notes |
 | ----------- | -------- | ----- |
-| Add a build step to bootstrap to build and distribute TPDE on supported targets | @TechnoPorg | 2 weeks |
-| Add a `-Z tpde` option which uses TPDE instead of LLVM for debug builds | @TechnoPorg | 3 weeks |
+| Add a build step to bootstrap to build and distribute `tpde-plugin.so` on supported targets | @TechnoPorg | 2 weeks |
+| Add a `-Z tpde` option which uses TPDE-llvm instead of LLVM for debug builds | @TechnoPorg | 3 weeks |
 | Work with TPDE maintainers to fix low-hanging fruits in TPDE if they enable support for a larger set of crates | @TechnoPorg | 8 weeks |
 | Set our new backend up to run Gankra's [abi-cafe]. Report bugs to TPDE maintainers | @TechnoPorg | 1 week |
 | Performance engineering - Measure improvements, analyze where we don't see improvements over LLVM's O0 | @TechnoPorg | 8 weeks |
