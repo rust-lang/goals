@@ -1,9 +1,9 @@
 use chrono::{Datelike, NaiveDate};
 use regex::Regex;
 use rust_project_goals::re::{HELP_WANTED, TLDR};
-use rust_project_goals::spanned::{Result, Span, Spanned};
+use rust_project_goals::spanned::Result;
 use rust_project_goals::util::{comma, MILESTONE_REGEX};
-use rust_project_goals::{goal, markwaydown, spanned, team};
+use rust_project_goals::{goal, spanned, team};
 use rust_project_goals_json::GithubIssueState;
 use std::path::PathBuf;
 
@@ -259,8 +259,6 @@ fn prepare_goals(
 
         let (has_help_wanted, help_wanted) = help_wanted(&issue_id, tldr.as_deref(), &comments)?;
 
-        let why_this_goal = why_this_goal(&issue_id, issue)?;
-
         let details_summary = match comments.len() {
             0 => String::from("No detailed updates available."),
             1 => String::from("1 detailed update available."),
@@ -279,7 +277,6 @@ fn prepare_goals(
             details_summary,
             comments,
             tldr,
-            why_this_goal,
             needs_separator: true, // updated after sorting
             theme: issue_themes.get(&issue.number).cloned().unwrap_or_default(),
             contact: issue_contact
@@ -367,20 +364,6 @@ fn help_wanted(
     }
 
     Ok((tldr_has_help_wanted || !help_wanted.is_empty(), help_wanted))
-}
-
-fn why_this_goal(issue_id: &IssueId, issue: &ExistingGithubIssue) -> Result<String> {
-    let span = Span {
-        file: issue_id.url().into(),
-        bytes: 0..issue.body.len(),
-    };
-    let sections = markwaydown::parse_text(Spanned::new(&issue.body, span))?;
-    for section in sections {
-        if section.title == "Why this goal?" {
-            return Ok(section.text.trim().to_string());
-        }
-    }
-    return Ok("".to_string());
 }
 
 struct Filter<'f> {

@@ -896,11 +896,11 @@ impl GoalDocument {
     }
 
     /// Modify the goal document on disk to link to the given issue number in the metadata.
-    pub fn link_issue(&self, number: IssueId) -> Result<()> {
+    pub fn link_issue(&self, number: &IssueId) -> Result<()> {
         let mut metadata_table = self.metadata.table.clone();
         metadata_table
             .content
-            .add_key_value_row(TRACKING_ISSUE_ROW, &number);
+            .add_key_value_row(TRACKING_ISSUE_ROW, number);
 
         Table::overwrite_in_path(&self.metadata.table, &self.path, &metadata_table)?;
 

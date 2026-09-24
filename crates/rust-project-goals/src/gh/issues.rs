@@ -438,10 +438,11 @@ pub const LOCK_TEXT: &str = "This issue is intended for status updates only.\n\n
 pub const CONTINUING_GOAL_PREFIX: &str = "This is a continuing project goal, and the updates below this comment will be for the new period";
 
 impl ExistingGithubIssue {
-    /// We use the presence of a "lock comment" as a signal that we successfully locked the issue.
+    /// We use the presence of the lock message as a heuristic
+    /// that we (probably) successfully locked the issue.
     /// The github CLI doesn't let you query that directly.
     pub fn was_locked(&self) -> bool {
-        self.comments.iter().any(|c| c.body.trim() == LOCK_TEXT)
+        self.body.contains(LOCK_TEXT) || self.comments.iter().any(|c| c.body.trim() == LOCK_TEXT)
     }
 
     /// True if we have a label with the given name.
