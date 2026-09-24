@@ -74,5 +74,13 @@ The duration of the project is 6 months.
 
 
 ## Frequently asked questions
-Q: How does this compare to the Cranelift backend? 
-A: Cranelift requires maintaining it's own backend, whereas TPDE-llvm is a drop-in replacement for our LLVM backend. TPDE-llvm therefore reuses the existing LLVM codegen backend. Compile time improvements from TPDE-llvm seem to show significant additional compile time improvements over Cranelift, at the cost of not supporting all features of the LLVM backend. We expect to keep LLVM O0 as a fallback for such cases. We expect TPDE-llvm to handle almost all cases, and as such the compile-time cost of calling back to LLVM should be neglible.
+Q: How does this compare to the Cranelift backend?  
+A: Cranelift requires maintaining it's own backend, whereas TPDE-llvm is a drop-in replacement for our LLVM backend. TPDE-llvm therefore reuses the existing LLVM codegen backend. Compile time improvements from TPDE-llvm seem to show significant additional compile time improvements over Cranelift
+
+Q: How do you handle features that are covered by LLVM, but not by TPDE-llvm?  
+A: We expect to keep LLVM O0 (or later maybe cg\_clif) as a fallback for such cases. We expect TPDE-llvm to handle almost all cases, and as such the compile-time cost of calling back to LLVM should be neglible. We explicitely do not want to split our existing LLVM codegen backend to adjust IR generation depending on LLVM O0 vs TPDE-llvm usage.
+
+Q: How do you handle ABI bugs?  
+A: TPDE-LLVM should implement LLVM's undocumented ABI or report a function/call as unsupported. A mismatch is a [LLVM] bug. (TPDE author in [discussion].)
+
+[discussion]: https://rust-lang.zulipchat.com/#narrow/channel/546987-goals.2Fproposed/topic/goals.23791.3A.20Propose.20a.20project.20goal.20for.20a.20TPDE.20backend/near/626241139
