@@ -209,9 +209,6 @@ pub struct UpdatesGoal {
     /// TL;DR comment (if any, empty string if none)
     pub tldr: Option<String>,
 
-    /// Contents of a "Why this goal?" section in the tracking issue (empty string if not present)
-    pub why_this_goal: String,
-
     /// If this goal needs to be separated from its following sibling by an empty line.
     pub needs_separator: bool,
 

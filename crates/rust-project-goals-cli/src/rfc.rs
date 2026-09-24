@@ -18,7 +18,7 @@ use rust_project_goals::{
         },
         labels::GhLabel,
     },
-    goal::{self, GoalDocument, GoalPlan, ParsedOwners},
+    goal::{self, GoalDocument},
     spanned::{self, Context, Error, Result, Spanned},
     team::{get_person_data, TeamName},
 };
@@ -608,15 +608,9 @@ fn initialize_issues<'doc>(
                     actions.insert(GithubAction::LockIssue {
                         number: existing_issue.number,
                     });
-                    actions.insert(GithubAction::Comment {
-                        number: existing_issue.number,
-                        body: LOCK_TEXT.to_string(),
-                    });
                 }
 
-                let link_text = goal_document_link(timeframe, &desired_issue.goal_document);
-
-                if !existing_issue.body.contains(&link_text) {
+                if existing_issue.body != desired_issue.body {
                     actions.insert(GithubAction::UpdateIssueBody {
                         number: existing_issue.number,
                         body: desired_issue.body,
@@ -654,7 +648,7 @@ fn issue<'doc>(timeframe: &str, document: &'doc GoalDocument) -> Result<GithubIs
     Ok(GithubIssue {
         title: document.metadata.title.to_string(),
         assignees,
-        body: issue_text(timeframe, document)?,
+        body: issue_text(timeframe, document),
         labels,
         tracking_issue: document.metadata.tracking_issue.as_ref(),
         goal_document: document,
@@ -666,78 +660,45 @@ fn goal_document_link(timeframe: &str, document: &GoalDocument) -> String {
     format!("[{timeframe}/{goal_file}](https://goals.rust-lang.org/{timeframe}/{goal_file}.html)")
 }
 
-fn issue_text(timeframe: &str, document: &GoalDocument) -> Result<String> {
-    let mut tasks = vec![];
-    for goal_plan in &document.goal_plans {
-        tasks.extend(task_items(goal_plan)?);
-    }
-
+fn issue_text(timeframe: &str, document: &GoalDocument) -> String {
     let teams = document
         .teams_with_asks()
-        .iter()
-        .map(|team| team.name_and_link())
-        .collect::<Vec<_>>();
+        .into_iter()
+        .map(|team| {
+            let link = team.name_and_link();
+            match document.metadata.champions.get(team) {
+                Some(champion) if !champion.content.trim().is_empty() => {
+                    format!("{link} ({})", champion.content.trim())
+                }
+                _ => link,
+            }
+        })
+        .collect::<Vec<_>>()
+        .join(", ");
 
-    Ok(format!(
+    format!(
         r##"
 | Metadata         | |
 | --------         | --- |
 | Contact          | {contact} |
 | Team(s)          | {teams} |
 | Goal document    | {goaldocument} |
+| Funding contact    | {funding_contact} |
 
 ## Summary
 
 {summary}
 
-## Tasks and status
+---
 
-{tasks}
-
-[Team]: https://img.shields.io/badge/Team%20ask-red
+{lock_text}
 "##,
         contact = &document.metadata.owner_usernames().join(", "),
-        teams = teams.join(", "),
+        funding_contact = document.funding_contact(),
         summary = document.summary,
-        tasks = tasks.join("\n"),
         goaldocument = goal_document_link(timeframe, document),
-    ))
-}
-
-fn task_items(goal_plan: &GoalPlan) -> Result<Vec<String>> {
-    use std::fmt::Write;
-
-    let mut tasks = vec![];
-
-    if let Some(title) = &goal_plan.subgoal {
-        tasks.push(format!("### {}", **title));
-    }
-
-    for plan_item in &goal_plan.plan_items {
-        let mut description = format!(
-            "* {box} {text}",
-            box = if plan_item.is_complete() { "[x]" } else { "[ ]" },
-            text = plan_item.text.content
-        );
-
-        if let Some(parsed_owners) = plan_item.parse_owners()? {
-            match parsed_owners {
-                ParsedOwners::TeamAsks(asks) => {
-                    let teams: Vec<String> = asks.iter().map(|ask| ask.name_and_link()).collect();
-
-                    write!(description, " ({} ![Team][])", teams.join(", "))?;
-                }
-
-                ParsedOwners::Usernames(usernames) => {
-                    write!(description, " ({})", usernames.join(", "))?;
-                }
-            }
-        }
-
-        tasks.push(description);
-    }
-
-    Ok(tasks)
+        lock_text = LOCK_TEXT,
+    )
 }
 
 fn teams_with_asks(goal_documents: &[GoalDocument]) -> BTreeSet<&'static TeamName> {
@@ -768,7 +729,7 @@ impl Display for GithubAction<'_> {
                 write!(f, "post comment on issue #{}: \"{}\"", number, body)
             }
             GithubAction::UpdateIssueBody { number, body: _ } => {
-                write!(f, "update the body on issue #{} for new milestone", number)
+                write!(f, "update the body on issue #{}", number)
             }
             GithubAction::SyncAssignees {
                 number,
@@ -833,7 +794,8 @@ impl GithubAction<'_> {
                 let issue_id =
                     create_issue(repository, &body, &title, &labels, &assignees, timeframe)?;
 
-                goal_document.link_issue(issue_id)?;
+                goal_document.link_issue(&issue_id)?;
+                lock_issue(repository, issue_id.number)?;
 
                 Ok(())
             }
