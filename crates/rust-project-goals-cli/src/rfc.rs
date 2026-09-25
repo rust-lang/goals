@@ -679,20 +679,24 @@ fn zulip_topic(goal_name: &str, issue_number: u64) -> String {
     title
 }
 
+/// URL-encodes a Zulip topic and returns a full URL to it.
+/// 
+/// See <https://zulip.com/api/zulip-urls#operand-encoding-and-decoding>.
 fn zulip_topic_url(topic: &str) -> String {
-    const HEX_DIGITS: &[u8; 16] = b"0123456789ABCDEF";
-
     let mut encoded = String::with_capacity(topic.len());
     for byte in topic.bytes() {
-        if byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_' | b'.' | b'~') {
+        if byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_' | b'~') {
             encoded.push(char::from(byte));
         } else {
-            encoded.push('.');
-            encoded.push(char::from(HEX_DIGITS[usize::from(byte >> 4)]));
-            encoded.push(char::from(HEX_DIGITS[usize::from(byte & 0x0f)]));
+            // Zulip uses percent-encoding with additional replacements:
+            // - `%` -> `.`
+            // - `.` -> `.2E`
+            // - `(` -> `.28`
+            // - `)` -> `.29`
+            use std::fmt::Write as _;
+            write!(&mut encoded, ".{byte:02X}").expect("String's Write doesn't Err");
         }
     }
-
     format!("{ZULIP_GOALS_TOPIC_URL}{encoded}")
 }
 
