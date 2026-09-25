@@ -32,6 +32,12 @@ This covers multiple teams and needs a lot of coordination to balance the needs 
 
 ### The "shiny future" we are working towards
 
+### Work items over the next year
+
+| Task                     | Owner(s) | Notes |
+| ------------------------ | -------- | ----- |
+| Implement the RFC (rustc) | @TaKO8Ki |       |
+
 ## Team asks
 
 | Team       | Support level | Notes                         |
