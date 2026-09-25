@@ -660,22 +660,82 @@ fn goal_document_link(timeframe: &str, document: &GoalDocument) -> String {
     format!("[{timeframe}/{goal_file}](https://goals.rust-lang.org/{timeframe}/{goal_file}.html)")
 }
 
-fn issue_text(timeframe: &str, document: &GoalDocument) -> String {
-    let teams = document
-        .teams_with_asks()
-        .into_iter()
-        .map(|team| {
-            let link = team.name_and_link();
-            match document.metadata.champions.get(team) {
-                Some(champion) if !champion.content.trim().is_empty() => {
-                    format!("{link} ({})", champion.content.trim())
-                }
-                _ => link,
-            }
-        })
-        .collect::<Vec<_>>()
-        .join(", ");
+const MAX_ZULIP_TOPIC_LEN: usize = 60;
+const ZULIP_GOALS_TOPIC_URL: &str =
+    "https://rust-lang.zulipchat.com/#narrow/channel/435869-goals/topic/";
 
+fn zulip_topic(goal_name: &str, issue_number: u64) -> String {
+    let goal_number = format!("(goals#{issue_number})");
+    let mut title = String::new();
+    for word in goal_name.split_whitespace() {
+        if title.len() + word.len() + 1 + goal_number.len() >= MAX_ZULIP_TOPIC_LEN {
+            break;
+        }
+        title.push_str(word);
+        title.push(' ');
+    }
+    title.push_str(&goal_number);
+    assert!(title.len() < MAX_ZULIP_TOPIC_LEN);
+    title
+}
+
+/// URL-encodes a Zulip topic and returns a full URL to it.
+/// 
+/// See <https://zulip.com/api/zulip-urls#operand-encoding-and-decoding>.
+fn zulip_topic_url(topic: &str) -> String {
+    let mut encoded = String::with_capacity(topic.len());
+    for byte in topic.bytes() {
+        if byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_' | b'~') {
+            encoded.push(char::from(byte));
+        } else {
+            // Zulip uses percent-encoding with additional replacements:
+            // - `%` -> `.`
+            // - `.` -> `.2E`
+            // - `(` -> `.28`
+            // - `)` -> `.29`
+            use std::fmt::Write as _;
+            write!(&mut encoded, ".{byte:02X}").expect("String's Write doesn't Err");
+        }
+    }
+    format!("{ZULIP_GOALS_TOPIC_URL}{encoded}")
+}
+
+#[cfg(test)]
+mod zulip_tests {
+    use super::{zulip_topic, zulip_topic_url, MAX_ZULIP_TOPIC_LEN};
+
+    #[test]
+    fn zulip_basic_topic() {
+        assert_eq!(
+            zulip_topic("Comprehensive niche checks", 262),
+            "Comprehensive niche checks (goals#262)"
+        );
+    }
+
+    #[test]
+    fn zulip_long_topic_truncated() {
+        let topic = zulip_topic(
+            "one two three four five six seven eight nine ten eleven twelve thirteen",
+            123,
+        );
+
+        assert_eq!(
+            topic,
+            "one two three four five six seven eight nine (goals#123)"
+        );
+        assert!(topic.len() < MAX_ZULIP_TOPIC_LEN);
+    }
+
+    #[test]
+    fn zulip_url_encoding() {
+        assert_eq!(
+            zulip_topic_url("A topic (goals#42)"),
+            "https://rust-lang.zulipchat.com/#narrow/channel/435869-goals/topic/A.20topic.20.28goals.2342.29"
+        );
+    }
+}
+
+fn issue_text(timeframe: &str, document: &GoalDocument) -> String {
     format!(
         r##"
 | Metadata         | |
@@ -697,7 +757,31 @@ fn issue_text(timeframe: &str, document: &GoalDocument) -> String {
         funding_contact = document.funding_contact(),
         summary = document.summary,
         goaldocument = goal_document_link(timeframe, document),
-        lock_text = LOCK_TEXT,
+        teams = document
+            .teams_with_asks()
+            .into_iter()
+            .map(|team| {
+                let link = team.name_and_link();
+                match document.metadata.champions.get(team) {
+                    Some(champion) if !champion.content.trim().is_empty() => {
+                        format!("{link} ({})", champion.content.trim())
+                    }
+                    _ => link,
+                }
+            })
+            .collect::<Vec<_>>()
+            .join(", "),
+        lock_text = match &document.metadata.tracking_issue {
+            Some(issue) => {
+                let topic = zulip_topic(&document.metadata.title, issue.number);
+                let topic_url = zulip_topic_url(&topic);
+                format!(
+                    "{LOCK_TEXT}\n\nFor general questions or comments, \
+                    please contact a goal owner or post in the [Zulip topic]({topic_url})."
+                )
+            }
+            None => LOCK_TEXT.to_string(),
+        },
     )
 }
 
