@@ -433,7 +433,7 @@ pub fn sync_labels(
 
 pub const ROADMAP_LABEL: &str = "Roadmap Goal";
 
-pub const LOCK_TEXT: &str = "This issue is intended for status updates only.\n\nFor general questions or comments, please contact the owner(s) directly.";
+pub const LOCK_TEXT: &str = "This issue is intended for status updates only.";
 
 pub const CONTINUING_GOAL_PREFIX: &str = "This is a continuing project goal, and the updates below this comment will be for the new period";
 
@@ -442,7 +442,11 @@ impl ExistingGithubIssue {
     /// that we (probably) successfully locked the issue.
     /// The github CLI doesn't let you query that directly.
     pub fn was_locked(&self) -> bool {
-        self.body.contains(LOCK_TEXT) || self.comments.iter().any(|c| c.body.trim() == LOCK_TEXT)
+        self.body.contains(LOCK_TEXT)
+            || self
+                .comments
+                .iter()
+                .any(|c| c.body.trim().starts_with(LOCK_TEXT))
     }
 
     /// True if we have a label with the given name.
@@ -491,7 +495,7 @@ impl ExistingGithubComment {
     /// True if this is one of the special comments that we put on issues.
     fn is_automated_comment(&self) -> bool {
         let trimmed_body = self.body.trim();
-        trimmed_body == LOCK_TEXT || trimmed_body.starts_with(CONTINUING_GOAL_PREFIX)
+        trimmed_body.starts_with(LOCK_TEXT) || trimmed_body.starts_with(CONTINUING_GOAL_PREFIX)
     }
 
     pub fn created_at_date(&self) -> NaiveDate {
