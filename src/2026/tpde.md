@@ -14,9 +14,9 @@
 
 ## Summary
 
-This project is a copy of the [GSoC project] which hadn't been selected by Google last time.
+Add an experimental TPDE-based compilation mode to rustc's LLVM backend to substantially reduce debug build times. This project is based on a [proposal for GSoC 2026][gsoc], which was not selected for the program.
 
-[GSoC project]: https://github.com/rust-lang/google-summer-of-code/blob/3d1a0ed860a204e19f966d23efd135d2aa16864d/README.md#tpde-codegen-backend-for-rustc
+[gsoc]: https://github.com/rust-lang/google-summer-of-code/blob/3d1a0ed860a204e19f966d23efd135d2aa16864d/README.md#tpde-codegen-backend-for-rustc
 
 ## Motivation
 
