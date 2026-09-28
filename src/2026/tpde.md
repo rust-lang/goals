@@ -3,12 +3,12 @@
 | Metadata              |                                              |
 | :-------------------- | -------------------------------------------- |
 | Contact               | @ZuseZ4                                      |
-| Status                | Proposed                                     |
+| Status                | Accepted                                     |
 | What and why          | Significant speedup of debug builds          |
 | Roadmap               | Fast Builds                                  |
-| Other tracking issues |                                              |
 | Zulip channel         | [gsoc/TPDE codegen backend for rustc][zulip] |
 | [compiler] champion   | @ZuseZ4                                      |
+| Tracking issue        | [rust-lang/goals#802]                        |
 
 [zulip]: https://rust-lang.zulipchat.com/#narrow/channel/421156-gsoc/topic/Idea.3A.20TPDE.20codegen.20backend.20for.20rustc
 
@@ -34,6 +34,7 @@ Distribute the TPDE-llvm library via rustup, and allow using it as a codegen opt
 
 
 ### Our shiny future
+
 TPDE-LLVM has shown to be bug-free, and became an official sub-project of LLVM. Lessons learned were applied to major other non-elf targets. The debug compile times of backend dominated builds improved in the order of 50%. We can mix-and-match between LLVM O0, LLVM O3, and TPDE-llvm, depending on the needs of users.
 
 
@@ -76,6 +77,7 @@ The duration of the project is 6 months.
 
 
 ## Frequently asked questions
+
 Q: How does this compare to the Cranelift backend?  
 A: Cranelift requires maintaining it's own backend, whereas TPDE-llvm is a drop-in replacement for our LLVM backend. TPDE-llvm therefore reuses the existing LLVM codegen backend. Compile time improvements from TPDE-llvm seem to show significant additional compile time improvements over Cranelift
 
