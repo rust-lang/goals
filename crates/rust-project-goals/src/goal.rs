@@ -1513,12 +1513,22 @@ pub enum Status {
     Proposed,
     Accepted,
     NotAccepted,
+    Completed,
+    Discontinued,
 }
 
 impl Status {
     /// True if this goal has not yet been rejected
     pub fn is_not_not_accepted(&self) -> bool {
         *self != Status::NotAccepted
+    }
+
+    /// True if this goal has ever been accepted.
+    pub fn is_post_accepted(&self) -> bool {
+        matches!(
+            self,
+            Status::Accepted | Status::Completed | Status::Discontinued
+        )
     }
 
     pub fn try_from(value: Spanned<&str>) -> Result<Spanned<Self>> {
@@ -1528,6 +1538,8 @@ impl Status {
             ("Accepted", Status::Accepted),
             ("Proposed", Status::Proposed),
             ("Not accepted", Status::NotAccepted),
+            ("Completed", Status::Completed),
+            ("Discontinued", Status::Discontinued),
         ];
 
         for (valid_value, status) in valid_values {
@@ -1606,10 +1618,12 @@ fn extract_metadata(sections: &[Section]) -> Result<Option<Metadata>> {
         .iter()
         .find(|row| row[0] == TRACKING_ISSUE_ROW)
     {
-        // Accepted goals must have a tracking issue.
         let has_tracking_issue = !r[1].is_empty();
-        if *status == Status::Accepted && !has_tracking_issue {
-            spanned::bail!(r[1], "accepted goals cannot have an empty tracking issue");
+        if status.is_post_accepted() && !has_tracking_issue {
+            spanned::bail!(
+                r[1],
+                "accepted/completed/discontinued goals cannot have an empty tracking issue"
+            );
         }
 
         if has_tracking_issue && !r[1].contains("goals#") {
@@ -1628,8 +1642,11 @@ fn extract_metadata(sections: &[Section]) -> Result<Option<Metadata>> {
             None
         }
     } else {
-        if *status == Status::Accepted {
-            spanned::bail!(title, "accepted goals must have a `Tracking issue` row");
+        if status.is_post_accepted() {
+            spanned::bail!(
+                title,
+                "accepted/completed/discontinued goals must have a `Tracking issue` row"
+            );
         }
         None
     };

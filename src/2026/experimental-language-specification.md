@@ -3,12 +3,11 @@
 | Metadata         |                                              |
 | :--              | :--                                          |
 | Contact | @jackh726                                    |
-| Status           | Accepted                                     |
+| Status           | Discontinued                                 |
 | Tracking issue   | [rust-lang/goals#627]           |
 | Zulip channel    | Likely a combination of #t-types and #t-spec |
 | [lang] champion  | @joshtriplett                                |
 | [types] champion | @jackh726                                    |
-
 
 ## Summary
 

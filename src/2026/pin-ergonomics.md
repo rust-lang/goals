@@ -3,7 +3,7 @@
 | Metadata            |                                    |
 |:--------------------|:-----------------------------------|
 | Contact    | @frank-king                        |
-| Status              | Accepted                           |
+| Status              | Discontinued                       |
 | Tracking issue      | [rust-lang/goals#389] |
 | Zulip channel       | N/A                                |
 | [compiler] champion | @oli-obk                           |
