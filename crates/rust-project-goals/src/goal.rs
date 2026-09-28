@@ -522,6 +522,9 @@ pub struct TeamAsk {
     /// Path to the markdown file containing this ask (appropriate for a link)
     pub link_path: Arc<PathBuf>,
 
+    /// Status of the goal containing this ask.
+    pub status: Status,
+
     /// What the team is being asked for (e.g., RFC decision)
     pub ask_description: String,
 
@@ -846,6 +849,21 @@ impl GoalDocument {
         }))
     }
 
+    /// Format a (subgoal) title with this goal's terminal status marker.
+    pub fn subtitle_with_status(&self, title: &str) -> String {
+        self.metadata.status.decorate_title(title)
+    }
+
+    /// Format the title with the terminal status marker.
+    pub fn title_with_status(&self) -> String {
+        self.subtitle_with_status(&self.metadata.title)
+    }
+
+    /// Format the short title with the terminal status marker.
+    pub fn short_title_with_status(&self) -> String {
+        self.subtitle_with_status(&self.metadata.short_title)
+    }
+
     /// Returns all teams involved with this goal.
     pub fn teams_with_asks(&self) -> BTreeSet<&'static TeamName> {
         self.team_involvement.teams()
@@ -1037,7 +1055,7 @@ pub fn format_goal_table(
             table.push(vec![
                 Spanned::here(format!(
                     "[{}]({})",
-                    *goal.metadata.title,
+                    goal.title_with_status(),
                     goal.link_path.display()
                 )),
                 Spanned::here(goal.contact_for_goal_list()),
@@ -1074,7 +1092,7 @@ pub fn format_goal_table(
             table.push(vec![
                 Spanned::here(format!(
                     "[{}]({})",
-                    *goal.metadata.title,
+                    goal.title_with_status(),
                     goal.link_path.display()
                 )),
                 Spanned::here(goal.contact_for_goal_list()),
@@ -1097,13 +1115,13 @@ pub fn format_highlight_goal_sections(
         if goal.needs_contributor() || goal.metadata.is_help_wanted() {
             output.push_str(&format!(
                 "{hashes} [{}]({}) ![Help wanted][]\n\n",
-                *goal.metadata.title,
+                goal.title_with_status(),
                 goal.link_path.display()
             ));
         } else {
             output.push_str(&format!(
                 "{hashes} [{}]({})\n\n",
-                *goal.metadata.title,
+                goal.title_with_status(),
                 goal.link_path.display()
             ));
         }
@@ -1247,7 +1265,7 @@ fn format_funding_table_row(output: &mut String, goal: &GoalDocument) {
     output.push_str(&format!(
         "| {} | [{}]({}#funding) | {} | {} | {} |\n",
         status.emoji(),
-        *goal.metadata.title,
+        goal.title_with_status(),
         goal.link_path.display(),
         cost_str,
         goal.funding_contact(),
@@ -1266,7 +1284,7 @@ pub fn format_funding_goal_sections(
     for goal in goals {
         output.push_str(&format!(
             "{hashes} [{}]({})\n\n",
-            *goal.metadata.title,
+            goal.title_with_status(),
             goal.link_path.display()
         ));
 
@@ -1319,7 +1337,7 @@ pub fn format_help_wanted_goal_sections(
     for goal in goals {
         output.push_str(&format!(
             "{hashes} [{}]({})\n\n",
-            *goal.metadata.title,
+            goal.title_with_status(),
             goal.link_path.display()
         ));
 
@@ -1371,7 +1389,7 @@ pub fn format_highlight_table(goals: &[&GoalDocument]) -> String {
         if children.is_empty() {
             output.push_str(&format!(
                 "| [{}]({}) | {} |\n",
-                *goal.metadata.title,
+                goal.title_with_status(),
                 goal.link_path.display(),
                 goal.what_and_why(),
             ));
@@ -1384,7 +1402,7 @@ pub fn format_highlight_table(goals: &[&GoalDocument]) -> String {
                 let anchor = slugify(&child.title);
                 output.push_str(&format!(
                     "| [{}]({}#{}) | {} |\n",
-                    *child.title,
+                    goal.subtitle_with_status(&child.title),
                     goal.link_path.display(),
                     anchor,
                     what_and_why,
@@ -1477,7 +1495,7 @@ pub fn format_roadmap_goal_rows(goals: &[&GoalDocument], filter_theme: &str) -> 
             let timespan = goal.metadata.timespan.as_deref().unwrap_or(milestone_dir);
             output.push_str(&format!(
                 "| [{}]({}) | {} | {} |\n",
-                *goal.metadata.title,
+                goal.title_with_status(),
                 goal.link_path.display(),
                 timespan,
                 goal.what_and_why(),
@@ -1496,7 +1514,7 @@ pub fn format_roadmap_goal_rows(goals: &[&GoalDocument], filter_theme: &str) -> 
                 let anchor = slugify(&child.title);
                 output.push_str(&format!(
                     "| [{}]({}#{}) | {} | {} |\n",
-                    *child.title,
+                    goal.subtitle_with_status(&child.title),
                     goal.link_path.display(),
                     anchor,
                     timespan,
@@ -1518,6 +1536,23 @@ pub enum Status {
 }
 
 impl Status {
+    /// Emoji representing terminal goal statuses.
+    pub fn emoji(self) -> Option<&'static str> {
+        match self {
+            Status::Completed => Some("✅"),
+            Status::Discontinued => Some("❌"),
+            Status::Proposed | Status::Accepted | Status::NotAccepted => None,
+        }
+    }
+
+    /// Add the terminal status emoji to a title when applicable.
+    pub fn decorate_title(self, title: &str) -> String {
+        match self.emoji() {
+            Some(emoji) => format!("{title} {emoji}"),
+            None => title.to_string(),
+        }
+    }
+
     /// True if this goal has not yet been rejected
     pub fn is_not_not_accepted(&self) -> bool {
         *self != Status::NotAccepted
@@ -1926,6 +1961,7 @@ fn extract_team_involvement(
                 team_asks.extend(plan_item.team_asks(
                     link_path,
                     &goal_titles,
+                    *metadata.status,
                     &metadata.contacts,
                 )?);
             }
@@ -2163,7 +2199,7 @@ pub fn format_sized_goal_table(goals: &[&GoalDocument], size: GoalSize) -> Resul
             let goal_cell = if is_first_row {
                 format!(
                     "[{}]({})",
-                    goal.metadata.short_title.content,
+                    goal.short_title_with_status(),
                     goal.link_path.display()
                 )
             } else {
@@ -2511,6 +2547,7 @@ impl PlanItem {
         &self,
         link_path: &Arc<PathBuf>,
         goal_titles: &Vec<Spanned<String>>,
+        status: Status,
         goal_owners: &str,
     ) -> Result<Vec<TeamAsk>> {
         let mut asks = vec![];
@@ -2538,6 +2575,7 @@ impl PlanItem {
 
             asks.push(TeamAsk {
                 link_path: link_path.clone(),
+                status,
                 ask_description: self.text.content.clone(),
                 goal_titles: goal_titles.clone(),
                 teams,

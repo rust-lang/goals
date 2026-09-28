@@ -9,7 +9,7 @@ use std::path::PathBuf;
 use spanned::{Result, Spanned};
 
 use crate::{
-    goal::{GoalDocument, SupportLevel},
+    goal::{GoalDocument, Status, SupportLevel},
     team::TeamName,
     util,
 };
@@ -19,6 +19,7 @@ struct GoalSupportData<'g> {
     goal_title: &'g str,
     subgoal_title: Option<&'g str>,
     link: &'g PathBuf,
+    status: Status,
     support_level: SupportLevel,
     notes: &'g str,
     champion: Option<&'g str>,
@@ -26,7 +27,13 @@ struct GoalSupportData<'g> {
 
 impl<'g> GoalSupportData<'g> {
     fn goal_title_cell(&self) -> String {
-        util::goal_title_cell(self.goal_title, self.link, self.subgoal_title)
+        let title = self.subgoal_title.unwrap_or(self.goal_title);
+        let title = self.status.decorate_title(title);
+        util::goal_title_cell(
+            &title,
+            self.link,
+            self.subgoal_title.map(|_| title.as_str()),
+        )
     }
 }
 
@@ -94,6 +101,7 @@ pub fn format_team_support_for_team(
                     goal_title: &goal.metadata.title,
                     subgoal_title: support.subgoal.as_ref().map(|s| s.content.as_str()),
                     link: &goal.link_path,
+                    status: *goal.metadata.status,
                     support_level: support.support_level,
                     notes: &support.notes,
                     champion,

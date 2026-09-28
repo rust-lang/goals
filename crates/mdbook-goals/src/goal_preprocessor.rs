@@ -666,8 +666,12 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             let content = std::fs::read_to_string(&goal.path)
                 .with_context(|| format!("reading `{}`", goal.path.display()))?;
             let path = goal.path.strip_prefix(&self.ctx.config.book.src).unwrap();
-            let mut new_chapter =
-                Chapter::new(&goal.metadata.title, content, path, parent_names.clone());
+            let mut new_chapter = Chapter::new(
+                &goal.title_with_status(),
+                content,
+                path,
+                parent_names.clone(),
+            );
 
             if let Some(mut number) = chapter.number.clone() {
                 number.push(index + 1);

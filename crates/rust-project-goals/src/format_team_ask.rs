@@ -5,7 +5,12 @@ use std::{
 
 use spanned::{Result, Spanned};
 
-use crate::{config::Configuration, goal::TeamAsk, team::TeamName, util};
+use crate::{
+    config::Configuration,
+    goal::{Status, TeamAsk},
+    team::TeamName,
+    util,
+};
 
 /// Format a set of team asks into a table, with asks separated by team and grouped by kind.
 ///
@@ -134,11 +139,12 @@ pub fn format_team_asks(asks_of_any_team: &[&TeamAsk]) -> Result<String> {
     Ok(output)
 }
 
-#[derive(Eq, PartialEq, PartialOrd, Ord, Hash, Copy, Clone, Debug)]
+#[derive(Eq, PartialEq, PartialOrd, Ord, Copy, Clone, Debug)]
 struct GoalData<'g> {
     goal_title: &'g String,
     subgoal_title: Option<&'g String>,
     link: &'g PathBuf,
+    status: Status,
 }
 
 impl<'g> GoalData<'g> {
@@ -148,11 +154,13 @@ impl<'g> GoalData<'g> {
                 goal_title,
                 subgoal_title: None,
                 link: &ask.link_path,
+                status: ask.status,
             }),
             [goal_title, subgoal_title] => Ok(Self {
                 goal_title,
                 subgoal_title: Some(subgoal_title),
                 link: &ask.link_path,
+                status: ask.status,
             }),
             _ => spanned::bail!(
                 ask.goal_titles[3],
@@ -163,10 +171,12 @@ impl<'g> GoalData<'g> {
     }
 
     fn goal_title(&self) -> String {
+        let title = self.subgoal_title.unwrap_or(self.goal_title);
+        let title = self.status.decorate_title(title);
         util::goal_title_cell(
-            self.goal_title,
+            &title,
             self.link,
-            self.subgoal_title.map(|s| s.as_str()),
+            self.subgoal_title.map(|_| title.as_str()),
         )
     }
 }

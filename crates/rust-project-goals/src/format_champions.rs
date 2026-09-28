@@ -18,7 +18,7 @@ pub fn format_champions(goals: &[&GoalDocument]) -> Result<String> {
             let champion_name = champion.content.clone();
             let goal_link = format!(
                 "[{}]({})",
-                goal.metadata.title.content,
+                goal.title_with_status(),
                 goal.link_path.display()
             );
 
