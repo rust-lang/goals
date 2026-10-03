@@ -3,6 +3,7 @@
 | Metadata         |                                     |
 | :--              | :--                                 |
 | Contact | @BoxyUwU                            |
+| Funding contact | [Hexcat](https://hexcat.nl/) |
 | Roadmap          | Project Zero                        |
 | Status           | Accepted                            |
 | Tracking issue   | [rust-lang/goals#621]  |
