@@ -3,6 +3,7 @@
 | Metadata              |                                    |
 |:----------------------|:-----------------------------------|
 | Contact      | @BoxyUwU                           |
+| Funding contact | [Hexcat](https://hexcat.nl/) |
 | Status                | Accepted                           |
 | Tracking issue        | [rust-lang/goals#405] |
 | Other tracking issues | [rustc-dev-guide#2663]             |

@@ -3,6 +3,7 @@
 | Metadata         |                                                                                                    |
 | :--              | :--                                                                                                |
 | Contact | @traviscross                                                                                       |
+| Funding contact | [Hexcat](https://hexcat.nl/) |
 | Status           | Accepted                                                                                           |
 | What and why     | Name opaque types and bound async return types so `async fn` in traits works with `Send` and `dyn` |
 | Roadmap          | Just add async                                                                                     |

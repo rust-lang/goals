@@ -3,6 +3,7 @@
 | Metadata              |                                                                                                      |
 | :--                   | :--                                                                                                  |
 | Contact      | @lcnr                                                                                            |
+| Funding contact | [Hexcat](https://hexcat.nl/) |
 | Status                | Accepted                                                                                             |
 | What and why          | Let types opt out of being moved or forgotten, enabling scoped spawn, async drop, and pin-by-default |
 | Timespan              | 2026-2027                                                                                            |
