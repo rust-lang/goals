@@ -77,11 +77,11 @@ optimization techniques.
 ## Funding
 
 Funding will support @nnethercote's profiling, benchmarking, and optimization
-work. Additionally, extra funding can support 1-2 additional engineers to form
+work. Extra funding can support 1-2 additional engineers to form
 a small team. Contact [Hexcat](https://hexcat.nl/) to fund this goal.
 
 | Purpose | Cost | Funded | Sponsor(s) |
 | ------- | ---- | ------ | ---------- |
-| Compiler performance optimization work | TBD | No | |
+| Compiler performance optimization work | Ask | Partial | OpenAI, Devolutions |
 
 ## Frequently asked questions
