@@ -87,7 +87,7 @@ At the end, we will publish the first version of `rustc_public` on crates.io.
 
 | Purpose | Cost | Funded | Sponsor(s) |
 |---------|------|--------|------------|
-| Contributor | Ask | No  |            |
+| @makai410 as owner (6 - 12 months, part-time) | Ask | No  |            |
 
 
 ## Frequently asked questions
