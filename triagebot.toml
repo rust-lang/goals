@@ -24,14 +24,14 @@ New goal proposal: "{title}" (goals#{number}).
 cc {recipients}
 """
 github_comment = "A [#goals/proposed topic]({zulip_topic_url}) was opened to discuss this issue."
-message_on_close = "goals#{number} has been resolved. Thanks for participating!"
+message_on_close = "Goal proposal goals#{number} has been resolved. Thanks for participating!"
 
 
-[notify-zulip."I-goals-nominated"]
+[notify-zulip."S-needs-discussion"]
 zulip_stream = 478266 # #goals/meta
 topic = "goals#{number}: {title}"
 message_on_add = """\
-Nominated issue: "{title}" (goals#{number}).
+Issue needs discussion: "{title}" (goals#{number}).
 
 cc {recipients}
 """
