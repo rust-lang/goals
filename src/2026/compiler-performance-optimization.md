@@ -82,6 +82,6 @@ a small team. Contact [Hexcat](https://hexcat.nl/) to fund this goal.
 
 | Purpose | Cost | Funded | Sponsor(s) |
 | ------- | ---- | ------ | ---------- |
-| Compiler performance optimization work | Ask | Partial | OpenAI, Devolutions |
+| Compiler performance optimization work | Ask | Partial | Google, OpenAI, Devolutions, Fulfil |
 
 ## Frequently asked questions
