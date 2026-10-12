@@ -262,4 +262,4 @@ support ongoing maintenance of related features.
 
 | Purpose | Cost | Funded | Sponsor(s) |
 |---------|------|--------|------------|
-| Reviewers + champions | $10,000 | No | |
+| Reviewers + champions | $10,000 | Yes | [Devolutions](https://devolutions.net/) |
