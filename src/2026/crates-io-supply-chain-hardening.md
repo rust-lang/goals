@@ -19,27 +19,26 @@ We plan to speed up and improve efficacy of manual security responses in the cra
 
 ### The status quo
 
-Registry administrators see supply chain attacks increasing in both in volume and sophistication. Today, we have a tight crates.io security response team that reacts quickly, but our mitigations are mostly manual and frequently destructive to the point of delaying response. From recent attacks, we see tools that are missing from our toolkit which we want for the future.
+Registry administrators see supply chain attacks increasing in both volume and sophistication. Today, we have a tight-knit crates.io security response team that reacts quickly, but our mitigations are mostly manual and often destructive enough to delay response. Recent attacks have highlighted gaps in our toolkit that we want to address.
 
 In a recent security incident, a stolen token published malware across an account of ~250 crates with hundreds of automated versions. The responder had to "wade through LLM spam of hundreds of versions" and chain together a script with ~70 yank & delete commands. In fact, one deletion failed and the related version lasted for a few extra days. According to the operator: "I kinda wish we had an intermediate step here. Deletion is only semi-reversible, but I would like to publicly nuke the account while we investigate."
 
-Most language ecosystems have recently experienced supply chain attacks that compromised significant infrastructure. Attacks are evolving in sophistication to include two stage attack payloads, hiding primary attacks underneath poisoned dependencies, and manipulation of the resolver to increase delivery ([arrayref in August 2026](https://blog.rust-lang.org/2026/08/20/supply-chain-attack-on-arrayref/)). We also see new attacks such as [spearphishing high-impact individuals](https://blog.rust-lang.org/2026/09/17/targeted-attacks/). Other projects see similar attacks, such as ([Django in October 2026](https://frankwiles.com/posts/i-got-targeted/)).
+Most language ecosystems have recently experienced supply chain attacks that compromised significant infrastructure. Attacks are becoming more sophisticated, using two-stage payloads, hiding primary attacks in poisoned dependencies, and manipulating the resolver to increase delivery ([arrayref in August 2026](https://blog.rust-lang.org/2026/08/20/supply-chain-attack-on-arrayref/)). We also see new attacks such as [spearphishing high-impact individuals](https://blog.rust-lang.org/2026/09/17/targeted-attacks/). Other projects face similar attacks, such as [Django in October 2026](https://frankwiles.com/posts/i-got-targeted/).
 
-Our current security responses are fairly tight, and we have largely avoided broad impact. `arrayref` was the worst attack we know of to date, and it was live for ~90 minutes with little evidence of further spread via compromised environments.
+
+Our current security responses are fairly effective, and we have largely avoided broad impact. `arrayref` was the worst attack we know of to date, and it was live for about 90 minutes, with little evidence of further spread through compromised environments.
 
 #### Our current tools
 
-We have quite a few detection systems built already, running offline. In fact, for the `arrayref` incident, several Rust Foundation security systems did in fact trigger (for instance, the namesquatting detection). They largely operate based on scheduled jobs. Some fire notifications, but many are false-positive-prone, so they must be reviewed manually.
+We already have quite a few detection systems running offline. (In fact, during the `arrayref` incident, several Rust Foundation security systems did trigger, e.g., the namesquatting detection.) They largely run as scheduled jobs. Some send notifications, but many are prone to false positives, so their results must be reviewed manually.
 
-We are also building client-side hardening via `min-publish-age`. It adds Cargo-side cooldowns for extra scrutiny. This could become set by default and relieve some of the urgency of security responses, at least for some swathe of our consumers. Though, it still leaves registry administrators in a position of, "press this button in time or else there is an incident", which is still a psychologically stressful operator role.
+We are also building client-side hardening via `min-publish-age`. It adds Cargo-side cooldowns to allow time for extra scrutiny. This could be enabled by default and relieve some of the urgency of security responses, at least for some of our consumers. However, it still leaves registry administrators in a position of "press this button in time or else there is an incident", which is still a psychologically stressful operator role.
 
 Crates.io and other registries have three package lifecycle states: published, yanked, and deleted. Yanking a package marks it as undesirable while keeping it accessible, and individual tools may prevent users from downloading it (e.g., cargo avoids resolving yanked versions, but still allows downloading them if they appear in an existing Cargo.lock file). This means yanking is a reversible operation, albeit less safe. In contrast, deleting a package makes it inaccessible by redacting it from the registry index, which makes it safer but destructive.
 
-Deletion is only partially reversible for two reasons: it loses download stats and history, which significantly impacts the perceived legitimacy of the project, and it frees the crate name for alternative ownership after an initial 24 hour period. Restoring deletes only means restoring crate versions in the index and making crate bytes accessible.
+Deletion is only partially reversible for two reasons: it loses download stats and history, which significantly impacts the perceived legitimacy of the project, and it frees the crate name for alternative ownership after an initial 24 hour period. Restoring deletes only means restoring crate versions in the index and making crate bytes accessible. Furthermore, deletion has a poor auditability story. Deletions show up in a registry's git index as removals of version lines, but this record is lost when the index is squashed. crates.io admins currently add notifications manually to a Zulip channel, but these are not easily discoverable by consumers outside of the Rust Project.
 
-Furthermore, deletion has a poor auditability story. Deletions show up in a registry's git index as removals of version lines, but this record gets buried on index squash. crates.io admins currently manually add notifications to a Zulip channel, but this is not all that discoverable for consumers outside of the Rust Project.
-
-Stepping back, our current workflows are insufficient for operators because the more impactful mitigation (deletion) forces operators into a destructive action under time pressure. This is stressful and delays response. It also currently requires chaining many individual actions (yanks and deletes of specific versions) into a bulk operation, which is error prone and can partially fail. In practice, operators end up making direct database queries rather than scripting via admin APIs, which is also a risky move under pressure due to potentially large blast radius.
+Stepping back, our current workflows are insufficient for operators because the more impactful mitigation (deletion) forces them to take destructive action under time pressure. This is stressful and delays response. It also currently requires chaining many individual actions (yanks and deletes of specific versions) into a bulk operation, which is error-prone and can partially fail. In practice, operators end up making direct database queries rather than scripting via admin APIs, which is also risky under pressure due to the potentially large blast radius.
 
 #### Peer approaches
 
@@ -51,7 +50,7 @@ PyPI maintainers are also [discussing automated detection and hold systems](http
 
 We propose adding an intermediate *quarantined* state that bridges the gap between yank and deletion, and a *withdrawn* state that is a fully reversible, auditable delete. This prevents access of crate bytes and avoids resolving withheld versions, but does not wipe ownership identity and usage data. This is preferable to the "yanked" state because it prevents usage in new builds even if a version appears in an existing Cargo.lock. It is preferable to deletion because it can be used used with less friction but similar efficacy due to reversibility.
 
-We will move our highest confidence detection systems from being passive to active, automatically quarantining clearly suspicious releases for human review. This gives our operators the leisure to review flagged crates in depth, on more reasonable timelines, rather than needing to make high-pressure decisions as quickly as possible. As part of this, we will validate our detections against real-world crates.io events to evaluate false positives and efficacy, and we will test new detection systems that appear promising.
+We will move our highest-confidence detection systems from being passive to active, automatically quarantining clearly suspicious releases for human review. This gives our operators room to review flagged crates in depth, on more reasonable timelines, rather than needing to make high-pressure decisions as quickly as possible. As part of this, we will validate our detections against real-world crates.io events to evaluate false positives and efficacy, and we will test new detection systems that appear promising.
 
 ### Work items over the next year
 
@@ -146,37 +145,33 @@ Users continuously install software in CI and otherwise. Even if a version has b
 
 ### What about malware that is already in local Cargo caches?
 
-Today, yanked and deleted crates persist in local Cargo caches even after registry administators action on them upstream. This gap will be closed separately from this goal by ongoing [Verifiable Mirroring work](https://goals.rust-lang.org/2026/mirroring.html). At a high level, the verifiable mirror will have cheap access to a cryptographically verifiable view of the freshest form of the upstream registry index, so that it can invalidate caches when a given crate's index file changes.
-
-This will apply out of box to yanks and deletions today. Capabilities added in this goal for new lifecycle states (quarantined and withdrawn) will also benefit.
+Today, yanked and deleted crates persist in local Cargo caches even after registry administrators take action on them upstream. This gap will be closed separately from this goal by the ongoing [Verifiable Mirroring work](https://goals.rust-lang.org/2026/mirroring.html). At a high level, the verifiable mirror will have cheap access to a cryptographically verifiable view of the latest upstream registry index, allowing it to invalidate caches when a crate's index file changes. This will apply out of the box to the existing states (yanked and deleted), as well as the new lifecycle states added by this goal (quarantined and withdrawn).
 
 ### Does this add work for maintainers?
 
-For quarantine support is strictly a softening of the current mitigation available (ie, delete). It's also a quality of life improvement for incident responders via bulk actions.
+Quarantine support is strictly a softening of the current mitigation available (i.e. deletion). It's also a quality-of-life improvement for incident responders via bulk actions.
 
-For publish-time detections and automated holds, there is a potential for maintainer impact. The RFC will go more in depth around the risks and controls for this. In general, the guiding principle will be, run in shadow mode for a while, make sure we have acceptable false-positive rates, focus on serious signals that are obviously suspicious, and only then promote a detection to acting. This protects both maintainers from toil, and the crates.io and security teams reviewing the queue from overload. Similarly we will need to specify a SLA, an appeal mechanism, and other nuts and bolts.
+Publish-time detections and automated holds could affect maintainers. The RFC will go into more depth on the risks and controls. In general, the guiding principle will be to run detections in shadow mode for a while, make sure we have acceptable false-positive rates, focus on serious signals that are obviously suspicious, and only then enable automated holds. This protects maintainers from toil, and the crates.io and security teams reviewing the queue from overload. We will also need to specify an SLA, an appeal mechanism, and other nuts and bolts.
 
-I'm confident that we can find a not-perfect solution that everybody is comfortable with, even if it doesn't cover all possible threat that we want to handle. We can keep iterating once we land a base set of systems.
+I'm confident that we can find an imperfect solution that everybody is comfortable with, even if it doesn't cover all possible threats that we want to handle. We can keep iterating once we land a base set of systems.
 
 ### Who decides what gets held? What is the trust model?
 
-This concern should be decided at the registry level. For the manual quarantine, we can use the existing criteria that we use for admin deletion. We also can reuse the [existing malicious crate channels](https://blog.rust-lang.org/2026/02/13/crates.io-malicious-crate-update/) (along with new tombstones in the index files).
+This should be decided at the registry level. For manual quarantine, we can use the existing criteria for admin deletion. We can also reuse the [existing malicious crate channels](https://blog.rust-lang.org/2026/02/13/crates.io-malicious-crate-update/), along with new tombstones in the index files.
 
-For the automatic hold we need to hash this out still. I imagine starting narrow, with deterministic checks, and shadow mode to judge impact, will be a good place to start. We will need to balance Project values around shared decisionmaking and transparency with the cat and mouse of detection efficacy. I suspect we will ultimately land on a model where a small delegated group, inside a security-related project team, is responsible for approving new detections, but with publicly agreed-upon criteria for such decisions that include data, values, etc.
+For automatic holds, we still need to hash this out. I imagine starting narrow, with deterministic checks and shadow mode to judge impact, will be a good place to start. We will need to balance Project values around shared decision-making and transparency with the cat-and-mouse nature of detection efficacy. I suspect we will ultimately land on a model where a small delegated group within a security-related project team is responsible for approving new detections, using publicly agreed-upon criteria that include data, values, etc.
 
 ### Why split this up?
 
-We'd prefer each individual RFC to be relatively small to keep it manageable to review and find consensus. Specifically, we are designing the quarantine registry spec and Cargo behaviors, separately from the actual distributed systems work that crates.io will implement on top of it (crates.io issue/PR).
+We'd prefer each individual RFC to be relatively small to keep it manageable to review and reach consensus. Specifically, we are designing the quarantine registry spec and Cargo behaviors separately from the distributed systems work that crates.io will implement on top of them.
 
-We build offline testing systems early so we can start baking detection approaches against dry-run data, since we will need strong data to bring to the ultimate RFCs to argue for enabling our first couple detection systems.
-
-And then, we are separating the Cargo/registry spec baseline support for publish-time holds from the policies around detections that actually apply such holds, and the crates.io-side implementation of those policies.
+We build offline testing systems early so we can start testing detection approaches against dry-run data, since we will need strong data to bring to the later RFCs to argue for enabling our first couple of detection systems. We are also separating the Cargo/registry spec's baseline support for publish-time holds from the policies around detections that actually apply such holds, and from the crates.io-side implementation of those policies.
 
 ### What are we leaving out?
 
-We aren't trying to build a whole lot of detection systems, or the best detection systems. We mostly want to have at least one detection, however thin, that is reliable enough to turn on. It's easy to discuss further systems once we have the base platforms.
+We aren't trying to build a whole lot of detection systems, or the best detection systems. We mostly want to have at least one detection system, however simple, that is reliable enough to turn on. It will be easier to discuss further systems once we have the base platforms in place.
 
-We also are not going deep into crowdsourcing reports of bad releases. Right now, we have a relatively crude process involving email intake. One could imagine crowdsourcing flags [like PyPI has discussed](https://blog.pypi.org/posts/2024-12-30-quarantine/#future-improvement-automation), for instance via cargo-vet. But, that deserves its own discussion and Project Goal. This one is already fairly large :)
+We also are not going deep into crowdsourcing reports of bad releases. Right now, we have a relatively crude process involving email intake. One could imagine crowdsourcing flags [like PyPI has discussed](https://blog.pypi.org/posts/2024-12-30-quarantine/#future-improvement-automation), for instance via cargo-vet. But that deserves its own discussion and Project Goal. This one is already fairly large :)
 
 ## Funding
 
