@@ -294,7 +294,7 @@ Ross Sullivan (@ranger-ross) is a current member of the Cargo team and has ongoi
 Further reductions are possible with more workstreams.
 For Ross to join, we would need a substantial amount of the funding to be paid "up-front" at the start of the phase.
 
-Matyáš Racek (@panstromek0 is a current member of the Compiler Performance working group and has ongoing work to reduce encoding sizes in rmeta files and incremental caches.
+Matyáš Racek (@panstromek) is a current member of the Compiler Performance working group and has ongoing work to reduce encoding sizes in rmeta files and incremental caches.
 He has experience measuring, triaging, and improving the compiler's performance, and his assistance will be invaluable in optimizations within the compiler itself.
 
 [cargo#17512]: https://github.com/rust-lang/cargo/pull/17512
