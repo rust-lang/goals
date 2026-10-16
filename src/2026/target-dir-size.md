@@ -257,32 +257,50 @@ We have sufficient contributors with existing experience.
 
 ## Funding
 
-There are over a dozen workstreams within this proposed goal.
-By myself, I cannot implement them all within a year.
-Additional funding will allow me to hire and mentor other compiler and build system engineers to split up the work,
-not only accelerating timelines but also completing more overall workstreams.
-Furthermore, it will allow me to focus on design work rather than implementation, unlocking the larger structural improvements that require coordination between teams.
+We are looking for sponsors to fund work on this goal.
+We suggest funding in two phases:
+first, a research and short-term improvements phase, with a small group;
+then a larger mid-term phase with a larger group.
 
-This goal needs a minimum of (Ask) to run, but for that amount we could only complete 3-5 small workstreams, most likely the items in the "Near-term improvements" section.
+### Phase 1: Measurements and near-term improvements
+
+This goal needs a minimum of (Ask) to run, but for that amount we could only complete the items in the "Measurements" and "Near-term improvements" section.
 Funding up to the full requested amount will allow us to complete all or almost all the proposed workstreams.
+
+Our best estimate is that this minimum funding would give around a 30% improvement in incremental target sizes over the next 6 months.
 
 I have extensive experience working on the compiler, including the query system and integration work between Rustc and Cargo.
 I also have project management experience from my time at Ferrocene,
 as well as consensus building experience on policy, design, and implementation work within the Rust project.
 As part of this work, I would lead implementation, mentor contributors, and coordinate between the Compiler and Cargo teams.
 
-Ross Sullivan is a current member of the Cargo team and has ongoing work to reduce target directory sizes.
+
+|Purpose                                                                              |Cost                           |Funded  |Sponsor(s)                                   |
+|-------------------------------------------------------------------------------------|-------------------------------|--------|---------------------------------------------|
+|@jyn514 as owner (3-6 months, full-time)                                             |Ask                            |No      |                                             |
+
+### Phase 2: mid-term improvements
+
+There are over a dozen workstreams within this proposed goal.
+By myself, I cannot implement them all within a year.
+Additional funding will allow me to hire and mentor other compiler and build system engineers to split up the work,
+not only accelerating timelines but also completing more overall workstreams.
+Furthermore, it will allow me to focus on design work rather than implementation, unlocking the larger structural improvements that require coordination between teams.
+
+This amount of funding will allow us to reach the 60-70% (per-directory) and 80-90% (cross-directory) targets from the goal summary.
+
+Ross Sullivan (@ranger-ross) is a current member of the Cargo team and has ongoing work to reduce target directory sizes.
 [Early research][cargo#17512] shows the possibility of a 56% or more size reduction in cross-project caches from his ongoing work alone.
 Further reductions are possible with more workstreams.
-For Ross to join, we would need a substantial amount of the funding to be paid "up-front" at the start of the goal.
+For Ross to join, we would need a substantial amount of the funding to be paid "up-front" at the start of the phase.
 
-Matyáš Racek is a current member of the Compiler Performance working group and has ongoing work to reduce encoding sizes in rmeta files and incremental caches.
+Matyáš Racek (@panstromek0 is a current member of the Compiler Performance working group and has ongoing work to reduce encoding sizes in rmeta files and incremental caches.
 He has experience measuring, triaging, and improving the compiler's performance, and his assistance will be invaluable in optimizations within the compiler itself.
 
 [cargo#17512]: https://github.com/rust-lang/cargo/pull/17512
 [brlo]: https://blog.rust-lang.org/inside-rust/2026/08/18/reducing-target-dir-size-on-nightly/
 
-Kobzol has been responsible for implementing and stabilizing `-Z embed-metadata=no`, and is a current member of the Council.
+Jakub Beránek (@Kobzol) has been responsible for implementing and stabilizing `-Z embed-metadata=no`, and is a current member of the Council.
 `embed-metadata` has reduced the size of release builds by [almost 30%][brlo] in the past, and we are confident that further similar improvements are possible.
 
 Zeklandia has a non-traditional programming background, but has the logistical flexibility to do short-term contract work,
