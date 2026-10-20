@@ -123,106 +123,14 @@ All structural redesigns will be conditional on benchmarks that show that they'r
 
 ### Work items over the next year
 
-Subgoals (heading level 5) are independent and can be worked on in parallel unless otherwise labeled.
-Within a subgoal, tasks are serially dependent unless otherwise labeled.
-
-#### Measurement
-
-##### Benchmark intermediate artifact sizes
+See [hackmd](https://hackmd.io/@jyn514/rkuckyShfl) for a detailed workplan.
 
 | Task        | Owner(s) | Notes |
 | ----------- | -------- | ----- |
-| Create a prototype that breaks down `.rmeta` files and `incremental/` directories by size and query across multiple build invocations | @jyn514  |       |
-| Develop the prototype into a tool that can be maintained and available to users | ? | Likely implemented as a `rustc_driver` or `-Z` flag |
-| Integrate that tool into `rustc-perf` benchmarks | ? | Subgoal id A2. Will automatically give us a graph over time once metrics are hooked up. |
- | (Optional) Add support for auto-triaging whether a size change is statistically relevant | ? | likely not necessary to start since metadata and query cache sizes are stable |
+| Measurement | @jyn514  | Phase 1 |
+| Near-term improvements | @jyn514  | Phase 1 |
+| Structural improvements | @jyn514  | Phase 2. Assisted by @panstromek, @ranger-ross, @kobzol, and @Zeklandia. |
 
-##### Collect representative benchmarks
-
-| Task        | Owner(s) | Notes |
-| ----------- | -------- | ----- |
-| Collect a sample of crates that have unusually large artifact sizes | @Zeklandia | Subgoal id B1 |
-| Add those crates to the `rustc-perf` benchmark suite | @Zeklandia | Depends on subgoal A2.  May require adding support for chains of dependencies to rustc-perf, since artifact size is impacted by monomorphization |
-| Identify the largest sub-sections of `.rmeta`, `.rlib`, and `incremental/` files for those benchmarks | @Zeklandia | Subgoal id B3 |
-
-#### Near-term improvements
-These will focus on improving intermediate artifact size for gathered benchmarks.
-Each of these can be worked on in parallel.
-
-| Task        | Owner(s) | Notes |
-| ----        | -------- | ----- |
-| Stabilize and enable `-Z embed-metadata=no` by default | @Kobzol | stablization PR already open but not yet merged |
-| Reduce debuginfo in build scripts | @jyn514 | if [cargo#17518] doesn't already apply to build scripts, it could be extended |
-| Avoid serializing unnecessary incremental state | ? | needs further investigation |
-| Avoid serializing queries on disk where possible. | ? | changes must backed by benchmarks showing that this has little effect on compilation speed |
-| Dynamically link the standard library in build scripts | @jyn514 | |
-
-#### Structural improvements
-
-##### Reduce duplicate storage and unnecessary serialized state
-Subtasks in this category can be worked on in parallel.
-
-| Task | Owner(s) | Notes | 
-| ---- | -------- | ----- |
-| Remove duplicate sections between incremental cache and `.rlib` files  | @panstromek | depends on subgoal B3. needs design work. |
-| Decrease debuginfo size for .rlib files | @jyn514 | likely through enabling compression; early benchmarks show near-original performance when compressed and unpacked split-dwarf is enabled. needs careful design if binaries are to remain static and portable. may be less urgent once `dev` profiles use `line-tables-only`. |
-| Use DWARF type signature computation to avoid duplicating debuginfo in the final binary  | @jyn514 | overlaps with binary-size roadmap, needs coordination |
-| Use `dwz` to avoid duplicating debuginfo in the final binary  | @jyn514 | unclear whether this should be Cargo or Rustc's responsibility, needs design work. overlaps with binary-size roadmap |
-| Extend Rustc with equivalents of `-gmodules` and `-fno-standalone-debug` to avoid duplicating debuginfo in intermediate artifacts | @jyn514 | large task, needs compiler design work. needs care to avoid making intermediate files non-portable. |
-
-##### Reduce overlap between test binaries
-Currently, `cargo test` produces one `libtest` harness binary for each crate in a workspace.
-In crates with many workspaces, this leads to a large amount of time spent linking and space taken up by the resulting many binaries.
-Can we consolidate these into a single binary, or use dynamic linking to reduce the amount of duplicated space?
-
-| Task         | Owner(s) | Notes |
-| ----------- | -------- | ----- |
-| Test on crates with large workspaces to see where the space is taken up | ? |  |
-| Investigate possible approaches to see which are feasible | ? | |
-| ? | ? | needs design discussion before further subtasks can be created |
-##### Decrease build script artifact sizes
-
-| Task         | Owner(s) | Notes |
-| ----------- | -------- | ----- |
-| Determine which build scripts generate the largest outputs | @Zeklandia | Depends on subgoal B1 |
-| Make targeted improvements to crates in the ecosystem | ? | for example, get build scripts to delete unused temporary artifacts after a successful build |
-
-##### Redesign `incremental/` directories to be GC-able
-
-| Task | Owner(s) | Notes | 
-| ---- | -------- | ----- |
-| Design discussions with Cargo team | @jyn514 | Most uncertainty. Needs Cargo team capacity. |
-| Emit structured info in Rustc that gives Cargo enough info to GC | ? | |
-| Extend Cargo to automatically GC incremental directories | ? | |
-##### Redesign Cargo's incremental caching for build scripts
-
-| Task         | Owner(s) | Notes |
-| ----------- | -------- | ----- |
-| Design discussions with Cargo team | @jyn514 | Most uncertainty. Needs Cargo team capacity. |
-| Delete build script executables between reruns | ? | needs care to ensure that outputs can be reused even when the original build script is gone. needs care to ensure that rebuilding a build script doesn't unnecessarily slow down builds.  |
-
-##### Distinguish temporary build script outputs from final outputs
-
-| Task         | Owner(s) | Notes |
-| ----------- | -------- | ----- |
-| Design discussions with Cargo team | ? | Most uncertainty. Needs Cargo team capacity. See [existing cargo discussion][scratchpad]. |
-| Add Cargo APIs that allow build scripts to communicate this | ? | |
-| Extend Cargo to GC temporary build script outputs | ? | |
-| Make targeted PRs within the ecosystem to switch crates to use the new APIs | ? | |
- ##### Redesign the `.rmeta`, `.rlib`, and incremental formats for better disk usage.
-Improvements to the `Encodable` serialization will result in decreased disk usage across all three file types.
-
-| Task         | Owner(s) | Notes |
-| ----------- | -------- | ----- |
-| Design discussions with Compiler team | @panstromek | will benefit from a compiler team sponsor, but not strictly necessary |
-| ? | ? | needs design discussion before further subtasks can be created |
-
-##### Garbage collect target directories within a project
-
-| Task         | Owner(s) | Notes |
-| ----------- | -------- | ----- |
-| Design discussions with Cargo team | @ranger-ross | discussions already ongoing in [cargo#17512], less risk than other design tasks |
-| ? | ? | needs design discussion before further subtasks can be created |
 
 ## Team asks
 
