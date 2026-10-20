@@ -160,26 +160,18 @@ We have sufficient contributors with existing experience.
 
 We are looking for sponsors to fund work on this goal.
 We suggest funding in two phases:
-first, a research and short-term improvements phase, with a small group;
-then a larger mid-term phase with a larger group.
+first, a short-term phase, with a small group;
+then a mid-term phase with a larger group.
 
 **Phase 1: Measurements and near-term improvements**
 
-This goal needs a minimum of (Ask) to run, but for that amount we could only complete the items in the "Measurements" and "Near-term improvements" section.
-Funding up to the full requested amount will allow us to complete all or almost all the proposed workstreams.
-
+This goal needs a minimum of (Ask) to run, which will allow us to do preliminary research and high-leverage low-hanging improvements, as described in the "Measurements" and "Near-term improvements" section of the HackMD.
 Our best estimate is that this minimum funding would give around a 30% improvement in incremental target sizes over the next 6 months.
 
 I have extensive experience working on the compiler, including the query system and integration work between Rustc and Cargo.
 I also have project management experience from my time at Ferrocene,
 as well as consensus building experience on policy, design, and implementation work within the Rust project.
 As part of this work, I would lead implementation, mentor contributors, and coordinate between the Compiler and Cargo teams.
-
-
-|Purpose                                                                              |Cost                           |Funded  |Sponsor(s)                                   |
-|-------------------------------------------------------------------------------------|-------------------------------|--------|---------------------------------------------|
-|@jyn514 as owner (3-6 months, full-time)                                             |Ask                            |No      |                                             |
-
 
 **Phase 2: mid-term improvements**
 
@@ -211,7 +203,7 @@ and I hope to mentor her to be a long-term maintainer on these compiler subsyste
 
 |Purpose                                                                              |Cost                           |Funded  |Sponsor(s)                                   |
 |-------------------------------------------------------------------------------------|-------------------------------|--------|---------------------------------------------|
-|@jyn514 as owner (6-12 months, full-time)                                            |Ask                            |No      |                                             |
+|@jyn514 as owner (3-12 months, full-time)                                            |Ask                            |No      |                                             |
 |@ranger-ross as Cargo design contact and implementor (6-12 months, variable)         |Ask                            |No      |                                             |
 |@panstromek as wg-perf design contact and implementor (6-12 months, part-time)       |Ask                            |No      |                                             |
 |@Kobzol as advisor (6-12 months, part-time)                                          |Ask                            |No      |                                             |
