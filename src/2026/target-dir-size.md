@@ -14,23 +14,15 @@
 ## Summary
 
 Investigate, triage, and decrease the size of intermediate compilation directories (e.g. `target/`).
-With a funded team of 3-5 engineers, we aim over the next year to decrease the size of the directory by 60% or more for fresh builds and by 80% or more for repeated builds across version branches.
-This includes both decreases in artifact size and garbage-collection within a target directory, such as artifacts from an earlier edit.
-We will benchmark based on real crates in the Rust ecosystem, focusing on disproportionately large and widely used crates.
-After benchmarking, we will work on multi-pronged approaches that allow parallel work on high-impact interventions.
+We have already identified several concrete ways that we will make these improvements.
 Our work will be incremental, in the sense that partial work outputs will still be useful; we do not need a full year to start seeing improvements.
-
-Note that this goal does *not* include garbage-collection across directories, such as deleting `cargo -Z script` artifacts.
-There is [parallel work][cargo#17524] on that, but it is not currently part of this goal.
-
-[cargo#17524]: https://github.com/rust-lang/cargo/pull/17524
 
 ## Motivation
 
 ### Why it matters
 
 Disk space is documented as a repeated concern;
-the [2025 "State of Rust Survey"][2025-survey] shows it as the second-most common complaint about the Rust toolchain,
+the [2025 State of Rust Survey][2025-survey] shows it as the second-most common complaint about the Rust toolchain,
 second only to slow compilation.
 
 [2025-survey]: https://blog.rust-lang.org/2026/03/02/2025-State-Of-Rust-Survey-results/#challenges-and-wishes-about-rust
@@ -59,7 +51,12 @@ Compiling Rust programs takes three primary resources:
 CPU time, and to some extent wall time and memory use, has been relentlessly optimized and micro-optimized for many years in Rustc.
 Target directory sizes have had various ideas suggested on the Cargo, but not as much ongoing work due to funding limitaions, and hardly anything has been done on the Rustc side.
 
-I am aware of the following ongoing work:
+We believe the primary obstacles to shrinking intermediate artifacts are that it's currently difficult to measure sizes, and a lack of funding for the work.
+The closest tools are `llvm-size` to show overall section sizes; `rustc -Z meta-stats` to show `.rmeta` contents; and `size:query_cache` on [perf.rust-lang.org][prlo], but none give a breakdown of `.rmeta` or incremental files by query, and are difficult to correlate across invocations.
+
+[prlo]: https://perf.rust-lang.org
+
+We are aware of the following ongoing work:
 - The [cross workspace cache] project goal, which reduces the number of total artifacts, but does not reduce the size of each artifact.
 - [Deduplicate build artifacts across workspaces][cargo#17453] again reduces the number of total artifacts.
 - Garbage-collection work to reclaim space between builds has several tracking issues ([cargo#5026], [cargo#13136], [cargo#13060]), but no project goal.
@@ -87,10 +84,13 @@ Furthermore, the Cargo team has suggested several possible improvements to disk 
 
 ### What we propose to do about it
 
-We believe the primary obstacles to shrinking intermediate artifacts are that it's currently difficult to measure sizes, and a lack of funding for the work.
-The closest tools are `llvm-size` to show overall section sizes; `rustc -Z meta-stats` to show `.rmeta` contents; and `size:query_cache` on [perf.rust-lang.org][prlo], but none give a breakdown of `.rmeta` or incremental files by query, and are difficult to correlate across invocations.
+We plan a two-phase goal.
+The first is a small initiative that has only Jynn as the owner, planned at 3-6 months, with an aim of 30-40% decrease in size for fresh builds.
+In the second phase, we will create a funded team of 3-5 engineers, planned at 12 months, and aim to decrease the size of the directory by 60% or more for fresh builds and by 80% or more for repeated builds across version branches.
 
-[prlo]: https://perf.rust-lang.org
+We will work on both decreases in artifact size and garbage-collection within a target directory, such as artifacts from an earlier edit.
+We will benchmark based on real crates in the Rust ecosystem, focusing on disproportionately large and widely used crates.
+After benchmarking, we will work on multi-pronged approaches that allow parallel work on high-impact interventions.
 
 At a high level, our plan is:
 1. Benchmark what takes up the space, and include those benchmarks in `rustc-perf` so they are triaged alongside other performance improvements and regressions.
@@ -319,8 +319,8 @@ and I hope to mentor her to be a long-term maintainer on these compiler subsyste
 
 ## Frequently asked questions
 
-TBD
+Q: Does this goal include garbage-collection across directories, such as deleting `cargo -Z script` artifacts?
 
-<!-- ### What do I do with this space? -->
+No. There is [parallel work][cargo#17524] on that from the Cargo team, but it is not currently part of this goal.
 
-<!-- *This is a good place to elaborate on your reasoning above -- for example, why did you put the design axioms in the order that you did? It's also a good place to put the answers to any questions that come up during discussion. The expectation is that this FAQ section will grow as the goal is discussed and eventually should contain a complete summary of the points raised along the way.* -->
+[cargo#17524]: https://github.com/rust-lang/cargo/pull/17524
