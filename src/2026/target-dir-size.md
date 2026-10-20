@@ -40,13 +40,9 @@ We expect that we may need to coordinate between teams, but that our efforts wil
 
 ### The status quo
 
-Compiling Rust programs takes three primary resources:
-1. CPU time and wall time
-2. Memory use
-3. Disk space
-
+Compiling Rust programs takes three primary resources: time, memory, and disk space.
 CPU time, and to some extent wall time and memory use, has been relentlessly optimized and micro-optimized for many years in Rustc.
-Target directory sizes have had various ideas suggested on the Cargo, but not as much ongoing work due to funding limitaions, and hardly anything has been done on the Rustc side.
+Disk space usage, by contrast, has received far less attention. There have been various proposals to reduce the target directory size on the Cargo side, but little actual work due to a lack of funding, and hardly anything has been done on the Rustc side.
 
 We believe the primary obstacles to shrinking intermediate artifacts are that it's currently difficult to measure sizes, and a lack of funding for the work.
 The closest tools are `llvm-size` to show overall section sizes; `rustc -Z meta-stats` to show `.rmeta` contents; and `size:query_cache` on [perf.rust-lang.org][prlo], but none give a breakdown of `.rmeta` or incremental files by query, and are difficult to correlate across invocations.
