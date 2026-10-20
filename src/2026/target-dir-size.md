@@ -10,6 +10,7 @@
 | [compiler] champion | @petrochenkov |
 | [wg-compiler-performance] | @Kobzol |
 | [infra] | @Kobzol |
+| Funding contact | @jyn514 |
 
 ## Summary
 
