@@ -166,7 +166,7 @@ We suggest funding in two phases:
 first, a research and short-term improvements phase, with a small group;
 then a larger mid-term phase with a larger group.
 
-### Phase 1: Measurements and near-term improvements
+**Phase 1: Measurements and near-term improvements**
 
 This goal needs a minimum of (Ask) to run, but for that amount we could only complete the items in the "Measurements" and "Near-term improvements" section.
 Funding up to the full requested amount will allow us to complete all or almost all the proposed workstreams.
@@ -183,7 +183,8 @@ As part of this work, I would lead implementation, mentor contributors, and coor
 |-------------------------------------------------------------------------------------|-------------------------------|--------|---------------------------------------------|
 |@jyn514 as owner (3-6 months, full-time)                                             |Ask                            |No      |                                             |
 
-### Phase 2: mid-term improvements
+
+**Phase 2: mid-term improvements**
 
 There are over a dozen workstreams within this proposed goal.
 By myself, I cannot implement them all within a year.
