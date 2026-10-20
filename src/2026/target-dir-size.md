@@ -50,12 +50,11 @@ The closest tools are `llvm-size` to show overall section sizes; `rustc -Z meta-
 [prlo]: https://perf.rust-lang.org
 
 We are aware of the following ongoing work:
-- The [cross workspace cache] project goal, which reduces the number of total artifacts, but does not reduce the size of each artifact.
-- [Deduplicate build artifacts across workspaces][cargo#17453] again reduces the number of total artifacts.
-- Garbage-collection work to reclaim space between builds has several tracking issues ([cargo#5026], [cargo#13136], [cargo#13060]), but no project goal.
+- The [cross workspace cache] goal and [deduplicating build artifacts across workspaces][cargo#17453], both of which reduce the number of total artifacts, but not the size of each artifact.
+- The garbage-collection work to reclaim space between builds has several tracking issues ([cargo#5026], [cargo#13136], [cargo#13060]), but not a Project Goal.
 - Reusing caching between `check` and `build` is being investigated in the [incremental system redesign] goal, but cannot help with initial full builds.
-- [`-Zembed-metadata=no`][embed-metadata] avoids creating unnecessary metadata sections, but does not shrink the sections themselves when they're created.
-- [Reduce debuginfo to `line-tables-only` in the `dev` profile][cargo#17518] reduces the size of debuginfo in the most common scenarios, but does not improve builds that have full debuginfo.
+- [`-Zembed-metadata=no`][embed-metadata] avoids creating unnecessary metadata sections, but does not shrink the sections themselves when they are created.
+- [Reduce debuginfo to `line-tables-only` in the `dev` profile][cargo#17518] reduces the size of debuginfo in the most common scenarios, but does not improve builds that use full debuginfo.
 
 Furthermore, the Cargo team has suggested several possible improvements to disk size which could be incorporated into this goal:
 - [Reduce how frequently build scripts need to be written][cargo#14948]
