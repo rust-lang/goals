@@ -289,18 +289,18 @@ Furthermore, it will allow me to focus on design work rather than implementation
 
 This amount of funding will allow us to reach the 60-70% (per-directory) and 80-90% (cross-directory) targets from the goal summary.
 
-Ross Sullivan (@ranger-ross) is a current member of the Cargo team and has ongoing work to reduce target directory sizes.
+@ranger-ross is a current member of the Cargo team and has ongoing work to reduce target directory sizes.
 [Early research][cargo#17512] shows the possibility of a 56% or more size reduction in cross-project caches from his ongoing work alone.
 Further reductions are possible with more workstreams.
 For Ross to join, we would need a substantial amount of the funding to be paid "up-front" at the start of the phase.
 
-Matyáš Racek (@panstromek) is a current member of the Compiler Performance working group and has ongoing work to reduce encoding sizes in rmeta files and incremental caches.
+@panstromek is a current member of the Compiler Performance working group and has ongoing work to reduce encoding sizes in rmeta files and incremental caches.
 He has experience measuring, triaging, and improving the compiler's performance, and his assistance will be invaluable in optimizations within the compiler itself.
 
 [cargo#17512]: https://github.com/rust-lang/cargo/pull/17512
 [brlo]: https://blog.rust-lang.org/inside-rust/2026/08/18/reducing-target-dir-size-on-nightly/
 
-Jakub Beránek (@Kobzol) has been responsible for implementing and stabilizing `-Z embed-metadata=no`, and is a current member of the Council.
+@Kobzol has been responsible for implementing and stabilizing `-Z embed-metadata=no`, and is a current member of the Council.
 `embed-metadata` has reduced the size of release builds by [almost 30%][brlo] in the past, and we are confident that further similar improvements are possible.
 
 Zeklandia has a non-traditional programming background, but has the logistical flexibility to do short-term contract work,
