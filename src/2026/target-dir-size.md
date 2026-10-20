@@ -21,14 +21,12 @@ Our work will be incremental, in the sense that partial work outputs will still 
 
 ### Why it matters
 
-Disk space is documented as a repeated concern;
-the [2025 State of Rust Survey][2025-survey] shows it as the second-most common complaint about the Rust toolchain,
-second only to slow compilation.
+Disk space usage is a recurring concern; the [2025 State of Rust survey][2025-survey] shows it as the second-most common complaint about the Rust toolchain, surpassed only by slow compilation.
 
 [2025-survey]: https://blog.rust-lang.org/2026/03/02/2025-State-Of-Rust-Survey-results/#challenges-and-wishes-about-rust
 
-We expect reducing disk space to benefit all environments that build Rust programs, but especially:
-- developers who heavily use multiple git worktrees/jj workspaces, such as AI-first workflows or contributors to the Rust compiler itself;
+We expect that reducing disk space usage will benefit all environments that build Rust programs, but especially:
+- developers who heavily use multiple git worktrees or jj workspaces, such as in AI-first workflows or when contributing to the Rust compiler itself;
 - CI jobs that cache intermediate artifacts, both in storage space and in upload/download speeds;
 - persistent remote caches, such as used by Bazel and Buck2, primarily in upload/download speeds and disk IO usage.
 
@@ -64,7 +62,7 @@ We are aware of the following ongoing work:
 - [`-Zembed-metadata=no`][embed-metadata] avoids creating unnecessary metadata sections, but does not shrink the sections themselves when they're created.
 - [Reduce debuginfo to `line-tables-only` in the `dev` profile][cargo#17518] reduces the size of debuginfo in the most common scenarios, but does not improve builds that have full debuginfo.
 
-Furthermore, the Cargo team has suggested several possible improvements to disk size which could be incorporated into the project goal:
+Furthermore, the Cargo team has suggested several possible improvements to disk size which could be incorporated into this goal:
 - [Reduce how frequently build scripts need to be written][cargo#14948]
 - [Give build scripts a dedicated scratchpad for temporary artifacts][scratchpad]
 - [Convert build scripts to artifact dependencies][cargo#14903]
@@ -93,7 +91,7 @@ We will benchmark based on real crates in the Rust ecosystem, focusing on dispro
 After benchmarking, we will work on multi-pronged approaches that allow parallel work on high-impact interventions.
 
 At a high level, our plan is:
-1. Benchmark what takes up the space, and include those benchmarks in `rustc-perf` so they are triaged alongside other performance improvements and regressions.
+1. Profile disk space usage by builds, and include that data in `rustc-perf` so it is triaged alongside other performance improvements and regressions.
 2. Near-term (1-6 months), use those measurements to guide simple improvements, with a focus on "easy wins" that greatly reduce size without much implementation work.
 3. Mid-term (3-12 months), use measurements to guide structural improvements that need design work or extensive review.
 4. Long-term (6-18 months), make large refactors, and change best-practices in the ecosystem to avoid disk usage.
@@ -136,9 +134,9 @@ Within a subgoal, tasks are serially dependent unless otherwise labeled.
 
 | Task        | Owner(s) | Notes |
 | ----------- | -------- | ----- |
-| Create a prototype PoC that breaks down `.rmeta` files and `incremental/` directories by size and query across multiple build invocations | @jyn514  |       |
-| Extend the PoC to a maintainable tool that can be used outside the project goal team | ? | Likely implemented as a `rustc_driver` or `-Z` flag |
-| Add support for running that tool to `rustc-perf` benchmarks | ? | Subgoal id A2. Will automatically give us a graph over time once metrics are hooked up. |
+| Create a prototype that breaks down `.rmeta` files and `incremental/` directories by size and query across multiple build invocations | @jyn514  |       |
+| Develop the prototype into a tool that can be maintained and available to users | ? | Likely implemented as a `rustc_driver` or `-Z` flag |
+| Integrate that tool into `rustc-perf` benchmarks | ? | Subgoal id A2. Will automatically give us a graph over time once metrics are hooked up. |
  | (Optional) Add support for auto-triaging whether a size change is statistically relevant | ? | likely not necessary to start since metadata and query cache sizes are stable |
 
 ##### Collect representative benchmarks
