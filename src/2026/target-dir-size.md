@@ -19,8 +19,6 @@ Our work will be incremental, in the sense that partial work outputs will still 
 
 ## Motivation
 
-### Why it matters
-
 Disk space usage is a recurring concern; the [2025 State of Rust survey][2025-survey] shows it as the second-most common complaint about the Rust toolchain, surpassed only by slow compilation.
 
 [2025-survey]: https://blog.rust-lang.org/2026/03/02/2025-State-Of-Rust-Survey-results/#challenges-and-wishes-about-rust
