@@ -15,9 +15,7 @@
 
 ## Summary
 
-Investigate, triage, and decrease the size of intermediate compilation directories (e.g. `target/`).
-We have already identified several concrete ways that we will make these improvements.
-Our work will be incremental, in the sense that partial work outputs will still be useful; we do not need a full year to start seeing improvements.
+Reduce disk space used by Rust build directories (e.g. `target/`) through iterative, measurement-guided optimizations in rustc and Cargo, focusing on intermediate artifact sizes, debuginfo, and garbage-collection.
 
 ## Motivation
 
