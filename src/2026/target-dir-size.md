@@ -4,6 +4,7 @@
 | :--------------- | -------------------------------------------------------------------------------- |
 | Contact | @jyn514                                   |
 | Status           | Proposed                                                                         |
+| Roadmap             | Binary size reduction                 |
 | What and why     | Reduce the size of temporary compilation artifacts so developers need less disk space |
 | Zulip channel    | N/A (an existing stream can be re-used or new streams can be created on request) |
 | [cargo] champion | @ranger-ross |
@@ -32,9 +33,9 @@ We expect that reducing disk space usage will benefit all environments that buil
 We also theorize that by reducing disk IO, we can speed up wall time for compilation itself.
 If our efforts are sufficiently fruitful, we could further decrease compilation time by allowing target directories to fit on a RAM disk (sometimes known as `tmpfs`).
 
-Note that disk space at *compile time* (of intermediate artifacts) is different than disk space at *runtime* (of final artifacts).
-The [binary size reduction] roadmap tracks final artifacts; this goal is focused on intermediate artifacts.
-We expect that we may need to coordinate between teams, but that our efforts will not substantially overlap.
+Note that disk space used by build directories includes both intermediate artifacts and final artifacts.
+The [binary size reduction] roadmap tracks final artifacts; this goal is focused primarily, but not solely, on intermediate artifacts.
+Debuginfo size reductions will benefit both.
 
 [Binary size reduction]: https://goals.rust-lang.org/2026/roadmap-binary-size-reduction.html
 
