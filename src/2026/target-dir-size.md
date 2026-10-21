@@ -7,7 +7,7 @@
 | Roadmap             | Binary size reduction                 |
 | What and why     | Reduce the size of temporary compilation artifacts so developers need less disk space |
 | Zulip channel    | N/A (an existing stream can be re-used or new streams can be created on request) |
-| [cargo] champion | @ranger-ross |
+| [cargo] champion | @weihanglo
 | [compiler] champion | @petrochenkov |
 | [wg-compiler-performance] | @Kobzol |
 | [infra] | @Kobzol |
@@ -124,7 +124,7 @@ See [hackmd](https://hackmd.io/@jyn514/rkuckyShfl) for a detailed workplan.
 | ----------- | -------- | ----- |
 | Measurement | @jyn514  | Phase 1 |
 | Near-term improvements | @jyn514  | Phase 1 |
-| Structural improvements | @jyn514  | Phase 2. Assisted by @panstromek, @ranger-ross, @kobzol, and @Zeklandia. |
+| Structural improvements | @jyn514  | Phase 2. Assisted by @panstromek, @weihanglo, @kobzol, and @Zeklandia. |
 
 
 ## Team asks
@@ -181,10 +181,9 @@ Furthermore, it will allow me to focus on design work rather than implementation
 
 This amount of funding will allow us to reach the 60-70% (per-directory) and 80-90% (cross-directory) targets from the goal summary.
 
-@ranger-ross is a current member of the Cargo team and has ongoing work to reduce target directory sizes.
-[Early research][cargo#17512] shows the possibility of a 56% or more size reduction in cross-project caches from his ongoing work alone.
-Further reductions are possible with more workstreams.
-For Ross to join, we would need a substantial amount of the funding to be paid "up-front" at the start of the phase.
+@weihanglo is a current member of the Cargo team and a member of Amazon's build performance team. He has experience implementing, reviewing, and designing changes to Cargo's garbage collection and build configuration, and has made `-Z embed-metadata` the default in Cargo, reducing metadata size by half on nightly toolchains. He has [written in detail][cargo-missing-parts] about the changes that would improve binary size.
+
+[cargo-missing-parts]: https://weihanglo.tw/posts/2024/the-missing-parts-in-cargo/
 
 @panstromek is a current member of the Compiler Performance working group and has ongoing work to reduce encoding sizes in rmeta files and incremental caches.
 He has experience measuring, triaging, and improving the compiler's performance, and his assistance will be invaluable in optimizations within the compiler itself.
@@ -199,14 +198,11 @@ Zeklandia has a non-traditional programming background, but has the logistical f
 and I hope to mentor her to be a long-term maintainer on these compiler subsystems.
 
 
-|Purpose                                                                              |Cost                           |Funded  |Sponsor(s)                                   |
-|-------------------------------------------------------------------------------------|-------------------------------|--------|---------------------------------------------|
-|@jyn514 as owner (3-12 months, full-time)                                            |Ask                            |No      |                                             |
-|@ranger-ross as Cargo design contact and implementor (6-12 months, variable)         |Ask                            |No      |                                             |
-|@panstromek as wg-perf design contact and implementor (6-12 months, part-time)       |Ask                            |No      |                                             |
-|@Kobzol as advisor (6-12 months, part-time)                                          |Ask                            |No      |                                             |
-|@Zeklandia as benchmark selector and analyst (variable, part-time)                   |Ask                            |No      |                                             |
-|Intern (1-12 months, part- or full-time, multiple openings)                          |TBD                            |No      |                                             |
+|Purpose                                                                              |Cost                              |Funded  |Sponsor(s)                                   |
+|-------------------------------------------------------------------------------------|----------------------------------|--------|---------------------------------------------|
+|@jyn514 as owner (12 months, full-time)                                            |$60k in each phase, $120k total   |No      |                                             |
+|@panstromek as wg-perf design contact and implementor (6 months, part-time)          |$25k in phase 2                   |No      |                                             |
+|@Zeklandia as benchmark selector and analyst (variable, part-time)                   |$5k in phase 1, (Ask) in phase 2  |No      |                                             |
 
 
 ## Frequently asked questions
