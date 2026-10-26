@@ -16,11 +16,11 @@ A very related set of types, `BTreeMap` and `BTreeSet`, currently have gotten so
 
 ### The status quo
 
-Right now, the standard library's implementation of `HashMap` and `HashSet` rely on the implementation in the `hashbrown` crate. This has been a very healthy relationship, since it means that the ecosystem can easily suggest changes to ergonomics of the implementation and expose its inner workings without having to deal with the extremely strict stability guarantees of the standard library. There are several ecosystem crates that are able to build upon this work for other primitives like `indexmap` (hash tables with ordered entries) and `dashmap` (concurrent hash tables).
+Right now, the standard library's implementation of `HashMap` and `HashSet` relies on the implementation in the `hashbrown` crate. This has been a very healthy relationship, since it means that the ecosystem can easily suggest changes to ergonomics of the implementation and expose its inner workings without having to deal with the extremely strict stability guarantees of the standard library. There are several ecosystem crates that are able to build upon this work for other primitives like `indexmap` (hash tables with ordered entries) and `dashmap` (concurrent hash tables).
 
 In the standard library, we also have the types `BTreeMap` and `BTreeSet` for an analogous data structure, however, these types have languished a lot because they don't have the benefit of being an external crate like `hashbrown`. This has lead to a lot of anxiety when it comes to working on these types: several features have been "put off" for their implementation due to the complexity of the current code (custom allocator support, cursors, etc.) and many downstream users are limited in the ways they can leverage these primitives due to the lack of robust APIs.
 
-Additionally, since `BTreeMap`'s implementation has not been substantially reworked since Rust 1.0, several new Rust features that have improved the ergonomics with working with unsafe code are currently unavailable for `BTreeMap`, which makes the code just that much more annoying to work with.
+Additionally, since `BTreeMap`'s implementation has not been substantially reworked since Rust 1.0, several new Rust features that have improved the ergonomics of working with unsafe code are currently unavailable for `BTreeMap`, which makes the code just that much more annoying to work with.
 
 ### What we propose to do about it
 
