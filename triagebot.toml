@@ -24,7 +24,14 @@ New goal proposal: "{title}" (goals#{number}).
 cc {recipients}
 """
 github_comment = "A [#goals/proposed topic]({zulip_topic_url}) was opened to discuss this issue."
-message_on_close = "Goal proposal goals#{number} has been resolved. Thanks for participating!"
+message_on_close = "Goal proposal goals#{number} has been closed. Thank you for participating."
+message_on_close_success = """\
+Goal proposal goals#{number} has been accepted.
+
+Someone from @_*T-goals* will add the goal owner to the `goal-owners` team, open a tracking issue, and update the goal metadata soon.
+
+Thank you for participating!
+"""
 
 
 [notify-zulip."S-needs-discussion"]
