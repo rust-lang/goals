@@ -10,7 +10,7 @@
 
 Right now, the standard library has the benefit of the `hashbrown` crate: a modern hash table implementation that can be reused by the ecosystem for more complicated situations, which is explicitly used for the libstd `HashMap` and `HashSet` types.
 
-A very related set of types, `BTreeMap` and `BTreeSet`, currently have gotten so overbearing in the standard library that they have a bit of a reputation of being hard to deal with. We should fix this, both factoring the implementation out into its own crate where the API can be experimented more easily, and to resolve concerns on custom allocators, cursors, and other desired APIs.
+A very related set of types, `BTreeMap` and `BTreeSet`, currently have gotten so overbearing in the standard library that they have a bit of a reputation of being hard to deal with. We should fix this, both factoring the implementation out into its own crate where the API can be experimented with more easily, and to resolve concerns on custom allocators, cursors, and other desired APIs.
 
 ## Motivation
 
