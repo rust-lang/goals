@@ -2,7 +2,7 @@
 
 | Metadata         |                                                                                  |
 | :--------------- | -------------------------------------------------------------------------------- |
-| Point of contact | @susitsm                                                                         |
+| Contact | @susitsm                                                                         |
 | Status           | Proposed                                                                         |
 | What and why     | Massive speedup of rebuilds in large multi-crate projects                                                                |
 | Roadmap          | Fast Builds                                                                      |
