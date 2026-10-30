@@ -17,7 +17,7 @@
 
 Implement the MCP [Relink Don't Rebuild](https://github.com/rust-lang/compiler-team/issues/790), which can give large speedups on [certain edits](https://github.com/rust-lang/cargo/issues/14604#issuecomment-4371471225) when rebuilding large projects with many crates.
 
-There is an existing implementation waiting for review. The first goal is to get that through the review process, integrate with cargo and get it to nightly users.
+There is an existing implementation (#156940) waiting for review. The first goal is to get that through the review process, integrate with cargo, and get it to nightly users.
 
 
 ## Motivation
@@ -53,13 +53,15 @@ can make the public API more resilient to change. Adding `do_something_else()` t
 
 ### Work items over the next year
 
-#### Usable implementation in nightly, with limitations.
+#### Usable implementation in nightly, with limitations
+
 | Task        | Owner(s) | Notes |
 | ----------- | -------- | ----- |
 | Split up the existing implementation into smaller PRs, review | @susitsm, @petrochenkov  | 2 months |
 | Cargo integration | @susitsm  | 1 month |
 
-#### Towards stabilization
+#### Prepare for stabilization
+
 | Task        | Owner(s) | Notes |
 | ----------- | -------- | ----- |
 | Restore compiler diagnostics | @susitsm | 1 month |
@@ -75,13 +77,13 @@ can make the public API more resilient to change. Adding `do_something_else()` t
 
 ## Funding
 
-The duration of the project is 7 months. With distinct subgoals which can be funded independently.
+The duration of the project is 7 months. The two subgoals can be funded independently.
 
 - Month 1-3 (Usable implementation in nightly)
   - This stage could already provide benefits for nightly users, at the cost of possibly incorrect line info in diagnostics and debuginfo of dependents. This would greatly help `cargo check` runs in IDE-s, since debuginfo is not a concern there.
   - Some diagnostics will not be available
   - Lot of the work is already done, needs review.
-- Month 4-7 (Towards stabilization)
+- Month 4-7 (Prepare for stabilization)
   - Performance optimizations
   - Rustdoc integration
   - Restoring diagnostics
@@ -89,7 +91,7 @@ The duration of the project is 7 months. With distinct subgoals which can be fun
 | Purpose | Cost | Funded | Sponsor(s) |
 |---------|------|--------|------------|
 | Contributor - Nightly implementation | $30,000 | No | |
-| Contributor - Towards stabilization | TBD | No | |
+| Contributor - Prepare for stabilization | TBD | No | |
 
 
 ## Frequently asked questions
