@@ -5,7 +5,8 @@
 | Contact        | @jyn514                                                                               |
 | Status         | Accepted                                                                              |
 | Roadmap        | Binary size reduction                                                                 |
-| What and why   | Reduce the size of temporary compilation artifacts so developers need less disk space |
+| Roadmap        | Fast Builds                                                                 |
+| What and why   | Reduce the size of temporary compilation artifacts so developers need less disk space and the compiler spends less time on disk I/O |
 | Tracking issue | [rust-lang/goals#830]                                                                 |
 | [cargo] champion | @weihanglo |
 | [compiler] champion | @petrochenkov |
