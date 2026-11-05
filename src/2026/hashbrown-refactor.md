@@ -5,6 +5,7 @@
 | Contact          | @clarfonthey                                  |
 | Status           | Proposed                                      |
 | What and why     | Refactor `hashbrown` and move it into `alloc` |
+| [libs] champion  | @clarfonthey                                  |
 
 ## Summary
 
