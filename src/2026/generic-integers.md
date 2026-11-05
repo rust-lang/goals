@@ -1,10 +1,10 @@
 # Generic integers
 
-| Metadata         |                                                                                                     |
-| :--------------- | --------------------------------------------------------------------------------------------------- |
-| Contact          | @clarfonthey                                                                                        |
-| Status           | Proposed                                                                                            |
-| What and why     | Implement an MVP of generic integer types ([RFC 3686](https://github.com/rust-lang/rfcs/pull/3686)) |
+| Metadata         |                                                             |
+| :--------------- | ----------------------------------------------------------- |
+| Contact          | @clarfonthey                                                |
+| Status           | Proposed                                                    |
+| What and why     | Allow writing code that's generic over the size of integers |
 
 ## Summary
 
