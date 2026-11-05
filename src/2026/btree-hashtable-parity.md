@@ -5,12 +5,11 @@
 | Contact          | @clarfonthey                                                  |
 | Status           | Proposed                                                      |
 | What and why     | Make `BTree` types as robust as their `HashTable` equivalents |
+| [libs] champion  | @clarfonthey                                                  |
 
 ## Summary
 
-Right now, the standard library has the benefit of the `hashbrown` crate: a modern hash table implementation that can be reused by the ecosystem for more complicated situations, which is explicitly used for the libstd `HashMap` and `HashSet` types, alongside an unstable raw `HashTable` type.
-
-A very related set of types, `BTreeMap` and `BTreeSet`, currently have gotten so overbearing in the standard library that they have a bit of a reputation of being hard to deal with. We should fix this, both factoring the implementation out into its own crate where the API can be experimented with more easily, and to resolve concerns on custom allocators, cursors, and other desired APIs. Additionally, similarly to `HashTable`, there would be a raw `BTree` type as well for users who want to make their own specialized implementations.
+Move the implementation of `BTreeMap` and `BTreeSet` into a separate crate similar to `hashbrown`, and bring their APIs to parity with `HashMap` and `HashSet`. Additionally, work on a "raw" `BTree` API similar to the raw `HashTable` API offered by `hashbrown`.
 
 ## Motivation
 
@@ -18,9 +17,9 @@ A very related set of types, `BTreeMap` and `BTreeSet`, currently have gotten so
 
 Right now, the standard library's implementation of `HashMap` and `HashSet` relies on the implementation in the `hashbrown` crate. This has been a very healthy relationship, since it means that the ecosystem can easily suggest changes to ergonomics of the implementation and expose its inner workings without having to deal with the extremely strict stability guarantees of the standard library. There are several ecosystem crates that are able to build upon this work for other primitives like `indexmap` (hash tables with ordered entries) and `dashmap` (concurrent hash tables).
 
-The situation surrounding `hashbrown` is actually the subject of its own goal which can be read at (LINK TBD). This goal extends that one by effectively offering the same treatment for the B-tree implementation, proposing to create a new crate for experimentation, to modernize and audit the API and implementation, and to ensure that all these features are at least considered for inclusion in the standard library.
+The situation surrounding `hashbrown` is actually [the subject of its own goal](./hashbrown-refactor.md). This goal extends that one by effectively offering the same treatment for the B-tree implementation, proposing to create a new crate for experimentation, to modernize and audit the API and implementation, and to ensure that all these features are at least considered for inclusion in the standard library.
 
-The B-tree implementation has languished a lot due to its complexity and awkwardness, and has lead to a lot of anxiety when it comes to working on these types: several features have been "put off" for their implementation due to the complexity of the current code ([custom allocator support](https://github.com/rust-lang/rust/issues/161678), [cursors](https://github.com/rust-lang/rust/issues/107540), etc.) and many downstream users are limited in the ways they can leverage these primitives due to the lack of robust APIs.
+The B-tree implementation has languished due to its complexity and awkwardness, and has led to a lot of anxiety when it comes to working on these types: several features have been "put off" for their implementation due to the complexity of the current code ([custom allocator support](https://github.com/rust-lang/rust/issues/161678), [cursors](https://github.com/rust-lang/rust/issues/107540), etc.) and many downstream users are limited in the ways they can leverage these primitives due to the lack of robust APIs.
 
 Additionally, since `BTreeMap`'s implementation has not been substantially reworked since Rust 1.0, several new Rust features that have improved the ergonomics of working with unsafe code are currently unavailable for `BTreeMap`, which makes the code just that much more annoying to work with.
 
