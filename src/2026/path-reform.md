@@ -35,7 +35,7 @@ The most substantial, immediate work has been suggested for a very long time and
 
 Note that these types actually should not have the same API because they will be able to explicitly take the quirks of their underlying implementations into account. For example, a large portion of the handling of the `Path::components` iterator depends on the prefix of Windows paths, and it would be nice to remove prefix handling entirely from the components iterator to remove that complex branch entirely. There could also be separate types for Windows' verbatim paths for users who explicitly want to use verbatim paths for their hygiene guarantees.
 
-The options really are endless here, and part of the open-endedness here is because the clunkiness of `Path` has resulted in the ecosystem effectively *avoiding* the use of `Path` whenever possible to avoid the clunkiness, either via converting other types like `String` or `OsString` into `Path` whenever an API requires it, or potentially reimplementing path logic themselves. We would really like to help fix this conundrum and ensure that the ecosystem actually has APIs available they *want* to use, rather than those they simply *must* use.
+The options really are endless here, and part of this is because the clunkiness of `Path` has resulted in the ecosystem effectively *avoiding* the use of `Path` whenever possible to avoid the clunkiness, either via converting other types like `String` or `OsString` into `Path` whenever an API requires it, or potentially reimplementing path logic themselves. We would really like to help fix this conundrum and ensure that the ecosystem actually has APIs available they *want* to use, rather than those they simply *must* use.
 
 That said, the lower bound on the work for this goal is to simply create three new `Path` APIs:
 
@@ -75,7 +75,7 @@ Note that this is particularly difficult on Windows, since it's incredibly uncle
 
 #### Normalized paths
 
-Right now, one massive issue with `Path` is the fact that equality and ordering are explicitly very expensive due to the normalisation of components. Consider the following cases from the standard library on which paths are considered the same:
+Right now, one massive issue with `Path` is the fact that equality and ordering are explicitly very expensive due to the normalization of components. Consider the following cases from the standard library on which paths are considered the same:
 
 | `lhs`        | `rhs`        | `Path::new(lhs) == Path::new(rhs)` |
 | ------------ | ------------ | ---------------------------------- |
@@ -89,7 +89,7 @@ Right now, one massive issue with `Path` is the fact that equality and ordering 
 | `C:\Windows` | `c:\windows` | `false`                            |
 | `C:\Windows` | `c:/Windows` | `true`                             |
 
-All of these questions are hard to answer without an explicit API that guarantees path normalisation. And so, it would be nice to have a "normalized path" type where an invariant is upheld that two paths are equal if their strings are identical, and this would require a number of knobs to configure like case-sensitivity, Unicode normalisation, etc. While things like case folding are probably out of scope here, the ability to ensure that e.g. there are no current-directory or non-leading previous-directory components present could be quite useful.
+All of these questions are hard to answer without an explicit API that guarantees path normalization. And so, it would be nice to have a "normalized path" type where an invariant is upheld that two paths are equal if their strings are identical, and this would require a number of knobs to configure like case-sensitivity, Unicode normalization, etc. While things like case folding are probably out of scope here, the ability to ensure that e.g. there are no current-directory or non-leading previous-directory components present could be quite useful.
 
 Additionally, for the sake of safety when extracting archives, one necessary but not sufficient property for safety is excluding previous-directory components.
 
@@ -123,13 +123,13 @@ Minimum funding would enable @clarfonthey and potentially others to devote time 
 
 ## Appendix: correctness bugs
 
-As part of preparing this goal, an [`A-path`] label was added to the `rust-lang/rust` repo to track `std::path` issues separate from `std::io` and `std::fs` issues. Additionally, these are now auto-labelled on PRs based upon the modified modules. This should hopefully help longer-term to track issues with `Path` and its related types more easily.
+As part of preparing this goal, an [`A-path`] label was added to the `rust-lang/rust` repo to track `std::path` issues separate from `std::io` and `std::fs` issues. Additionally, these are now auto-labeled on PRs based upon the modified modules. This should hopefully help longer-term to track issues with `Path` and its related types more easily.
 
-[`A-path`]: https://github.com/rust-lang/rust/issues?q=state%3Aopen%20label%3AA-path
+[`A-path`]: https://github.com/rust-lang/rust/issues?q=state:open+label:A-path
 
 This list is taken from [the intersection of `A-path` and `C-bug` labels][correctness-bugs]:
 
-[correctness-bugs]: https://github.com/rust-lang/rust/issues?q=label%3AA-path+label%3AC-bug
+[correctness-bugs]: https://github.com/rust-lang/rust/issues?q=label:A-path+label:C-bug
 
 * 2016: [#31789: Windows paths should not be prefixed with `\\?\` when displayed](https://github.com/rust-lang/rust/issues/31789)
 * 2016: [#32497: `PathBuf::set_extension` accepts an extension containing slashes](https://github.com/rust-lang/rust/issues/32497)
