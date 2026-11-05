@@ -38,7 +38,7 @@ Besides the general desire to give `hashbrown` some love, there are a few concre
 
 Ultimately, the goal is *not* to deprecate the `hashbrown` crate, but rather make its separation from the standard library its sole purpose and strength, rather than just being a more powerful version of the standard library wrappers. Having the implementation be in its own crate means that the bar for experimenting is even lower than it is for the standard library, and developers can use new experimental changes without having to switch to a nightly compiler. Additionally, this will allow easier benchmarking of changes to the maps since code can compile and use both the existing and new implementations, which would require separate compilers normally.
 
-As you might expect, hash table implementations can be a neverending battle of tuning various knobs to get extra performance, and having the ability to quickly iterate on that without needing to rebuild the entire compiler is a massive plus. It's just unfortunate so many crates *have* to do this, since it represents a nontrivial amount of compile-time work that could be replaced with the prebuild standard library.
+As you might expect, hash table implementations can be a neverending battle of tuning various knobs to get extra performance, and having the ability to quickly iterate on that without needing to rebuild the entire compiler is a massive plus. It's just unfortunate so many crates *have* to do this, since it represents a nontrivial amount of compile-time work that could be replaced with the prebuilt standard library.
 
 ### The "shiny future" we are working towards
 
