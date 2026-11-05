@@ -567,6 +567,8 @@ fn initialize_issues<'doc>(
                                 | "R-every-4-weeks"
                                 | "R-every-2-weeks"
                                 | "R-every-week"
+                                | "S-blocked-funding"
+                                | "S-blocked-contributors"
                         )
                         .then(|| label.name.clone())
                     }))

@@ -1,15 +1,15 @@
 # Relink Don't Rebuild
 
-| Metadata         |                                                                                  |
-| :--------------- | -------------------------------------------------------------------------------- |
-| Contact | @susitsm                                                                         |
-| Status           | Proposed                                                                         |
-| What and why     | Massive speedup of rebuilds in large multi-crate projects                                                                |
-| Roadmap          | Fast Builds                                                                      |
-| Tracking issue   |                                                                                  |
-| Other tracking issues | [rust-lang/rust#158844]            |
-| Zulip channel    | [t-compiler/relink-dont-rebuild][zulip] |
-| [compiler] champion | @petrochenkov |
+| Metadata              |                                                           |
+| :-------------------- | :-------------------------------------------------------- |
+| Contact               | @susitsm                                                  |
+| Status                | Proposed                                                  |
+| What and why          | Massive speedup of rebuilds in large multi-crate projects |
+| Roadmap               | Fast Builds                                               |
+| Tracking issue        | [rust-lang/goals#843]                                     |
+| Other tracking issues | [rust-lang/rust#158844]                                   |
+| Zulip channel         | [t-compiler/relink-dont-rebuild][zulip]                   |
+| [compiler] champion   | @petrochenkov                                             |
 
 [zulip]: https://rust-lang.zulipchat.com/#narrow/channel/604410-t-compiler.2Frelink-dont-rebuild
 
@@ -19,9 +19,7 @@ Implement the MCP [Relink Don't Rebuild](https://github.com/rust-lang/compiler-t
 
 There is an existing implementation (#156940) waiting for review. The first goal is to get that through the review process, integrate with cargo, and get it to nightly users.
 
-
 ## Motivation
-
 
 ### The status quo
 
@@ -34,12 +32,15 @@ Calculate the public API hash of crates and only recompile dependents when it ch
 The largest concern of adding such public API hash is maintainability: adding new language features should automatically get added to the public API hash, otherwise RDR can quickly become riddled with silent miscompiles. The proposed implementation solves this problem by building on the metadata ("header") files produced by rustc, automatically integrating any new data added to it.
 
 One more concern is the second order effect of implementing RDR without going to the extra mile with how it handles line information. Considering all public item line info changes as public API changes encourages people to write "header style" code. Instead of
+
 ```rust
 pub fn foo() {
     do_something();
 }
 ```
+
 writing
+
 ```rust
 pub fn foo() {
     foo_private()
@@ -49,31 +50,32 @@ fn foo_private() {
     do_something();
 }
 ```
+
 can make the public API more resilient to change. Adding `do_something_else()` to `foo_private` does not change the public API, while adding it to `foo` changes it, which can lead to considerable difference in recompilation speed in a large project, encouraging people to write these "header" functions and make lints for enforcing it. It remains to be discussed whether combating this is desired in the future. There are no plans to do special handling for line info only changes in the first version of RDR.
 
 ### Work items over the next year
 
 #### Usable implementation in nightly, with limitations
 
-| Task        | Owner(s) | Notes |
-| ----------- | -------- | ----- |
-| Split up the existing implementation into smaller PRs, review | @susitsm, @petrochenkov  | 2 months |
-| Cargo integration | @susitsm  | 1 month |
+| Task                                                          | Owner(s)                | Notes    |
+| ------------------------------------------------------------- | ----------------------- | -------- |
+| Split up the existing implementation into smaller PRs, review | @susitsm, @petrochenkov | 2 months |
+| Cargo integration                                             | @susitsm                | 1 month  |
 
 #### Prepare for stabilization
 
-| Task        | Owner(s) | Notes |
-| ----------- | -------- | ----- |
-| Restore compiler diagnostics | @susitsm | 1 month |
-| Optimize the implementation | @susitsm | 2 months |
-| Integrate with rustdoc | @susitsm | 1 month |
+| Task                         | Owner(s) | Notes    |
+| ---------------------------- | -------- | -------- |
+| Restore compiler diagnostics | @susitsm | 1 month  |
+| Optimize the implementation  | @susitsm | 2 months |
+| Integrate with rustdoc       | @susitsm | 1 month  |
 
 ## Team asks
 
-| Team       | Support level | Notes                                   |
-| ---------- | ------------- | --------------------------------------- |
-| [cargo]    | Small         | review cargo integration                 |
-| [compiler] | Medium        | dedicated reviewer                             |
+| Team       | Support level | Notes                    |
+| ---------- | ------------- | ------------------------ |
+| [cargo]    | Small         | review cargo integration |
+| [compiler] | Medium        | dedicated reviewer       |
 
 ## Funding
 
@@ -88,10 +90,9 @@ The duration of the project is 7 months. The two subgoals can be funded independ
   - Rustdoc integration
   - Restoring diagnostics
 
-| Purpose | Cost | Funded | Sponsor(s) |
-|---------|------|--------|------------|
-| Contributor - Nightly implementation | $30,000 | No | |
-| Contributor - Prepare for stabilization | TBD | No | |
-
+| Purpose                                 | Cost    | Funded | Sponsor(s) |
+| --------------------------------------- | ------- | ------ | ---------- |
+| Contributor - Nightly implementation    | $30,000 | No     |            |
+| Contributor - Prepare for stabilization | TBD     | No     |            |
 
 ## Frequently asked questions
