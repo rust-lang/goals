@@ -57,6 +57,7 @@ At least initially, the goal will *not* be to implement the full RFC and some of
 
 | Team            | Support level | Notes                                       |
 | --------------- | ------------- | ------------------------------------------- |
+| [libs]          | Small         | Review code changes                         |
 | [compiler]      | Medium        | Review code changes                         |
 | [lang]          | Medium        | Review/make decisions on unresolved details |
 | [types]         | Medium        | Combination of above                        |
