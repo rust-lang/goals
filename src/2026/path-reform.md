@@ -5,6 +5,7 @@
 | Contact          | @clarfonthey                              |
 | Status           | Proposed                                  |
 | What and why     | Overhaul the standard library `Path` APIs |
+| [libs] champion | @clarfonthey |
 
 ## Summary
 
