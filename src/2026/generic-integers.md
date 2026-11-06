@@ -1,10 +1,11 @@
 # Generic integers
 
-| Metadata         |                                                             |
-| :--------------- | ----------------------------------------------------------- |
-| Contact          | @clarfonthey                                                |
-| Status           | Proposed                                                    |
-| What and why     | Allow writing code that's generic over the size of integers |
+| Metadata            |                                                             |
+| ------------------- | ----------------------------------------------------------- |
+| Contact             | @clarfonthey                                                |
+| Status              | Proposed                                                    |
+| What and why        | Allow writing code that's generic over the size of integers |
+| [compiler] champion | @beetrees                                                   |
 
 ## Summary
 
