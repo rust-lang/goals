@@ -9,7 +9,6 @@
 | Zulip channel | N/A (to be created on request) |
 | [cargo] champion | TBD |
 | [crates-io] champion | TBD |
-| [security-response] champion | TBD |
 
 ## Summary
 
@@ -119,7 +118,6 @@ Three phases, roughly 6-9 months. The critical-release phase depends on consensu
 | :-- | :-- | :-- |
 | [cargo] | Large | Review: Resolver and lockfile semantics; source-replacement trust model and docs; RFCs and implementation |
 | [crates-io] | Small | Steward the registry index spec changes so alternate registries interoperate; crates.io not expected to publish registry releases itself |
-| [security] | Small | Co-drive discussion; advise on advisory linkage, criticality, and confusion-attack detection |
 
 Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions, Alpha-Omega, Akrites, external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI).
 
