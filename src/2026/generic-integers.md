@@ -6,6 +6,8 @@
 | Status              | Proposed                                                    |
 | What and why        | Allow writing code that's generic over the size of integers |
 | [compiler] champion | @beetrees                                                   |
+| [lang] champion     | @scottmcm                                                   |
+| [types] champion    | @oli-obk                                                    |
 
 ## Summary
 
