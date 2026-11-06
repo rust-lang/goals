@@ -96,3 +96,15 @@ The duration of the project is 7 months. The two subgoals can be funded independ
 | Contributor - Prepare for stabilization | TBD     | No     |            |
 
 ## Frequently asked questions
+
+### How does RDR help agentic coding?
+
+Compilation speed directly affects how quickly coding agents can work. Running `cargo check` and `cargo build` can take a significant amount of time relative to the time an agent spends actually writing code. Faster compilation therefore translates directly into faster iteration and more productive agents.
+
+#### The many-worktrees problem
+
+In agentic workflows, different agents typically work in separate Git worktrees. Each worktree can have its own build directory, but duplicating build artifacts for every agent can quickly become prohibitive in terms of disk space.
+
+An alternative is to share a single build directory between agents. However, Cargo locks the build directory during compilation, effectively serializing build operations. The time each compilation takes therefore limits how many agents can efficiently share the same build directory without spending significant time waiting for the lock. This becomes particularly problematic in large projects, where incremental rebuilds can still take considerable time.
+
+**RDR can significantly alleviate this bottleneck.** When applicable (currently [estimated at 50–90% of rebuilds](https://github.com/rust-lang/cargo/issues/14604#issuecomment-4371471225), potentially even more when agents are instructed to write RDR-compatible code), it can make rebuilds an order of magnitude faster. This means less time spent holding the build-directory lock and potentially an order of magnitude more agents sharing the same build directory efficiently.
