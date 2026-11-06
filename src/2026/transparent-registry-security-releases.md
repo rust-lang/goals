@@ -53,7 +53,7 @@ a feed of registry-injected releases that they published, with metadata such as 
 As a later step, we will also add support for nudging Cargo to resolve certain "urgent" releases even if a lockfile is already present and pins an earlier version, to handle 0-days and other releases that consumers want to uptake as fast as possible.
 
 
-Some design axioms:
+Some design rules:
 
 1. **Divergence from upstream is considered an attack unless declared.** A registry that serves releases not in its upstream must say so per release. Tooling treats undeclared divergence as a dependency confusion attack.
 2. **Upstream releases always win.** A registry release never takes over the maintainer's next version number. A real upstream release supersedes it on the next update.
