@@ -1,11 +1,13 @@
 # Path reform
 
-| Metadata         |                                           |
-| :--------------- | ----------------------------------------- |
-| Contact          | @clarfonthey                              |
-| Status           | Proposed                                  |
-| What and why     | Overhaul the standard library `Path` APIs |
-| [libs] champion  | @clarfonthey                              |
+| Metadata        |                                           |
+| :--             | :--                                       |
+| Contact         | @clarfonthey                              |
+| Status          | Proposed                                  |
+| What and why    | Overhaul the standard library `Path` APIs |
+| [libs] champion | @clarfonthey                              |
+| Tracking issue  | [rust-lang/goals#851]                     |
+
 
 ## Summary
 

@@ -1,11 +1,13 @@
 # `hashbrown` Refactor
 
-| Metadata         |                                               |
-| :--------------- | --------------------------------------------- |
-| Contact          | @clarfonthey                                  |
-| Status           | Proposed                                      |
-| What and why     | Refactor `hashbrown` and move it into `alloc` |
-| [libs] champion  | @clarfonthey                                  |
+| Metadata        |                                               |
+| :--             | :--                                           |
+| Contact         | @clarfonthey                                  |
+| Status          | Proposed                                      |
+| What and why    | Refactor `hashbrown` and move it into `alloc` |
+| [libs] champion | @clarfonthey                                  |
+| Tracking issue  | [rust-lang/goals#853]                         |
+
 
 ## Summary
 
