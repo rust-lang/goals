@@ -1,11 +1,13 @@
 # `BTree`-`HashTable` parity
 
-| Metadata         |                                                               |
-| :--------------- | ------------------------------------------------------------- |
-| Contact          | @clarfonthey                                                  |
-| Status           | Proposed                                                      |
-| What and why     | Make `BTree` types as robust as their `HashTable` equivalents |
-| [libs] champion  | @clarfonthey                                                  |
+| Metadata        |                                                               |
+| :--             | :--                                                           |
+| Contact         | @clarfonthey                                                  |
+| Status          | Proposed                                                      |
+| What and why    | Make `BTree` types as robust as their `HashTable` equivalents |
+| [libs] champion | @clarfonthey                                                  |
+| Tracking issue  | [rust-lang/goals#852]                                         |
+
 
 ## Summary
 
