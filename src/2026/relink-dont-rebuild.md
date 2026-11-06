@@ -3,7 +3,7 @@
 | Metadata              |                                                           |
 | :-------------------- | :-------------------------------------------------------- |
 | Contact               | @susitsm                                                  |
-| Status                | Proposed                                                  |
+| Status                | Accepted                                                  |
 | What and why          | Massive speedup of rebuilds in large multi-crate projects |
 | Roadmap               | Fast Builds                                               |
 | Tracking issue        | [rust-lang/goals#843]                                     |
@@ -55,14 +55,18 @@ can make the public API more resilient to change. Adding `do_something_else()` t
 
 ### Work items over the next year
 
-#### Usable implementation in nightly, with limitations
+#### Relink Don't Rebuild - Land in nightly, with limitations
 
 | Task                                                          | Owner(s)                | Notes    |
 | ------------------------------------------------------------- | ----------------------- | -------- |
 | Split up the existing implementation into smaller PRs, review | @susitsm, @petrochenkov | 2 months |
 | Cargo integration                                             | @susitsm                | 1 month  |
 
-#### Prepare for stabilization
+#### Relink Don't Rebuild - Prepare for stabilization
+
+| Metadata              |      |
+| :-------------------- | :--- |
+| Timespan              | 2027 |
 
 | Task                         | Owner(s) | Notes    |
 | ---------------------------- | -------- | -------- |
@@ -93,7 +97,7 @@ The duration of the project is 7 months. The two subgoals can be funded independ
 | Purpose                                 | Cost    | Funded | Sponsor(s) |
 | --------------------------------------- | ------- | ------ | ---------- |
 | Contributor - Nightly implementation    | $30,000 | No     |            |
-| Contributor - Prepare for stabilization | TBD     | No     |            |
+| Contributor - Prepare for stabilization | $40,000 | No     |            |
 
 ## Frequently asked questions
 
