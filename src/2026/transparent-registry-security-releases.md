@@ -99,7 +99,7 @@ Three phases, roughly 6-9 months. The critical-release phase depends on consensu
 | Design: event feed of registry releases, signing, relation to [verifiable mirroring](./mirroring.md) | @jlizen | |
 | Design: provenance and how consumers verify registry release = base + diff | @jlizen | |
 | Audit tool: diff a registry against its declared upstream, flag undeclared divergence | needs owner | |
-| Tooling to produce a declared security release from upstream `.crate` + diff | @jlizen | |
+| Tooling to produce a declared security release from upstream `.crate` + diff | needs owner | |
 
 #### Critical security releases that apply to locked versions
 
@@ -124,9 +124,8 @@ Feedback from outside the Project: RustSec maintainers, alternate registry opera
 
 | Task | Experience level | Time investment |
 | :-- | :-- | :-- |
-| Reference implementation in an alternate registry | Intermediate Rust, registry operations | 1-2 months |
 | Audit tool (registry vs. upstream diff) | Intermediate Rust | 1-2 months |
-| Producer tooling | Intermediate Rust | 1-2 months |
+| Producer tooling (package a registry patch) | Intermediate Rust | 1-2 months |
 
 ## Funding
 
