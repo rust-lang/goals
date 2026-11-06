@@ -1,15 +1,15 @@
 # Implement Verifiable Mirroring Prototype
 
-| Metadata             |                                    |
-| :--                  | :--                                |
-| Contact     | @walterhpearce                     |
-| Status               | Accepted                           |
+| Metadata             |                       |
+| :--                  | :--                   |
+| Contact              | @arlosi               |
+| Status               | Accepted              |
 | Tracking issue       | [rust-lang/goals#637] |
-| Zulip channel        | [#tbd-signing]                     |
-| [rustup] champion    | @djc                               |
-| [cargo] champion     | @arlosi                            |
-| [infra] champion     | @Mark-Simulacrum                   |
-| [crates-io] champion | @LawnGnome                         |
+| Zulip channel        | [#tbd-signing]        |
+| [rustup] champion    | @djc                  |
+| [cargo] champion     | @arlosi               |
+| [infra] champion     | @Mark-Simulacrum      |
+| [crates-io] champion | @LawnGnome            |
 
 
 [#tbd-signing]: https://rust-lang.zulipchat.com/#narrow/channel/417663-tbd-signing
@@ -128,7 +128,7 @@ We have decided not to explore this method, as our exponential artifact growth (
 | Rustup Mirror Configuration Implementation | @walterhpearce | Implement mirror configurability and redirection in Rustup. |
 | TUF Implementation | @walterhpearce | Integrate TUF verification into Rustup client. |
 | Azure/GCP Mirror prototype | @walterhpearce,@simulacrum | Deploy and test the first official  mirror. |
-| Mirror Registry Design | @arlosi | Draft Cargo chawalterhpearcenges for mirror discovery and fallback. |
+| Mirror Registry Design | @arlosi | Draft Cargo changes for mirror discovery and fallback. |
 | Key Signing Ceremony | @walterhpearce | Record a demo of the multi-key signing process. |
 | Sync/Mirror Agent | @walterhpearce | Develop the standardized tool for mirror synchronization. |
 | RFC Update & Submission | @walterhpearce | Formalize the "Rust Project Mirroring" architecture based on prototype results. |
