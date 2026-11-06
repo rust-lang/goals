@@ -2,12 +2,12 @@
 
 | Metadata            |                                                                       |
 | ------------------- | --------------------------------------------------------------------- |
-| Contact             | TBD                                                                   |
+| Contact             | @clarfonthey                                                          |
 | Status              | Proposed                                                              |
 | What and why        | Investigate long-term changes to the standard library `Iterator` APIs |
 | [compiler] champion | TBD                                                                   |
 | [lang] champion     | TBD                                                                   |
-| [libs] champion     | TBD                                                                   |
+| [libs] champion     | @clarfonthey                                                          |
 | [opsem] champion    | TBD                                                                   |
 | [types] champion    | TBD                                                                   |
 
