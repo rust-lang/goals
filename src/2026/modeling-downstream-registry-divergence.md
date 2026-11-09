@@ -43,6 +43,7 @@ Prior art falls into three buckets: downstream publication of fixes, provenance,
 - **PyPI attestations / PEP 740**: [PEP 740](https://peps.python.org/pep-0740/), [PyPI announcement](https://blog.pypi.org/posts/2024-11-14-pypi-now-supports-digital-attestations/), [index-hosted attestations spec](https://packaging.python.org/en/latest/specifications/index-hosted-attestations/). This is a similar idea to npm but hosted in the index itself, and the Simple API serves them. Probably closer to what we want for declaring a release's origin in the index itself.
 - **Go checksum database**: [database](https://sum.golang.org/), [launch post](https://blog.golang.org/module-mirror-launch), [Trillian](https://github.com/google/trillian). This is along the lines of the audit tooling we are interested in: Go makes it easy to audit a mirror to see if its bytes diverge from upstream. Though, it doesn't have any concept of declared/intended divergence, so corporate users end up turning `GOSUMDB` off. There also was [a recent bypass](https://freenode.net/article/gos-checksum-database-meets-its-trust-assumptions).
 - **Cargo**: [RFC 3493](https://rust-lang.github.io/rfcs/3493-precise-pre-release-cargo-update.html) lets `cargo update --precise` target a pre-release. This is the closest existing hook for resolving a non-upstream release; we likely would build on top of it.
+- **Central Patches draft RFC** ([HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g), @celinval): an earlier draft of the Cargo side of this goal. Registries reserve a pre-release tag for their own releases, Cargo resolves them within existing requirements, and consumers control uptake per registry. It will be rewritten after discovery to match what we learn about how registries diverge today.
 
 ### What we propose to do about it
 
@@ -67,11 +68,13 @@ Out of scope:
 
 ### Work items over the next year
 
+This goal is co-authored by @jlizen and @celinval. @jlizen leads discovery (survey, requirements, initial docs); the RFC and Cargo implementation are shared.
+
 Two phases, roughly 3-6 months.
 
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
-| Declared registry releases: spec, resolver support, docs | @jlizen | |
+| Declared registry releases: spec, resolver support, docs | @jlizen, @celinval | |
 | Feed, audit tooling, producer tooling | @jlizen | |
 
 #### Declared registry releases: spec, resolver support, docs
@@ -81,13 +84,13 @@ Two phases, roughly 3-6 months.
 | Survey alternate registries and mirrors for how they diverge today | @jlizen | |
 | Docs: describe how source replacement is used today and its risks | @jlizen | |
 | Requirements doc; gather use cases from registry operators, Alpha-Omega, Akrites, Linux packagers, Rust contracting shops (Ferrous Systems, Mainmatter) | @jlizen | |
-| RFC: Registry release declarations, Cargo resolver behavior, registry advertisement, consumer opt-out, lockfile interaction | @jlizen | may split into two |
-| Cargo implementation behind unstable flag | @jlizen | |
-| Reference implementation in an alternate registry or static index | @jlizen | end to end without crates.io |
+| RFC: Registry release declarations, Cargo resolver behavior, registry advertisement, consumer opt-out, lockfile interaction | @jlizen, @celinval | may split into two; builds on the [Central Patches draft](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g) |
+| Cargo implementation behind unstable flag | @jlizen, @celinval | |
+| Reference implementation in an alternate registry or static index | @jlizen, @celinval | end to end without crates.io |
 | RustSec advisory DB: represent "fixed in registry X with registry release Y" | @jlizen | with RustSec maintainers |
 | Docs: update source-replacement / mirroring docs for registry releases | @jlizen | |
 | Docs: Guidance for registry operators who diverge from upstream | @jlizen | |
-| Stabilization | @jlizen | |
+| Stabilization | @jlizen, @celinval | |
 
 #### Feed, audit tooling, producer tooling
 
