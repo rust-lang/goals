@@ -11,9 +11,7 @@
 
 ## Summary
 
-[RFC 3686: Generic Integers V2: It's Time](https://github.com/rust-lang/rfcs/pull/3686) is currently blocked on exploring how exactly this feature would interact with the existing compiler and language, to resolve some of the current unknowns.
-
-In particular, an MVP of this feature would add `u<N>` and `i<N>` const-generic integer types similar to C's `_BitInt(N)` type, with the explicit goal to ensure that these types are literally equivalent to their non-generic versions. This would allow vast simplifications of various APIs and documentation for them, and would be useful even without "filling in" the other values for `N` in the implementation.
+Implement an MVP of [the generic integers RFC](https://github.com/rust-lang/rfcs/pull/3686), adding `u<N>` and `i<N>` types equivalent to the existing integer types such as `u16` and `i32`, and refining the RFC in the process.
 
 ## Motivation
 
