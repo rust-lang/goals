@@ -9,6 +9,7 @@ use crate::{
     config::Configuration,
     goal::{Status, TeamAsk},
     team::TeamName,
+    title::Title,
     util,
 };
 
@@ -141,8 +142,8 @@ pub fn format_team_asks(asks_of_any_team: &[&TeamAsk]) -> Result<String> {
 
 #[derive(Eq, PartialEq, PartialOrd, Ord, Copy, Clone, Debug)]
 struct GoalData<'g> {
-    goal_title: &'g String,
-    subgoal_title: Option<&'g String>,
+    goal_title: &'g Title,
+    subgoal_title: Option<&'g Title>,
     link: &'g PathBuf,
     status: Status,
 }
@@ -174,7 +175,7 @@ impl<'g> GoalData<'g> {
 
     fn goal_title(&self) -> String {
         let title = self.subgoal_title.unwrap_or(self.goal_title);
-        let title = self.status.decorate_title(title);
+        let title = self.status.decorate_title(title.displayable());
         util::goal_title_cell(
             &title,
             self.link,

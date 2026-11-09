@@ -4,6 +4,7 @@ use std::{fmt::Display, path::Path};
 
 use spanned::{Error, Result, Spanned};
 
+use crate::title::Title;
 use crate::util;
 
 /// A "section" is a piece of markdown that begins with `##` and which extends until the next section.
@@ -14,7 +15,7 @@ pub struct Section {
     pub level: usize,
 
     /// Title of the section -- what came after the `#` in the markdown.
-    pub title: Spanned<String>,
+    pub title: Spanned<Title>,
 
     /// Markdown text until start of next section, excluding tables
     pub text: Spanned<String>,
@@ -25,7 +26,7 @@ pub struct Section {
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Table {
-    pub header: Vec<Spanned<String>>,
+    pub header: Vec<Spanned<Title>>,
     pub rows: Vec<Vec<Spanned<String>>>,
 }
 
@@ -84,7 +85,7 @@ pub fn parse_text(text: Spanned<&str>) -> Result<Vec<Section>> {
                 } else {
                     open_table = Some(Spanned::new(
                         Table {
-                            header: row,
+                            header: row.into_iter().map(|s| s.map(Title::new)).collect(),
                             rows: vec![],
                         },
                         line.span.clone(),
@@ -150,7 +151,7 @@ fn close_section(
 
 #[derive(Debug)]
 enum CategorizeLine {
-    Title(usize, Spanned<String>),
+    Title(usize, Spanned<Title>),
     TableRow(Vec<Spanned<String>>),
     TableDashRow(Vec<Spanned<()>>),
     Other,
@@ -161,7 +162,13 @@ fn categorize_line(line: Spanned<&str>) -> CategorizeLine {
     // tables due to unexpected spaces.
     if line.starts_with("#") {
         let level = line.chars().take_while(|ch| **ch == '#').count();
-        CategorizeLine::Title(level, line.trim_start_matches('#').trim().to_string())
+        CategorizeLine::Title(
+            level,
+            line.trim_start_matches('#')
+                .trim()
+                .to_string()
+                .map(Title::new),
+        )
     } else if let Some(line) = line
         .trim()
         .strip_prefix("|")
@@ -217,7 +224,12 @@ impl Table {
         let mut new_text = full_text[..table_span.start].to_string();
 
         let table_text = {
-            let mut new_rows = vec![new_table.header.clone()];
+            let mut new_rows = vec![new_table
+                .header
+                .iter()
+                .cloned()
+                .map(|s| s.map(|t| t.displayable().to_string()))
+                .collect()];
             new_rows.extend(new_table.rows.iter().cloned());
             util::format_table(&new_rows)
         };

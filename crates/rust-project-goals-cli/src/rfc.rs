@@ -778,7 +778,7 @@ fn issue_text(timeframe: &str, document: &GoalDocument) -> String {
         },
         lock_text = match &document.metadata.tracking_issue {
             Some(issue) => {
-                let topic = zulip_topic(&document.metadata.title, issue.number);
+                let topic = zulip_topic(document.metadata.title.displayable(), issue.number);
                 let topic_url = zulip_topic_url(&topic);
                 format!(
                     "{LOCK_TEXT}\n\nFor general questions or comments, \

@@ -266,7 +266,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                 })
                 .collect();
 
-            filtered_goals.sort_by_key(|g| g.metadata.title.to_lowercase());
+            filtered_goals.sort_by_key(|g| g.metadata.title.clone());
 
             let output = goal::format_roadmap_goal_rows(&filtered_goals, filter_value);
 
@@ -310,7 +310,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                 })
                 .collect();
 
-            filtered_goals.sort_by_key(|g| g.metadata.title.to_lowercase());
+            filtered_goals.sort_by_key(|g| g.metadata.title.clone());
 
             let output = goal::format_highlight_table(&filtered_goals);
 
@@ -342,7 +342,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                 })
                 .collect();
 
-            filtered_goals.sort_by_key(|g| g.metadata.title.to_lowercase());
+            filtered_goals.sort_by_key(|g| g.metadata.title.clone());
 
             let output = goal::format_highlight_credits(&filtered_goals);
 
@@ -395,7 +395,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                     .collect()
             };
 
-            filtered_goals.sort_by_key(|g| g.metadata.title.to_lowercase());
+            filtered_goals.sort_by_key(|g| g.metadata.title.clone());
 
             let heading_re = Regex::new(r"(?m)^(#+)\s").unwrap();
             let preceding = &chapter.content[..range.start];
@@ -434,7 +434,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             .filter(|g| g.metadata.status.content.is_not_not_accepted() && g.needs_funding())
             .collect();
 
-        filtered_goals.sort_by_key(|g| g.metadata.title.to_lowercase());
+        filtered_goals.sort_by_key(|g| g.metadata.title.clone());
 
         let output = goal::format_funding_table(&filtered_goals);
         chapter.content.replace_range(range, &output);
@@ -467,7 +467,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             })
             .collect();
 
-        filtered_goals.sort_by_key(|g| g.metadata.title.to_lowercase());
+        filtered_goals.sort_by_key(|g| g.metadata.title.clone());
 
         let output = goal::format_funding_table(&filtered_goals);
         chapter.content.replace_range(range, &output);
@@ -489,7 +489,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             .filter(|g| g.metadata.status.content.is_not_not_accepted() && g.needs_funding())
             .collect();
 
-        filtered_goals.sort_by_key(|g| g.metadata.title.to_lowercase());
+        filtered_goals.sort_by_key(|g| g.metadata.title.clone());
 
         let roadmap_refs: Vec<&goal::RoadmapDocument> = roadmaps.iter().collect();
         let output = goal::format_funding_table_grouped(&filtered_goals, &roadmap_refs);
@@ -589,7 +589,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                 })
                 .collect();
 
-            filtered_goals.sort_by_key(|g| g.metadata.title.to_lowercase());
+            filtered_goals.sort_by_key(|g| g.metadata.title.clone());
 
             // Search backwards from the directive for the most recent heading to
             // determine the level at which to emit goal sub-headings.
@@ -657,7 +657,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             .filter(|g| g.metadata.status.content.is_not_not_accepted())
             .collect();
 
-        goals_with_status.sort_by_key(|g| g.metadata.title.to_lowercase());
+        goals_with_status.sort_by_key(|g| g.metadata.title.clone());
 
         // Create subchapters for each goal
         let mut parent_names = chapter.parent_names.clone();
@@ -699,7 +699,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
 
         let roadmaps = self.roadmap_documents(chapter_path)?;
         let mut sorted_roadmaps: Vec<&RoadmapDocument> = roadmaps.iter().collect();
-        sorted_roadmaps.sort_by_key(|r| r.title.to_lowercase());
+        sorted_roadmaps.sort_by_key(|r| r.title.clone());
 
         // Create subchapters for each roadmap
         let mut parent_names = chapter.parent_names.clone();
@@ -711,8 +711,12 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                 .path
                 .strip_prefix(&self.ctx.config.book.src)
                 .unwrap();
-            let mut new_chapter =
-                Chapter::new(&roadmap.title.content, content, path, parent_names.clone());
+            let mut new_chapter = Chapter::new(
+                roadmap.title.displayable(),
+                content,
+                path,
+                parent_names.clone(),
+            );
 
             if let Some(mut number) = chapter.number.clone() {
                 number.push(index + 1);
@@ -753,7 +757,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             let mut goals_with_status: Vec<&GoalDocument> =
                 goals.iter().filter(|g| filter(g, capture_value)).collect();
 
-            goals_with_status.sort_by_key(|g| g.metadata.title.to_lowercase());
+            goals_with_status.sort_by_key(|g| g.metadata.title.clone());
 
             // Get milestone issues for progress generation
             let milestone_issues = if let Some(first_goal) = goals_with_status.first() {
@@ -1079,7 +1083,9 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             let theme = &roadmap.short_title.content;
             let mut all_task_owners: BTreeSet<String> = BTreeSet::new();
             for goal in goals.iter() {
-                if goal.metadata.status.is_not_not_accepted() && goal.matches_roadmap_theme(theme) {
+                if goal.metadata.status.is_not_not_accepted()
+                    && goal.matches_roadmap_theme(theme.displayable())
+                {
                     all_task_owners.extend(goal.task_owners.iter().cloned());
                 }
             }

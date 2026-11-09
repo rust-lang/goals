@@ -98,8 +98,8 @@ pub fn format_team_support_for_team(
         if let Some(supports) = goal.team_involvement.as_support() {
             for support in supports.iter().filter(|s| s.team == team_name) {
                 entries.push(GoalSupportData {
-                    goal_title: &goal.metadata.title,
-                    subgoal_title: support.subgoal.as_ref().map(|s| s.content.as_str()),
+                    goal_title: goal.metadata.title.displayable(),
+                    subgoal_title: support.subgoal.as_ref().map(|s| s.displayable()),
                     link: &goal.link_path,
                     status: *goal.metadata.status,
                     support_level: support.support_level,
