@@ -8,7 +8,6 @@
 | [compiler] champion | TBD                                                                   |
 | [lang] champion     | TBD                                                                   |
 | [libs] champion     | @clarfonthey                                                          |
-| [opsem] champion    | TBD                                                                   |
 | [types] champion    | TBD                                                                   |
 
 ## Summary
@@ -72,7 +71,6 @@ The team asks here are weird, since nothing actually needs to be *implemented* p
 | [compiler]  | Large         | Codegen investigation                                               |
 | [lang]      | Large         | Type system feature investigation                                   |
 | [libs]      | Large         | API/ecosystem investigation                                         |
-| [opsem]     | Large         | Safety audits (is what people are doing actually sound? can it be?) |
 | [types]     | Large         | Language feature investigation                                      |
 
 ## Funding
