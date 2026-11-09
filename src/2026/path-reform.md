@@ -11,7 +11,7 @@
 
 ## Summary
 
-Overhaul the standard library `Path` APIs, both creating a "v2" version of the existing APIs (potentially becoming the default on a new edition) and adding explicit platform-independent POSIX/Windows path types.
+Overhaul the standard library `Path` APIs, both creating a "v2" version of the existing APIs (potentially becoming the default on a new edition) and adding explicit platform-independent Unix/Windows path types.
 
 ## Motivation
 
@@ -33,7 +33,7 @@ While there are a few ecosystem crates that attempt to fix these issues, the com
 
 ### What we propose to do about it
 
-The most substantial, immediate work has been suggested for a very long time and actually has already been implemented by Python: we need to separate out the Windows and POSIX path types into two types that can be used and tested on all platforms. (Python calls these `WindowsPath` and `PosixPath`, although the Rust story is a bit more complicated.)
+The most substantial, immediate work has been suggested for a very long time and actually has already been implemented by Python: we need to separate out the Windows and Unix path types into two types that can be used and tested on all platforms. (Python calls these `WindowsPath` and `PosixPath`, although the Rust story is a bit more complicated.)
 
 Note that these types actually should not have the same API because they will be able to explicitly take the quirks of their underlying implementations into account. For example, a large portion of the handling of the `Path::components` iterator depends on the prefix of Windows paths, and it would be nice to remove prefix handling entirely from the components iterator to remove that complex branch entirely. There could also be separate types for Windows' verbatim paths for users who explicitly want to use verbatim paths for their hygiene guarantees.
 
@@ -42,7 +42,7 @@ The options really are endless here, and part of this is because the clunkiness 
 That said, the lower bound on the work for this goal is to simply create three new `Path` APIs:
 
 1. A "v2 `Path`" API which can potentially replace the current `Path` on a future edition, taking new designs into account.
-2. A platform-independent POSIX path API which explicitly adapts the API for the handling of POSIX paths.
+2. A platform-independent Unix path API which explicitly adapts the API for the handling of Unix paths.
 3. A platform-independent Windows path API which explicitly adapts the API for the handling of Windows paths.
 
 Because the `std::path` module actually contains several types related to `Path` (like `PathBuf` and various iterators), these three APIs would actually correspond to three submodules of `std::path`, with the placeholder `std::path::v2` being able to replace the default `std::path` APIs on a future edition.
@@ -101,13 +101,13 @@ Really, the split-at-separator logic could be useful for a broad number of other
 
 ### Work items over the next year
 
-| Task                        | Owner(s) | Notes                       |
-| --------------------------- | -------- | --------------------------- |
-| `std::path::windows` ACP    | None yet |                             |
-| `std::path::posix` ACP      | None yet |                             |
-| `std::path::v2` ACP         | None yet |                             |
-| Windows path implementation | None yet |                             |
-| POSIX path implementation   | None yet |                             |
+| Task                        | Owner(s)     | Notes                       |
+| --------------------------- | ------------ | --------------------------- |
+| `std::path::windows` ACP    | None yet     |                             |
+| `std::path::unix` ACP       | @clarfonthey |                             |
+| `std::path::v2` ACP         | @clarfonthey |                             |
+| Windows path implementation | None yet     |                             |
+| Unix path implementation    | @clarfonthey |                             |
 
 ## Team asks
 
