@@ -53,13 +53,13 @@ There are lots of other things we could learn from `hashbrown`, and there is in 
 
 ### Work items over the next year
 
-| Task                                              | Owner(s) | Notes                       |
-| ------------------------------------------------- | -------- | --------------------------- |
-| Make `Set` rely entirely on `Map`                 | None yet | Will involve new APIs       |
-| Make `Map` rely entirely on `Table`               | None yet | Will involve new APIs       |
-| Absorb `RawTable` into `HashTable` implementation | None yet |                             |
-| Unsafe code auditing/additional refactoring       | None yet |                             |
-| Move `hashbrown` into `alloc`                     | None yet | Will eventually require FCP |
+| Task                                              | Owner(s)     | Notes                       |
+| ------------------------------------------------- | ------------ | --------------------------- |
+| Make `Set` rely entirely on `Map`                 | @clarfonthey | Will involve new APIs       |
+| Make `Map` rely entirely on `Table`               | @clarfonthey | Will involve new APIs       |
+| Absorb `RawTable` into `HashTable` implementation | @clarfonthey |                             |
+| Unsafe code auditing/additional refactoring       | @clarfonthey |                             |
+| Move `hashbrown` into `alloc`                     | @clarfonthey | Will eventually require FCP |
 
 ## Team asks
 
