@@ -636,7 +636,7 @@ impl TeamInvolvement {
 /// Roadmap files (`roadmap-*.md`) are skipped; use `roadmaps_in_dir` for those.
 pub fn goals_in_dir(directory_path: &Path) -> Result<Vec<GoalDocument>> {
     let mut goal_documents = vec![];
-    for (path, link_path) in markdown_files(&directory_path)? {
+    for (path, link_path) in markdown_files(directory_path)? {
         // Skip template files
         if path.file_name().unwrap() == "TEMPLATE.md" {
             continue;
@@ -660,7 +660,7 @@ pub fn goals_in_dir(directory_path: &Path) -> Result<Vec<GoalDocument>> {
 /// Only processes files matching the `roadmap-*.md` naming convention.
 pub fn roadmaps_in_dir(directory_path: &Path) -> Result<Vec<RoadmapDocument>> {
     let mut roadmap_documents = vec![];
-    for (path, link_path) in markdown_files(&directory_path)? {
+    for (path, link_path) in markdown_files(directory_path)? {
         let Some(filename) = path.file_name().and_then(|n| n.to_str()) else {
             continue;
         };
@@ -710,7 +710,7 @@ pub fn validate_username_consistency(goals: &[GoalDocument]) -> Result<()> {
     }
 
     let mut errors = Vec::new();
-    for (_, casings) in &seen {
+    for casings in seen.values() {
         if casings.len() > 1 {
             let variants: Vec<String> = casings
                 .iter()
@@ -1020,7 +1020,7 @@ pub fn format_goal_table(
                     // Find the matching issue in milestone_issues and generate progress HTML
                     let progress_html = if let Some(issues) = milestone_issues {
                         if let Some(issue) = issues.iter().find(|issue| issue.number == *number) {
-                            let progress = checkboxes(&issue);
+                            let progress = checkboxes(issue);
                             generate_progress_html(&progress, &issue.state)
                         } else {
                             // Issue not found - might be in different milestone or not exist
@@ -1425,7 +1425,7 @@ pub fn format_highlight_credits(goals: &[&GoalDocument]) -> String {
                 all_people.insert(owner.clone());
             }
         }
-        for (_team, champion) in &goal.metadata.champions {
+        for champion in goal.metadata.champions.values() {
             for username in owner_usernames(&champion.content) {
                 all_people.insert(username.to_string());
             }
@@ -1791,7 +1791,7 @@ fn first_sentence(s: &str) -> String {
     let mut chars = collapsed.char_indices().peekable();
     while let Some((i, ch)) = chars.next() {
         if ch == '.' {
-            let next_is_boundary = chars.peek().map_or(true, |&(_, next)| next.is_whitespace());
+            let next_is_boundary = chars.peek().is_none_or(|&(_, next)| next.is_whitespace());
             if next_is_boundary {
                 return collapsed[..=i].to_owned();
             }

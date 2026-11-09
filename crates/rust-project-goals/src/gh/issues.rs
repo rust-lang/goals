@@ -80,7 +80,7 @@ pub fn count_issues_matching_search(repository: &Repository, search: &str) -> Re
 
     let output = Command::new("gh")
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("list")
         .arg("-S")
@@ -108,10 +108,10 @@ pub fn count_issues_matching_search(repository: &Repository, search: &str) -> Re
 pub fn fetch_issue(repository: &Repository, issue: u64) -> Result<ExistingGithubIssue> {
     let output = Command::new("gh")
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("view")
-        .arg(&format!("{issue}"))
+        .arg(format!("{issue}"))
         .arg("--json")
         .arg("title,assignees,number,comments,body,state,labels,milestone")
         .output()?;
@@ -200,7 +200,7 @@ pub fn list_issues(
     let mut cmd = Command::new("gh");
 
     cmd.arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("list")
         .arg("-s")
@@ -223,7 +223,7 @@ pub fn list_issues(
 
     Ok(existing_issues
         .into_iter()
-        .map(|e_i| ExistingGithubIssue::from(e_i))
+        .map(ExistingGithubIssue::from)
         .collect())
 }
 
@@ -237,19 +237,19 @@ pub fn create_issue(
 ) -> Result<IssueId> {
     let output = Command::new("gh")
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("create")
         .arg("-b")
-        .arg(&body)
+        .arg(body)
         .arg("-t")
-        .arg(&title)
+        .arg(title)
         .arg("-l")
         .arg(labels.join(","))
         .arg("-a")
-        .arg(comma(&assignees))
+        .arg(comma(assignees))
         .arg("-m")
-        .arg(&milestone)
+        .arg(milestone)
         .output()?;
 
     if !output.status.success() {
@@ -270,14 +270,14 @@ pub fn create_issue(
         }
     }
 
-    Err(Error::str(format!("creating issue did not return a URL")))
+    Err(Error::str("creating issue did not return a URL".to_string()))
 }
 
 pub fn change_title(repository: &Repository, number: u64, title: &str) -> Result<()> {
     let mut command = Command::new("gh");
     command
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("edit")
         .arg(number.to_string())
@@ -300,7 +300,7 @@ pub fn change_milestone(repository: &Repository, number: u64, milestone: &str) -
     let mut command = Command::new("gh");
     command
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("edit")
         .arg(number.to_string())
@@ -322,7 +322,7 @@ pub fn change_milestone(repository: &Repository, number: u64, milestone: &str) -
 pub fn create_comment(repository: &Repository, number: u64, body: &str) -> Result<()> {
     let output = Command::new("gh")
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("comment")
         .arg(number.to_string())
@@ -344,7 +344,7 @@ pub fn create_comment(repository: &Repository, number: u64, body: &str) -> Resul
 pub fn update_issue_body(repository: &Repository, number: u64, body: &str) -> Result<()> {
     let output = Command::new("gh")
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("edit")
         .arg(number.to_string())
@@ -372,17 +372,17 @@ pub fn sync_assignees(
     let mut command = Command::new("gh");
     command
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("edit")
         .arg(number.to_string());
 
     if !remove_owners.is_empty() {
-        command.arg("--remove-assignee").arg(comma(&remove_owners));
+        command.arg("--remove-assignee").arg(comma(remove_owners));
     }
 
     if !add_owners.is_empty() {
-        command.arg("--add-assignee").arg(comma(&add_owners));
+        command.arg("--add-assignee").arg(comma(add_owners));
     }
 
     let output = command.output()?;
@@ -406,17 +406,17 @@ pub fn sync_labels(
     let mut command = Command::new("gh");
     command
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("edit")
         .arg(number.to_string());
 
     if !remove_labels.is_empty() {
-        command.arg("--remove-label").arg(comma(&remove_labels));
+        command.arg("--remove-label").arg(comma(remove_labels));
     }
 
     if !add_labels.is_empty() {
-        command.arg("--add-label").arg(comma(&add_labels));
+        command.arg("--add-label").arg(comma(add_labels));
     }
 
     let output = command.output()?;
@@ -463,21 +463,20 @@ impl ExistingGithubIssue {
 pub fn lock_issue(repository: &Repository, number: u64) -> Result<()> {
     let output = Command::new("gh")
         .arg("-R")
-        .arg(&repository.to_string())
+        .arg(repository.to_string())
         .arg("issue")
         .arg("lock")
         .arg(number.to_string())
         .output()?;
 
-    if !output.status.success() {
-        if !output.stderr.starts_with(b"already locked") {
+    if !output.status.success()
+        && !output.stderr.starts_with(b"already locked") {
             return Err(Error::str(format!(
                 "failed to lock issue `{}`: {}",
                 number,
                 String::from_utf8_lossy(&output.stderr)
             )));
         }
-    }
 
     Ok(())
 }
@@ -537,7 +536,7 @@ impl From<ExistingGithubIssueJson> for ExistingGithubIssue {
 ///
 /// Returns a tuple (completed, total) with the number of completed items and the total number of items.
 pub fn checkboxes(issue: &ExistingGithubIssue) -> Progress {
-    match try_checkboxes(&issue) {
+    match try_checkboxes(issue) {
         Ok(pair) => pair,
         Err(e) => Progress::Error {
             message: e.to_string(),

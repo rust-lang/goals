@@ -9,7 +9,7 @@ use walkdir::WalkDir;
 
 pub const ARROW: &str = "↳";
 
-pub const MILESTONE_REGEX: &'static str = r"^\d{4}([hH][12])?$";
+pub const MILESTONE_REGEX: &str = r"^\d{4}([hH][12])?$";
 
 /// Format a goal title cell for use in markdown tables.
 /// If `subgoal_title` is Some, renders as `↳ subgoal`, otherwise as `[title](link)`.
@@ -142,7 +142,7 @@ pub fn in_thread<R>(op: impl FnOnce() -> R + Send) -> R
 where
     R: Send,
 {
-    std::thread::scope(|scope| scope.spawn(|| op()).join().unwrap())
+    std::thread::scope(|scope| scope.spawn(op).join().unwrap())
 }
 
 /// Tracks footnotes for long text in markdown tables.
@@ -185,5 +185,11 @@ impl Footnotes {
             write!(output, "\n\n{}\n", footnote)?;
         }
         Ok(())
+    }
+}
+
+impl Default for Footnotes {
+    fn default() -> Self {
+        Self::new()
     }
 }

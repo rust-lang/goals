@@ -1036,13 +1036,13 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         if !parent_name
             .chars()
             .next()
-            .map_or(false, |c| c.is_ascii_digit())
+            .is_some_and(|c| c.is_ascii_digit())
         {
             return Ok(()); // Not a milestone directory, skip
         }
 
         // Find the goal document for this chapter
-        let goals = self.goal_documents(&chapter_path)?;
+        let goals = self.goal_documents(chapter_path)?;
         let chapter_in_context = self.ctx.config.book.src.join(chapter_path);
 
         if let Some(goal) = goals.iter().find(|gd| gd.path == chapter_in_context) {
@@ -1229,7 +1229,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             let champion_content =
                 self.generate_champion_report_content(milestone, team_name_str)?;
 
-            let report_name = format!("Recent updates");
+            let report_name = "Recent updates".to_string();
             let report_virtual_path = format!("{team_name_str}/recent-updates.md");
             let report_path = Path::new(&report_virtual_path);
 

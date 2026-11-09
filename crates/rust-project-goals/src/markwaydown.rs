@@ -120,7 +120,7 @@ pub fn parse_text(text: Spanned<&str>) -> Result<Vec<Section>> {
                 close_table(&mut open_section, &mut open_table);
                 if let Some(section) = open_section.as_mut() {
                     section.text.span.bytes.end = line.span.bytes.end;
-                    section.text.content.push_str(&**line);
+                    section.text.content.push_str(&line);
                     section.text.content.push('\n');
                 }
             }

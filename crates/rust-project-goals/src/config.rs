@@ -32,7 +32,7 @@ impl Configuration {
         lazy_static::lazy_static! {
             static ref CONFIG: Configuration = Configuration::load().unwrap();
         }
-        &*CONFIG
+        &CONFIG
     }
 
     fn load() -> Result<Configuration> {

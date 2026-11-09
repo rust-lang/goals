@@ -110,7 +110,7 @@ fn find_latest_milestone() -> Result<std::path::PathBuf> {
         }
 
         // Simple lexicographic comparison works for our milestone format
-        if latest.as_ref().map_or(true, |(n, _)| name > n.as_str()) {
+        if latest.as_ref().is_none_or(|(n, _)| name > n.as_str()) {
             latest = Some((name.to_string(), entry.path().to_path_buf()));
         }
     }
@@ -193,7 +193,7 @@ fn format_review(
         writeln!(output, "**Contact:** {}", goal.metadata.contacts)?;
 
         // Team champion for this team specifically
-        let needs_champion = goal.team_involvement.as_support().map_or(false, |s| {
+        let needs_champion = goal.team_involvement.as_support().is_some_and(|s| {
             s.iter().any(|s| {
                 s.team == team
                     && matches!(s.support_level, SupportLevel::Large | SupportLevel::Medium)
@@ -203,7 +203,7 @@ fn format_review(
         if let Some(champion) = champion {
             writeln!(output, "**Champion:** {}", champion.content)?;
         } else if needs_champion {
-            writeln!(output, "**Champion:** {}", "TBD")?;
+            writeln!(output, "**Champion:** TBD")?;
         };
 
         // Support level for this team

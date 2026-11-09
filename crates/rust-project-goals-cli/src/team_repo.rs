@@ -94,19 +94,19 @@ fn team_file(owners: &BTreeSet<&str>) -> Result<String> {
     writeln!(out, "# Auto-generated from the goals repository")?;
     writeln!(out, "name = \"goal-owners\"")?;
     writeln!(out, "kind = \"marker-team\"")?;
-    writeln!(out, "")?;
+    writeln!(out)?;
     writeln!(out, "[people]")?;
     writeln!(out, "leads = []")?;
     writeln!(out, "members = [")?;
     for owner in owners {
         match team::get_person_data(owner)? {
-            Some(p) => writeln!(out, "    \"{}\",", &p.github_username)?,
+            Some(p) => writeln!(out, "    \"{}\",", p.github_username)?,
             None => writeln!(out, "    \"{}\",", &owner[1..])?,
         }
     }
     writeln!(out, "]")?;
     writeln!(out, "included-teams = []")?;
-    writeln!(out, "")?;
+    writeln!(out)?;
     writeln!(out, "[[github]]")?;
     writeln!(out, "orgs = [\"rust-lang\"]")?;
     Ok(out)

@@ -143,7 +143,7 @@ fn main() -> Result<()> {
 
     match &opt.cmd {
         Command::FCP { path } => {
-            rfc::generate_comment(&path)?;
+            rfc::generate_comment(path)?;
         }
 
         Command::CFP {
@@ -159,7 +159,7 @@ fn main() -> Result<()> {
         }
 
         Command::RFC { path } => {
-            rfc::generate_rfc(&path)?;
+            rfc::generate_rfc(path)?;
         }
 
         Command::Issues {
@@ -178,7 +178,7 @@ fn main() -> Result<()> {
             path,
             team_repo_path,
         } => {
-            team_repo::generate_team_repo(&path, team_repo_path)?;
+            team_repo::generate_team_repo(path, team_repo_path)?;
         }
 
         Command::Updates {
@@ -276,7 +276,7 @@ fn generate_updates(
     let output = output.replace("<pre>", "\n\n<pre>");
 
     if let Some(output_file) = output_file {
-        std::fs::write(&output_file, output).with_path_context(output_file, "failed to write")?;
+        std::fs::write(output_file, output).with_path_context(output_file, "failed to write")?;
     } else if vscode {
         let mut child = ProcessCommand::new("code")
             .arg("-")

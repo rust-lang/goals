@@ -34,7 +34,7 @@ fn validate_path(path: &Path) -> Result<String> {
 
     let timeframe = path
         .components()
-        .last()
+        .next_back()
         .unwrap()
         .as_os_str()
         .to_str()
@@ -83,7 +83,7 @@ fn separate_reference_links(text: &str) -> (String, Vec<String>) {
     }
 
     // Trim trailing blank lines from body
-    while body_lines.last().map_or(false, |l| l.trim().is_empty()) {
+    while body_lines.last().is_some_and(|l| l.trim().is_empty()) {
         body_lines.pop();
     }
 
@@ -168,7 +168,7 @@ fn inline_rendered_file(text: &str, context_level: usize) -> String {
     }
 
     // Trim leading blank lines
-    while result.first().map_or(false, |l| l.trim().is_empty()) {
+    while result.first().is_some_and(|l| l.trim().is_empty()) {
         result.remove(0);
     }
 
@@ -362,7 +362,7 @@ pub fn generate_issues(
             for action in &actions {
                 eprintln!("* {action}");
             }
-            eprintln!("");
+            eprintln!();
             eprintln!("Use `--commit` to execute the actions.");
             return Ok(());
         }
@@ -559,8 +559,7 @@ fn initialize_issues<'doc>(
                     .labels
                     .iter()
                     .cloned()
-                    .chain(existing_issue.labels.iter().filter_map(|label| {
-                        matches!(
+                    .chain(existing_issue.labels.iter().filter(|&label| matches!(
                             label.name.as_str(),
                             "ex-2025h2"
                                 | "Flagship Goal"
@@ -569,9 +568,7 @@ fn initialize_issues<'doc>(
                                 | "R-every-week"
                                 | "S-blocked-funding"
                                 | "S-blocked-contributors"
-                        )
-                        .then(|| label.name.clone())
-                    }))
+                        )).map(|label| label.name.clone()))
                     .collect();
 
                 if existing_label_names != desired_label_names {
@@ -754,7 +751,7 @@ fn issue_text(timeframe: &str, document: &GoalDocument) -> String {
 
 {lock_text}
 "##,
-        contact = &document.metadata.owner_usernames().join(", "),
+        contact = document.metadata.owner_usernames().join(", "),
         summary = document.summary,
         goaldocument = goal_document_link(timeframe, document),
         teams = document
