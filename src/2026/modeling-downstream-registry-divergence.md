@@ -1,13 +1,14 @@
-# Transparent registry security releases
+# Modeling downstream registry divergence
 
 | Metadata | |
 | :-- | :-- |
 | Contact | @jlizen |
-| Short title | Transparent registry releases |
-| What and why | Make it explicit, auditable, and resolvable when a downstream registry serves releases that differ from upstream, so security fixes can be delivered without looking like a dependency confusion attack |
+| Short title | Downstream registry divergence |
+| What and why | Downstream registries already serve releases upstream never published, mostly for security fixes; document that reality and give it a declared, auditable, resolvable shape so it is distinguishable from a dependency confusion attack |
 | Status | Proposed |
 | Zulip channel | N/A (to be created on request) |
 | [cargo] champion | TBD |
+| [social-media] champion | TBD |
 | [crates-io] champion | TBD |
 
 ## Summary
@@ -84,7 +85,7 @@ Three phases, roughly 6-9 months. The critical-release phase depends on consensu
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
 | Docs: Update Cargo docs to reflect current (dependency confusion) usage of source replacement | @jlizen | |
-| Requirements doc; gather use cases from registry operators, Alpha-Omega, Akrites, Linux packagers | @jlizen | |
+| Requirements doc; gather use cases from registry operators, Alpha-Omega, Akrites, Linux packagers, Rust contracting shops (Ferrous Systems, Mainmatter) | @jlizen | |
 | Survey alternate registries and mirrors for how they diverge today | @jlizen | |
 | RFC: Registry release declarations, Cargo resolver behavior, registry advertisement, consumer opt-out | @jlizen | may split into two |
 | Cargo implementation behind unstable flag | @jlizen | |
@@ -102,6 +103,7 @@ Three phases, roughly 6-9 months. The critical-release phase depends on consensu
 | Design: provenance and how consumers verify registry release = base + diff | @jlizen | |
 | Audit tool: diff a registry against its declared upstream, flag undeclared divergence | needs owner | |
 | Tooling to produce a declared security release from upstream `.crate` + diff | needs owner | |
+| Blog post: how downstream registries diverge today, the new declared model, and how to audit a mirror | @jlizen | after modeling + audit tooling land |
 
 #### Critical security releases that apply to locked versions
 
@@ -118,8 +120,9 @@ Three phases, roughly 6-9 months. The critical-release phase depends on consensu
 | :-- | :-- | :-- |
 | [cargo] | Large | Review: Resolver and lockfile semantics; source-replacement trust model and docs; RFCs and implementation |
 | [crates-io] | Small | Steward the registry index spec changes so alternate registries interoperate; crates.io not expected to publish registry releases itself |
+| [social-media] | Small | Advice + edits for blog post |
 
-Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions, Alpha-Omega, Akrites, external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI).
+Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions, Alpha-Omega, Akrites, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI).
 
 ## Help wanted
 
