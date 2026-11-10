@@ -10,6 +10,8 @@
 | [cargo] champion | TBD |
 | [social-media] champion | TBD |
 
+Ecosystem security champion: TBD. (Team is still being chartered, [ref](https://github.com/rust-lang/leadership-council/issues/352).)
+
 ## Summary
 
 Cargo's stable source replacement functionality is under-documented and powerful. It is being used in many ways, including some not considered when the feature was last documented. We will inventory how it is being used and abused, and update the documentation to describe what tangible risks to look out for under "use at your own risk". Many companies rely on source replacement to emergency-replace open source code when a vulnerability is found in it. Given that this is already technically possible, we will propose an RFC for a recommended way to do so, with Cargo support, that can be distinguished from a malicious dependency confusion attack.
@@ -110,6 +112,8 @@ Two phases, roughly 3-6 months.
 | [cargo] | Large | Review: Resolver and lockfile semantics; source-replacement trust model and docs; RFCs and implementation |
 | [crates-io] | Small | Steward the registry index spec changes so alternate registries interoperate; crates.io not expected to publish registry releases itself |
 | [social-media] | Small | Advice + edits for blog post |
+
+We also expect a Small review from the proposed ecosystem security team once it exists.
 
 Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions, Alpha-Omega, Akrites, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI), corporate-managed downstream package vendors (Google, Meta?, etc).
 
