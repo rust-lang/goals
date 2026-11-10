@@ -77,7 +77,7 @@ Two phases, roughly 3-6 months.
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
 | Declared registry releases: spec, resolver support, docs | @jlizen, @celinval | |
-| Feed, audit tooling, producer tooling | @jlizen | |
+| Feed, audit tooling, producer tooling | @jlizen, @CAD97 | |
 
 #### Declared registry releases: spec, resolver support, docs
 
@@ -102,7 +102,7 @@ Two phases, roughly 3-6 months.
 | Design: event feed of registry releases, signing, relation to [verifiable mirroring](./mirroring.md) | @jlizen | |
 | Design: provenance and how consumers verify registry release = base + diff | @jlizen | |
 | Audit tool: diff a registry against its declared upstream, flag undeclared divergence | needs owner | |
-| Tooling to produce a declared registry release from upstream `.crate` + diff | needs owner | |
+| Tooling to produce a declared registry release from upstream `.crate` + diff | @CAD97 | |
 | Blog post: how downstream registries diverge today, the new declared model, and how to audit a mirror | @jlizen | after modeling + audit tooling land |
 
 ## Team asks
@@ -122,7 +122,6 @@ Feedback from outside the Project: RustSec maintainers, alternate registry opera
 | Task | Experience level | Time investment |
 | :-- | :-- | :-- |
 | Audit tool (registry vs. upstream diff) | Intermediate Rust | 1-2 months |
-| Producer tooling (package a registry release) | Intermediate Rust | 1-2 months |
 
 ## Frequently asked questions
 
