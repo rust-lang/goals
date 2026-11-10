@@ -159,4 +159,4 @@ No. Lockfiles are respected by default. The RFC will include an opt-in way to ta
 
 ### Does this change semver?
 
-Maybe. Registry releases need a version shape that sorts correctly, does not take the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component. Each has costs for older Cargo versions and for tools outside Cargo. Discovery includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
+Maybe. Registry releases need a version shape that sorts correctly, does not use the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component. Each has costs for older Cargo versions and for tools outside Cargo. Discovery includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
