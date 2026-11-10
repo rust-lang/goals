@@ -3,14 +3,9 @@
 | Metadata | |
 | :-- | :-- |
 | Contact | @jlizen |
-<<<<<<< HEAD
 | Status | Accepted |
 | Zulip channel | [#goals/crates-io-hardening][zulip]  |
 | Tracking issue   | [rust-lang/goals#816] |
-=======
-| Status | Proposed |
-| Zulip channel | N/A |
->>>>>>> 4f11830 (Apply suggestion from @nxsaken)
 | [crates-io] champion | @Turbo87 |
 | [cargo] champion | @eh2406 |
 | [docs-rs] champion | @syphar |
@@ -187,4 +182,4 @@ Funding will go to team reviewers and champions. Excess funds will be contribute
 
 | Purpose | Cost | Funded | Sponsor(s) |
 | :-- | :-- | :-- | :-- |
-| Reviewers + champions | $10,000 | Yes | [Devolutions](https://devolutions.net/) |
+| Reviewers + champions | $10,000 | Full | [Devolutions](https://devolutions.net/) |
