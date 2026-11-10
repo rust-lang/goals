@@ -10,6 +10,7 @@ use crate::gh::issues::{checkboxes, ExistingGithubIssue};
 use crate::markwaydown::{self, Section, Table};
 use crate::re::{self, CHAMPION_METADATA};
 use crate::team::{self, TeamName};
+use crate::title::Title;
 use crate::util::{self, commas, markdown_files};
 use rust_project_goals_json::{GithubIssueState, Progress};
 
@@ -209,7 +210,7 @@ pub struct FundingItem {
 /// A single row from the `## Help wanted` section's `| Task | Experience level | Time investment |` table.
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct HelpWantedItem {
-    pub task: String,
+    pub task: Title,
     pub experience_level: String,
     pub time_investment: String,
 }
@@ -269,10 +270,10 @@ pub struct RoadmapDocument {
     pub link_path: Arc<PathBuf>,
 
     /// The full title from the `#` heading
-    pub title: Spanned<String>,
+    pub title: Spanned<Title>,
 
     /// Short title from metadata table (or title if absent)
-    pub short_title: Spanned<String>,
+    pub short_title: Spanned<Title>,
 
     /// Text from the "What and why" metadata row
     pub what_and_why: String,
@@ -300,7 +301,8 @@ impl RoadmapDocument {
             return Ok(None);
         };
 
-        let summary = extract_summary(&sections)?.unwrap_or_else(|| title.content.clone());
+        let summary =
+            extract_summary(&sections)?.unwrap_or_else(|| title.displayable().to_string());
 
         Ok(Some(RoadmapDocument {
             path: path.to_path_buf(),
@@ -317,8 +319,8 @@ impl RoadmapDocument {
 /// Metadata loaded from the goal header
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Metadata {
-    pub title: Spanned<String>,
-    pub short_title: Spanned<String>,
+    pub title: Spanned<Title>,
+    pub short_title: Spanned<Title>,
     pub contacts: String,
     pub status: Spanned<Status>,
     pub tracking_issue: Option<IssueId>,
@@ -413,7 +415,7 @@ pub struct TaskItem {
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct TaskTree {
     /// Title of this node (goal title for root, heading text for children)
-    pub title: Spanned<String>,
+    pub title: Spanned<Title>,
 
     /// Task items from the `| Task | Owner(s) | Notes |` table in this section
     pub tasks: Vec<TaskItem>,
@@ -487,7 +489,7 @@ impl TaskTree {
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct GoalPlan {
     /// If `Some`, title of the subsection in which these items were found.
-    pub subgoal: Option<Spanned<String>>,
+    pub subgoal: Option<Spanned<Title>>,
 
     /// List of items found in the table.
     pub plan_items: Vec<PlanItem>,
@@ -529,7 +531,7 @@ pub struct TeamAsk {
     pub ask_description: String,
 
     /// Title(s) of the goal. The first element is the title of the goal. The second, if present, is the subgoal.
-    pub goal_titles: Vec<Spanned<String>>,
+    pub goal_titles: Vec<Spanned<Title>>,
 
     /// Name(s) of the teams being asked to do the thing
     pub teams: Vec<&'static TeamName>,
@@ -580,7 +582,7 @@ pub struct TeamSupport {
     pub notes: String,
 
     /// If this came from a `###` subsection, the subgoal title
-    pub subgoal: Option<Spanned<String>>,
+    pub subgoal: Option<Spanned<Title>>,
 }
 
 /// How teams are involved with a goal - either through specific asks (old format)
@@ -634,7 +636,7 @@ impl TeamInvolvement {
 /// Roadmap files (`roadmap-*.md`) are skipped; use `roadmaps_in_dir` for those.
 pub fn goals_in_dir(directory_path: &Path) -> Result<Vec<GoalDocument>> {
     let mut goal_documents = vec![];
-    for (path, link_path) in markdown_files(&directory_path)? {
+    for (path, link_path) in markdown_files(directory_path)? {
         // Skip template files
         if path.file_name().unwrap() == "TEMPLATE.md" {
             continue;
@@ -658,7 +660,7 @@ pub fn goals_in_dir(directory_path: &Path) -> Result<Vec<GoalDocument>> {
 /// Only processes files matching the `roadmap-*.md` naming convention.
 pub fn roadmaps_in_dir(directory_path: &Path) -> Result<Vec<RoadmapDocument>> {
     let mut roadmap_documents = vec![];
-    for (path, link_path) in markdown_files(&directory_path)? {
+    for (path, link_path) in markdown_files(directory_path)? {
         let Some(filename) = path.file_name().and_then(|n| n.to_str()) else {
             continue;
         };
@@ -708,7 +710,7 @@ pub fn validate_username_consistency(goals: &[GoalDocument]) -> Result<()> {
     }
 
     let mut errors = Vec::new();
-    for (_, casings) in &seen {
+    for casings in seen.values() {
         if casings.len() > 1 {
             let variants: Vec<String> = casings
                 .iter()
@@ -768,7 +770,7 @@ pub fn validate_roadmap_references(
 
     let roadmap_titles: BTreeSet<String> = roadmaps
         .iter()
-        .map(|r| r.short_title.content.trim().to_string())
+        .map(|r| r.short_title.content.displayable().to_string())
         .collect();
 
     for goal in goals {
@@ -838,7 +840,7 @@ impl GoalDocument {
         Ok(Some(GoalDocument {
             path: path.to_path_buf(),
             link_path,
-            summary: summary.unwrap_or_else(|| (*metadata.title).clone()),
+            summary: summary.unwrap_or_else(|| (*metadata.title.displayable()).to_string()),
             metadata,
             team_involvement,
             goal_plans,
@@ -856,12 +858,12 @@ impl GoalDocument {
 
     /// Format the title with the terminal status marker.
     pub fn title_with_status(&self) -> String {
-        self.subtitle_with_status(&self.metadata.title)
+        self.subtitle_with_status(self.metadata.title.displayable())
     }
 
     /// Format the short title with the terminal status marker.
     pub fn short_title_with_status(&self) -> String {
-        self.subtitle_with_status(&self.metadata.short_title)
+        self.subtitle_with_status(self.metadata.short_title.displayable())
     }
 
     /// Returns all teams involved with this goal.
@@ -954,20 +956,6 @@ impl GoalDocument {
     }
 }
 
-/// Convert a heading title to an mdbook-compatible anchor slug.
-fn slugify(title: &str) -> String {
-    title
-        .trim()
-        .to_lowercase()
-        .chars()
-        .map(|c| if c.is_alphanumeric() { c } else { '-' })
-        .collect::<String>()
-        .split('-')
-        .filter(|s| !s.is_empty())
-        .collect::<Vec<_>>()
-        .join("-")
-}
-
 /// Generate progress HTML based on issue progress and state
 fn generate_progress_html(progress: &Progress, state: &GithubIssueState) -> String {
     match (progress, state) {
@@ -1032,7 +1020,7 @@ pub fn format_goal_table(
                     // Find the matching issue in milestone_issues and generate progress HTML
                     let progress_html = if let Some(issues) = milestone_issues {
                         if let Some(issue) = issues.iter().find(|issue| issue.number == *number) {
-                            let progress = checkboxes(&issue);
+                            let progress = checkboxes(issue);
                             generate_progress_html(&progress, &issue.state)
                         } else {
                             // Issue not found - might be in different milestone or not exist
@@ -1174,10 +1162,10 @@ pub fn format_funding_table_grouped(
 
     // Sort roadmaps alphabetically by short title
     let mut sorted_roadmaps: Vec<&&RoadmapDocument> = roadmaps.iter().collect();
-    sorted_roadmaps.sort_by_key(|r| r.short_title.to_lowercase());
+    sorted_roadmaps.sort_by_key(|r| r.short_title.content.clone());
 
     for roadmap in sorted_roadmaps {
-        let theme = roadmap.short_title.content.trim();
+        let theme = roadmap.short_title.displayable();
         let matching: Vec<usize> = goals
             .iter()
             .enumerate()
@@ -1409,10 +1397,10 @@ pub fn format_highlight_table(goals: &[&GoalDocument]) -> String {
                     .what_and_why
                     .clone()
                     .unwrap_or_else(|| goal.what_and_why());
-                let anchor = slugify(&child.title);
+                let anchor = child.title.slugify();
                 output.push_str(&format!(
                     "| [{}]({}#{}) | {} |\n",
-                    goal.subtitle_with_status(&child.title),
+                    goal.subtitle_with_status(child.title.displayable()),
                     goal.link_path.display(),
                     anchor,
                     what_and_why,
@@ -1437,7 +1425,7 @@ pub fn format_highlight_credits(goals: &[&GoalDocument]) -> String {
                 all_people.insert(owner.clone());
             }
         }
-        for (_team, champion) in &goal.metadata.champions {
+        for champion in goal.metadata.champions.values() {
             for username in owner_usernames(&champion.content) {
                 all_people.insert(username.to_string());
             }
@@ -1461,7 +1449,7 @@ pub fn format_roadmap_table(roadmaps: &[&RoadmapDocument]) -> Result<String> {
     ]];
 
     let mut sorted_roadmaps: Vec<&&RoadmapDocument> = roadmaps.iter().collect();
-    sorted_roadmaps.sort_by_key(|r| r.short_title.to_lowercase());
+    sorted_roadmaps.sort_by_key(|r| (*r.short_title).clone());
 
     for roadmap in sorted_roadmaps {
         table.push(vec![
@@ -1521,10 +1509,10 @@ pub fn format_roadmap_goal_rows(goals: &[&GoalDocument], filter_theme: &str) -> 
                     .what_and_why
                     .clone()
                     .unwrap_or_else(|| goal.what_and_why());
-                let anchor = slugify(&child.title);
+                let anchor = child.title.slugify();
                 output.push_str(&format!(
                     "| [{}]({}#{}) | {} | {} |\n",
-                    goal.subtitle_with_status(&child.title),
+                    goal.subtitle_with_status(child.title.displayable()),
                     goal.link_path.display(),
                     anchor,
                     timespan,
@@ -1768,7 +1756,7 @@ fn extract_metadata(sections: &[Section]) -> Result<Option<Metadata>> {
     Ok(Some(Metadata {
         title: title.clone(),
         short_title: if let Some(row) = short_title_row {
-            row[1].clone()
+            row[1].clone().map(Title::new)
         } else {
             title.clone()
         },
@@ -1803,7 +1791,7 @@ fn first_sentence(s: &str) -> String {
     let mut chars = collapsed.char_indices().peekable();
     while let Some((i, ch)) = chars.next() {
         if ch == '.' {
-            let next_is_boundary = chars.peek().map_or(true, |&(_, next)| next.is_whitespace());
+            let next_is_boundary = chars.peek().is_none_or(|&(_, next)| next.is_whitespace());
             if next_is_boundary {
                 return collapsed[..=i].to_owned();
             }
@@ -1813,7 +1801,10 @@ fn first_sentence(s: &str) -> String {
 }
 
 pub fn extract_summary(sections: &[Section]) -> Result<Option<String>> {
-    let Some(ownership_section) = sections.iter().find(|section| section.title == "Summary") else {
+    let Some(ownership_section) = sections
+        .iter()
+        .find(|section| section.title.sortable() == "summary")
+    else {
         return Ok(None);
     };
 
@@ -1822,7 +1813,7 @@ pub fn extract_summary(sections: &[Section]) -> Result<Option<String>> {
 
 /// Extract funding items from the `## Funding` section, if present.
 fn extract_funding(sections: &[Section]) -> Result<Vec<FundingItem>> {
-    let Some(section) = sections.iter().find(|s| s.title == "Funding") else {
+    let Some(section) = sections.iter().find(|s| s.title.sortable() == "funding") else {
         return Ok(vec![]);
     };
 
@@ -1855,7 +1846,10 @@ fn extract_funding(sections: &[Section]) -> Result<Vec<FundingItem>> {
 
 /// Extract help wanted items from the `## Help wanted` section, if present.
 fn extract_help_wanted(sections: &[Section]) -> Result<Vec<HelpWantedItem>> {
-    let Some(section) = sections.iter().find(|s| s.title == "Help wanted") else {
+    let Some(section) = sections
+        .iter()
+        .find(|s| s.title.sortable() == "help wanted")
+    else {
         return Ok(vec![]);
     };
 
@@ -1868,7 +1862,7 @@ fn extract_help_wanted(sections: &[Section]) -> Result<Vec<HelpWantedItem>> {
     let mut items = vec![];
     for row in &table.rows {
         items.push(HelpWantedItem {
-            task: row[0].to_string(),
+            task: Title::new(row[0].to_string()),
             experience_level: row[1].to_string(),
             time_investment: row[2].to_string(),
         });
@@ -1877,8 +1871,8 @@ fn extract_help_wanted(sections: &[Section]) -> Result<Vec<HelpWantedItem>> {
 }
 
 struct RoadmapMetadata {
-    title: Spanned<String>,
-    short_title: Spanned<String>,
+    title: Spanned<Title>,
+    short_title: Spanned<Title>,
     what_and_why: String,
     contact: String,
 }
@@ -1904,7 +1898,7 @@ fn extract_roadmap_metadata(sections: &[Section]) -> Result<Option<RoadmapMetada
 
     let short_title = if let Some(row) = first_table.rows.iter().find(|row| row[0] == "Short title")
     {
-        row[1].clone()
+        row[1].clone().map(Title::new)
     } else {
         title.clone()
     };
@@ -1943,7 +1937,7 @@ fn extract_team_involvement(
     // Check for new format first (2026+): "Team asks" section
     if let Some(team_asks_index) = sections
         .iter()
-        .position(|section| section.title == "Team asks")
+        .position(|section| section.title.sortable() == "team asks")
     {
         let team_support = extract_team_support(sections, team_asks_index, link_path)?;
         // New format doesn't have goal_plans or task_owners in the same way
@@ -1957,7 +1951,7 @@ fn extract_team_involvement(
     // Fall back to old format (pre-2026): "Ownership and team asks" section
     if let Some(ownership_index) = sections
         .iter()
-        .position(|section| section.title == "Ownership and team asks")
+        .position(|section| section.title.sortable() == "ownership and team asks")
     {
         let goal_plans = extract_plan_items_from_index(sections, ownership_index)?;
 
@@ -2031,7 +2025,7 @@ fn extract_team_support(
 
 /// Extract team support entries from a single section's table.
 fn extract_team_support_from_section(
-    subgoal: Option<Spanned<String>>,
+    subgoal: Option<Spanned<Title>>,
     section: &Section,
     link_path: &Arc<PathBuf>,
 ) -> Result<Vec<TeamSupport>> {
@@ -2190,7 +2184,7 @@ pub fn format_sized_goal_table(goals: &[&GoalDocument], size: GoalSize) -> Resul
     }
 
     // Sort goals by title
-    filtered_goals.sort_by_key(|g| g.metadata.title.to_lowercase());
+    filtered_goals.sort_by_key(|g| g.metadata.title.content.clone());
 
     // Build the table
     let mut table: Vec<Vec<Spanned<String>>> = vec![vec![
@@ -2287,7 +2281,7 @@ fn goal_team_rows(goal: &GoalDocument) -> Vec<(&'static TeamName, SupportLevel)>
 fn extract_task_tree(sections: &[Section], metadata: &Metadata) -> Result<TaskTree> {
     let Some(work_items_index) = sections
         .iter()
-        .position(|s| s.title.content.trim() == "Work items over the next year")
+        .position(|s| s.title.content.sortable() == "work items over the next year")
     else {
         return Ok(TaskTree::root(metadata, vec![], vec![]));
     };
@@ -2321,7 +2315,7 @@ fn parse_task_tree_child(section: &Section, parent_metadata: &Metadata) -> Resul
     let metadata_table = section
         .tables
         .iter()
-        .find(|t| t.header.len() == 2 && t.header[0].content.trim() == "Metadata");
+        .find(|t| t.header.len() == 2 && t.header[0].sortable() == "metadata");
 
     // Parse child-specific fields from metadata table (if present)
     let (own_roadmap, own_timespan, own_what_and_why) = if let Some(table) = metadata_table {
@@ -2380,9 +2374,7 @@ fn parse_task_tree_child(section: &Section, parent_metadata: &Metadata) -> Resul
 fn extract_task_items(section: &Section) -> Result<Vec<TaskItem>> {
     // Look for a task table with 3 columns: Task, Owner(s) [or team(s)], Notes
     let task_table = section.tables.iter().find(|t| {
-        t.header.len() == 3
-            && t.header[0].content.trim() == "Task"
-            && t.header[2].content.trim() == "Notes"
+        t.header.len() == 3 && t.header[0].sortable() == "task" && t.header[2].sortable() == "notes"
     });
 
     let Some(table) = task_table else {
@@ -2423,7 +2415,7 @@ fn extract_plan_items_from_index(
     Ok(goal_plans)
 }
 
-fn goal_plan(subgoal: Option<Spanned<String>>, section: &Section) -> Result<Option<GoalPlan>> {
+fn goal_plan(subgoal: Option<Spanned<Title>>, section: &Section) -> Result<Option<GoalPlan>> {
     match section.tables.len() {
         0 => Ok(None),
         1 => {
@@ -2558,7 +2550,7 @@ impl PlanItem {
     fn team_asks(
         &self,
         link_path: &Arc<PathBuf>,
-        goal_titles: &Vec<Spanned<String>>,
+        goal_titles: &Vec<Spanned<Title>>,
         status: Status,
         goal_owners: &str,
     ) -> Result<Vec<TeamAsk>> {
@@ -2601,7 +2593,12 @@ impl PlanItem {
 }
 
 fn expect_headers(table: &Table, expected: &[&str]) -> Result<()> {
-    if table.header != expected {
+    if table
+        .header
+        .iter()
+        .map(|s| s.displayable())
+        .ne(expected.iter().copied())
+    {
         // FIXME: do a diff so we see which headers are missing or extraneous
 
         return Err(

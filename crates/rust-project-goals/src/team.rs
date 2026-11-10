@@ -104,7 +104,7 @@ impl TeamName {
         }
 
         // FIXME: do better :)
-        format!("https://www.rust-lang.org/governance/teams")
+        "https://www.rust-lang.org/governance/teams".to_string()
     }
 
     /// Label to use on github

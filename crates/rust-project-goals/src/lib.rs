@@ -10,3 +10,4 @@ pub mod re;
 pub mod team;
 pub mod util;
 pub use spanned;
+pub mod title;

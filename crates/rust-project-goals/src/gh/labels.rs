@@ -18,7 +18,7 @@ impl GhLabel {
         loop {
             let output = Command::new("gh")
                 .arg("-R")
-                .arg(&repository.to_string())
+                .arg(repository.to_string())
                 .arg("label")
                 .arg("list")
                 .arg("--json")
@@ -31,7 +31,7 @@ impl GhLabel {
             if labels.len() >= limit {
                 // If we got exactly as many as we asked for,
                 // we might be missing some.
-                limit = limit * 2;
+                limit *= 2;
                 continue;
             }
 
@@ -42,7 +42,7 @@ impl GhLabel {
     pub fn create(&self, repository: &Repository) -> Result<()> {
         let output = Command::new("gh")
             .arg("-R")
-            .arg(&repository.to_string())
+            .arg(repository.to_string())
             .arg("label")
             .arg("create")
             .arg(&self.name)

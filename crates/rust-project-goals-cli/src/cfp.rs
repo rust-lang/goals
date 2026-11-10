@@ -102,7 +102,7 @@ pub mod text_processing {
             );
             let re = Regex::new(&section_header_pattern).unwrap();
 
-            if let Some(section_match) = re.find(&content) {
+            if let Some(section_match) = re.find(content) {
                 // Find the end of the section header line
                 if let Some(header_end) = content[section_match.end()..].find('\n') {
                     let content_start = section_match.end() + header_end + 1;
@@ -148,7 +148,7 @@ pub mod text_processing {
         // Match both year-only (2027) and half-year (2026H1) formats
         let re = Regex::new(&format!(r"# ⏳ {MILESTONE_REGEX} goal process")).unwrap();
 
-        if let Some(last_match) = re.find_iter(&content).last() {
+        if let Some(last_match) = re.find_iter(content).last() {
             // Find the end of this section (next section or end of file)
             if let Some(next_section_pos) = content[last_match.end()..].find("\n# ") {
                 let insert_pos = last_match.end() + next_section_pos;
@@ -160,7 +160,7 @@ pub mod text_processing {
         } else {
             // No existing ⏳ timeframe sections, find the first dated section (⏳ or ⚙️) and insert before it
             let dated_section_re = Regex::new(r"\n# (⏳|⚙️) \d{4}").unwrap();
-            if let Some(first_dated) = dated_section_re.find(&content) {
+            if let Some(first_dated) = dated_section_re.find(content) {
                 new_content.insert_str(first_dated.start(), &new_section);
             } else {
                 // No dated sections at all, insert after "# Summary\n\n"
@@ -169,7 +169,7 @@ pub mod text_processing {
                     new_content.insert_str(insert_pos, &new_section);
                 } else {
                     // No # Summary found, prepend
-                    new_content = new_section + &content;
+                    new_content = new_section + content;
                 }
             }
         }
@@ -233,7 +233,7 @@ pub mod text_processing {
             Regex::new(r"## Current goal period(?:\s*\([^\)]*\))?\s*\n").unwrap();
 
         // First try to find and replace an existing entry for this specific timeframe
-        if let Some(this_period_match) = this_period_pattern.find(&content) {
+        if let Some(this_period_match) = this_period_pattern.find(content) {
             // Found an existing section for this specific timeframe
             // Find the end of this section (next section or end of file)
             if let Some(next_section_pos) = content[this_period_match.end()..].find("\n## ") {
@@ -245,7 +245,7 @@ pub mod text_processing {
                 // No next section, replace until the end
                 new_content.replace_range(this_period_match.start().., &new_section);
             }
-        } else if let Some(next_period_match) = next_period_pattern.find(&content) {
+        } else if let Some(next_period_match) = next_period_pattern.find(content) {
             // Found an existing "Next goal period" section
             // Find the end of this section (next section or end of file)
             if let Some(next_section_pos) = content[next_period_match.end()..].find("\n## ") {
@@ -259,7 +259,7 @@ pub mod text_processing {
             }
         } else {
             // No existing "Next goal period" section, try to add after "Current goal period" section
-            if let Some(current_period_match) = current_period_pattern.find(&content) {
+            if let Some(current_period_match) = current_period_pattern.find(content) {
                 // Find the end of the current period section
                 if let Some(next_section_pos) = content[current_period_match.end()..].find("\n## ")
                 {

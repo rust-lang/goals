@@ -155,7 +155,7 @@ pub fn render_updates(
 
     let filter = Filter {
         start_date: match start_date {
-            Some(date) => date.clone(),
+            Some(date) => *date,
             None => default_start_date(),
         },
         end_date,
@@ -239,7 +239,7 @@ fn prepare_goals(
             );
         }
 
-        let progress = checkboxes(&issue);
+        let progress = checkboxes(issue);
 
         let mut comments = issue.comments.clone();
         comments.sort_by_key(|c| c.created_at.clone());
@@ -342,7 +342,7 @@ fn help_wanted(
         // Look for a line that says "Help wanted" at the front.
         // Then extract the rest of that line along with subsequent lines until we find a blank line.
         while lines.peek().is_some() {
-            while let Some(line) = lines.next() {
+            for line in lines.by_ref() {
                 if let Some(c) = HELP_WANTED.captures(line) {
                     let text = c["text"].trim().to_string();
                     if !text.is_empty() {
@@ -352,7 +352,7 @@ fn help_wanted(
                 }
             }
 
-            while let Some(line) = lines.next() {
+            for line in lines.by_ref() {
                 if line.trim().is_empty() {
                     break;
                 } else {
