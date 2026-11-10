@@ -48,7 +48,7 @@ how to handle this divergence or to audit a registry against upstream.
 
 We will allow registries to advertise that they support injected (security) releases (as well as propagate security releases from their upstreams).
 Those security releases will be clearly marked in the index, and in consuming lockfiles.
-Cargo will resolve them by default, unless the user opts out. They will respect semver, and new maintainer releases wil take precedence
+Cargo will resolve them by default, unless the user opts out. They will respect semver, and new maintainer releases wil take precedence.
 Registries that opt into using this functionality will have a canonical way to expose
 a feed of registry-injected releases that they published, with metadata such as relevant advisories. Tooling will be available to audit that all registry-added releases are tagged properly and advertised in the feed.
 
