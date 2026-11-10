@@ -162,4 +162,4 @@ There are no crates.io changes. crates.io team will review a RFC about registry 
 
 Changing locked versions is the most surprising, complex, and potentially controversial feature in this goal. We would be happy to
 accomplish everything but that and make sure that the experience of using standard security releases is good. We can evaluate
-viability of the critic release component as we go.
+viability of the critical release component as we go.
