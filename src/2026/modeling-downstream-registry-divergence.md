@@ -57,7 +57,7 @@ Registries that opt into this functionality will have a canonical way to expose 
 
 Some design rules:
 
-1. **Divergence from upstream is considered an attack unless declared.** A registry that serves releases not in its upstream must say so per release. Serving a strict subset of upstream is not divergence; a partial mirror is still a valid mirror. Tooling treats undeclared divergence as a dependency confusion attack.
+1. **Divergence from upstream is considered an attack unless declared.** A registry that serves releases not in its upstream must say so per release. Serving a subset of upstream's crates and versions is not divergence; a partial mirror is still a valid mirror. Any change to a crate version it does serve, including index metadata or bytes, is divergence. A local source that only the builder uses, such as a `cargo vendor` directory in an offline distro build, is a different case, since nobody else consumes it. Tooling treats undeclared divergence in a registry served to others as a dependency confusion attack.
 2. **Upstream releases always win.** A registry release never uses the maintainer's next version number. A real upstream release supersedes it on the next update.
 3. **Consumers stay in control.** Resolving registry releases is opt-out. Lockfiles are respected unless the consumer opts in to taking registry releases on top of them.
 4. **Usage is up to registries.** Our goal adds a spec that covers how to declare and advertise registry releases. We will add Cargo support for resolving them. But, who gets to publish these releases, what goes in them, and to what extent the contents are explained to consumers is up to each registry. crates.io may never enable it.
@@ -134,7 +134,7 @@ more control.
 
 ### Is a mirror that serves only some of crates.io diverging?
 
-No. A strict subset of upstream, with identical bytes, is a valid mirror. Companies often vet a subset, some mirrors carry only the top N most-downloaded crates, and large mirrors may one day carry only popular crates and defer the rest to upstream. The spec should let a mirror declare "subset of upstream" separately from "publishes registry releases", and the audit tooling should treat missing crates differently from changed or added ones.
+No. A mirror that serves a subset of upstream's crates and versions is a valid mirror. Any change to a crate version it serves, including index metadata or bytes, is divergence. Companies often vet a subset, some mirrors carry only the top N most-downloaded crates, and large mirrors may one day carry only popular crates and defer the rest to upstream. The spec should let a mirror declare "subset of upstream" separately from "publishes registry releases", and the audit tooling should treat missing crates differently from changed or added ones.
 
 ### Why not just `cargo update --precise` ([RFC 3493](https://rust-lang.github.io/rfcs/3493-precise-pre-release-cargo-update.html))?
 
