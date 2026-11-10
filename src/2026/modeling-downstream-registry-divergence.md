@@ -120,12 +120,6 @@ Feedback from outside the Project: RustSec maintainers, alternate registry opera
 | Audit tool (registry vs. upstream diff) | Intermediate Rust | 1-2 months |
 | Producer tooling (package a registry release) | Intermediate Rust | 1-2 months |
 
-## Funding
-
-| Purpose | Cost | Funded | Sponsor(s) |
-| :-- | :-- | :-- | :-- |
-| Reviewers + champions (Rust Foundation Maintainers Fund) | $10,000 | No | |
-
 ## Frequently asked questions
 
 ### Isn't this just sanctioning dependency confusion?
