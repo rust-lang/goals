@@ -13,7 +13,7 @@
 ## Summary
 
 We will offer an official way for downstream registries to advertise special releases that are not published by maintainers, so that registries can vend security fixes while waiting on upstream to take them.
-An official method allows transparency, good Cargo resolution, and a way for maintainers to take back over by issuing new releases.
+An official method allows transparency, good Cargo resolution, and a way for maintainers to issue new releases that supersede downstream releases.
 Then, we will add support for "urgent" releases that bypass lockfiles to allow consumers to immediately uptake critical fixes.
 
 
