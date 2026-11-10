@@ -43,7 +43,7 @@ Prior art falls into three buckets: downstream publication of fixes, provenance,
 - **Go checksum database**: [database](https://sum.golang.org/), [launch post](https://blog.golang.org/module-mirror-launch), [Trillian](https://github.com/google/trillian). This is along the lines of the audit tooling we are interested in: Go makes it easy to audit a mirror to see if its bytes diverge from upstream. Though, it doesn't have any concept of declared/intended divergence, so corporate users end up turning `GOSUMDB` off. There also was [a recent bypass](https://freenode.net/article/gos-checksum-database-meets-its-trust-assumptions).
 - **Hatch environment sources** ([docs](https://hatch.pypa.io/latest/config/environment/sources/)): Hatch lets a project redirect a named dependency to a local path, git ref, URL, or another index. This is client-side, like Cargo's `[patch]` and `[source]`, not registry-side. Two relevant pieces: `HATCH_NO_SOURCES` turns off all redirection so CI can check that the published metadata resolves by itself, and `dep show sources` lists each redirection and the dependencies it affects.
 - **Cargo**: [RFC 3493](https://rust-lang.github.io/rfcs/3493-precise-pre-release-cargo-update.html) lets `cargo update --precise` target a pre-release. This is the closest existing hook for resolving a non-upstream release; we likely would build on top of it.
-- **Central Patches draft RFC** ([HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g), @celinval): one exploration of the Cargo side of this goal, written before a full inventory of cargo source replacement usage. Registries reserve a pre-release tag for their own releases, Cargo resolves them within existing requirements, and consumers control uptake per registry. It is a starting point for discussion. The RFC will start from the problem and alternatives, and this draft will be rewritten or replaced based on what the real-word usage inventory finds.
+- **Central Patches draft RFC** ([HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g), @celinval): one exploration of the Cargo side of this goal, written before a full inventory of cargo source replacement usage. Registries reserve a pre-release tag for their own releases, Cargo resolves them within existing requirements, and consumers control uptake per registry. It is a starting point for discussion. The RFC will start from the problem and alternatives, and this draft will be rewritten or replaced based on what the real-world usage inventory finds.
 
 ### What we propose to do about it
 
@@ -68,7 +68,7 @@ Out of scope:
 
 ### Work items over the next year
 
-This goal is co-authored by @jlizen and @celinval. @jlizen leads discovery (survey, requirements, initial docs); the RFC and Cargo implementation are shared.
+This goal is co-authored by @jlizen and @celinval. @jlizen leads the inventory (survey, requirements, initial docs); the RFC and Cargo implementation are shared.
 
 Two phases, roughly 3-6 months.
 
@@ -151,7 +151,7 @@ in the short term, certainly not without a separate RFC/goal.
 
 ### How does this relate to TUF / verifiable mirroring?
 
-They are complementary. Signing proves that bytes came from the registry that served them. This goal makes a registry declare which of those bytes are not upstream's. Depending on how signing lands, undeclared divergence may become impossible rather than merely detectable, which is the outcome we want. We will gather requirements from that work during discovery so registry releases fit the signing model.
+They are complementary. Signing proves that bytes came from the registry that served them. This goal makes a registry declare which of those bytes are not upstream's. Depending on how signing lands, undeclared divergence may become impossible rather than merely detectable, which is the outcome we want. We will gather requirements from that work during the inventory so registry releases fit the signing model.
 
 ### Does this change lockfile behavior?
 
@@ -159,4 +159,4 @@ No. Lockfiles are respected by default. The RFC will include an opt-in way to ta
 
 ### Does this change semver?
 
-Maybe. Registry releases need a version shape that sorts correctly, does not use the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component. Each has costs for older Cargo versions and for tools outside Cargo. Discovery includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
+Maybe. Registry releases need a version shape that sorts correctly, does not use the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component. Each has costs for older Cargo versions and for tools outside Cargo. The inventory includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
