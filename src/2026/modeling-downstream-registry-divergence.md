@@ -43,7 +43,7 @@ Prior art falls into three buckets: downstream publication of fixes, provenance,
 - **PyPI attestations / PEP 740**: [PEP 740](https://peps.python.org/pep-0740/), [PyPI announcement](https://blog.pypi.org/posts/2024-11-14-pypi-now-supports-digital-attestations/), [index-hosted attestations spec](https://packaging.python.org/en/latest/specifications/index-hosted-attestations/). This is a similar idea to npm but hosted in the index itself, and the Simple API serves them. Probably closer to what we want for declaring a release's origin in the index itself.
 - **Go checksum database**: [database](https://sum.golang.org/), [launch post](https://blog.golang.org/module-mirror-launch), [Trillian](https://github.com/google/trillian). This is along the lines of the audit tooling we are interested in: Go makes it easy to audit a mirror to see if its bytes diverge from upstream. Though, it doesn't have any concept of declared/intended divergence, so corporate users end up turning `GOSUMDB` off. There also was [a recent bypass](https://freenode.net/article/gos-checksum-database-meets-its-trust-assumptions).
 - **Cargo**: [RFC 3493](https://rust-lang.github.io/rfcs/3493-precise-pre-release-cargo-update.html) lets `cargo update --precise` target a pre-release. This is the closest existing hook for resolving a non-upstream release; we likely would build on top of it.
-- **Central Patches draft RFC** ([HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g), @celinval): an earlier draft of the Cargo side of this goal. Registries reserve a pre-release tag for their own releases, Cargo resolves them within existing requirements, and consumers control uptake per registry. It will be rewritten after discovery to match what we learn about how registries diverge today.
+- **Central Patches draft RFC** ([HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g), @celinval): one exploration of the Cargo side of this goal, written before discovery. Registries reserve a pre-release tag for their own releases, Cargo resolves them within existing requirements, and consumers control uptake per registry. It is a starting point for discussion. The RFC will start from the problem and alternatives, and this draft will be rewritten or replaced based on what discovery finds.
 
 ### What we propose to do about it
 
@@ -54,7 +54,7 @@ Registries that opt into this functionality will have a canonical way to expose 
 
 Some design rules:
 
-1. **Divergence from upstream is considered an attack unless declared.** A registry that serves releases not in its upstream must say so per release. Tooling treats undeclared divergence as a dependency confusion attack.
+1. **Divergence from upstream is considered an attack unless declared.** A registry that serves releases not in its upstream must say so per release. Serving a strict subset of upstream is not divergence; a partial mirror is still a valid mirror. Tooling treats undeclared divergence as a dependency confusion attack.
 2. **Upstream releases always win.** A registry release never takes over the maintainer's next version number. A real upstream release supersedes it on the next update.
 3. **Consumers stay in control.** Resolving registry releases is opt-out. Lockfiles are respected unless the consumer opts in to taking registry releases on top of them.
 4. **Usage is up to registries.** Our goal adds a spec that covers how to declare and advertise registry releases. We will add Cargo support for resolving them. But, who gets to publish these releases, what goes in them, and to what extent the contents are explained to consumers is up to each registry. crates.io may never enable it.
@@ -81,10 +81,11 @@ Two phases, roughly 3-6 months.
 
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
-| Survey alternate registries and mirrors for how they diverge today | @jlizen | |
-| Docs: describe how source replacement is used today and its risks | @jlizen | |
+| Survey alternate registries and mirrors for how they diverge today | @jlizen | including behaviors that amount to dependency confusion in practice |
+| Docs: describe how source replacement is used today and its risks; define terms (mirror, downstream registry, registry release) | @jlizen | |
 | Requirements doc; gather use cases from registry operators, Alpha-Omega, Akrites, Linux packagers, Rust contracting shops (Ferrous Systems, Mainmatter) | @jlizen | |
-| RFC: Registry release declarations, Cargo resolver behavior, registry advertisement, consumer opt-out, lockfile interaction | @jlizen, @celinval | may split into two; builds on the [Central Patches draft](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g) |
+| Requirements from the TUF / [verifiable mirroring](./mirroring.md) work: registry releases must fit the signing model | @jlizen | with @arlosi |
+| RFC: Registry release declarations, Cargo resolver behavior, registry advertisement, consumer opt-out, lockfile interaction | @jlizen, @celinval | may split into two; informed by the [Central Patches draft](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g) |
 | Cargo implementation behind unstable flag | @jlizen, @celinval | |
 | Reference implementation in an alternate registry or static index | @jlizen, @celinval | end to end without crates.io |
 | RustSec advisory DB: represent "fixed in registry X with registry release Y" | @jlizen | with RustSec maintainers |
@@ -133,6 +134,10 @@ Not quite. Today, downstream registry operators can only apply security or other
 Under this goal, we will move away from "confusion" to an explicit dependency injection, that is clearly modeled and gives consumers
 more control.
 
+### Is a mirror that serves only some of crates.io diverging?
+
+No. A strict subset of upstream, with identical bytes, is a valid mirror. Companies often vet a subset, some mirrors carry only the top N most-downloaded crates, and large mirrors may one day carry only popular crates and defer the rest to upstream. The spec should let a mirror declare "subset of upstream" separately from "publishes registry releases", and the audit tooling should treat missing crates differently from changed or added ones.
+
 ### Why not just `cargo update --precise` ([RFC 3493](https://rust-lang.github.io/rfcs/3493-precise-pre-release-cargo-update.html))?
 
 Precise updates require that every consumer know about and point-install each release. Transitive consumers won't do that. We want
@@ -150,6 +155,14 @@ that can be consumed by many mirrors.
 No, besides review (optional) registry spec changes to ensure that there is one format. We don't expect crates.io to use this feature
 in the short term, certainly not without a separate RFC/goal.
 
+### How does this relate to TUF / verifiable mirroring?
+
+They are complementary. Signing proves that bytes came from the registry that served them. This goal makes a registry declare which of those bytes are not upstream's. Depending on how signing lands, undeclared divergence may become impossible rather than merely detectable, which is the outcome we want. We will gather requirements from that work during discovery so registry releases fit the signing model.
+
 ### Does this change lockfile behavior?
 
 No. Lockfiles are respected by default. The RFC will include an opt-in way to take registry releases on top of an existing lockfile.
+
+### Does this change semver?
+
+Maybe. Registry releases need a version shape that sorts correctly, does not take the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component. Each has costs for older Cargo versions and for tools outside Cargo. Discovery includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
