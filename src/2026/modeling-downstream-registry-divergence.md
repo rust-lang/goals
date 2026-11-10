@@ -31,6 +31,7 @@ For instance, registries might want to backport security fixes for versions that
 
 With today's support, there is no way for a registry to prominently say "this release is mine, not upstream's", and similarly no way for a consumer to decide
 how to handle this divergence or to audit a registry against upstream. Benign divergence from upstream is difficult to distinguish from malicious, without careful review.
+We call this type of release a "registry release", where a registry serves a release that does not originate with upstream and may need different handling and auditability by consumers.
 
 
 #### Prior art
