@@ -39,7 +39,7 @@ We call this type of release a "registry release", where a registry serves a rel
 Prior art falls into three buckets: downstream publication of fixes, provenance, and mirror auditing.
 
 - **Maven Central CARE** ([Sonatype RFC, 2026](https://www.sonatype.com/blog/request-for-comments-care-and-maven-central)): Maven Central has proposed central, registry-level security fixes. Under this model, pre-approved remediation actors publish emergency fixes into the existing coordinate under a reserved version form. This leaves the maintainer's next version untouched. The release author goes in release metadata rather than the version string. It involves no resolver changes.
-- **Linux distributions**: Some distributions, such as Fedora, vendor crates into a local, offline source replacement directory and patch them under the upstream version number, for example to remove non-Linux dependencies. Their own versioning and signed advisories live at the package level (the RPM or deb release), not in the crate version Cargo sees. This is a mature, accepted model for divergence from upstream, but it is declared outside of Cargo. Other distributions may differ and serve more conventionally modeled registries with patched releases. We will consult with Linux distribution packagers to understand whether this goal's new features can make their lives easier.
+- **Linux distributions**: Some distributions, such as Fedora, Ubuntu, and Debian, vendor crates into a local, offline source replacement directory and patch them under the upstream version number, for example to remove non-Linux dependencies. Their own versioning and signed advisories live at the package level (the RPM or deb release), not in the crate version Cargo sees. In Ubuntu and Debian the vendored crates also ship as installable `librust-*-dev` packages, so they reach end users in source form. This is a mature, accepted model for divergence from upstream, but it is declared outside of Cargo. Other distributions may differ and serve more conventionally modeled registries with patched releases. We will consult with Linux distribution packagers to understand whether this goal's new features can make their lives easier.
 - **Sigstore / transparency logs**: [sigstore.dev](https://www.sigstore.dev/), [Rekor](https://docs.sigstore.dev/logging/overview/). This is a public, append-only Merkle tree transparency log, and a model for the feed of registry releases: a registry cannot quietly add a release and later deny it. This is related but distinct from the registry signing / TUF work, we can look at how these models might relate.
 - **npm provenance**: [docs](https://docs.npmjs.com/generating-provenance-statements), [launch post](https://github.blog/security/supply-chain-security/introducing-npm-package-provenance/), [npm/provenance spec](https://github.com/npm/provenance). This is a system that uses Sigstore and is logged in Rekor to validate that a release came from a given source repo and committed via a specific CI workflow, with various attestations. It is interacted with via `npm publish --provenance` and `npm audit signatures` but not stored inline in the index.
 - **PyPI attestations / PEP 740**: [PEP 740](https://peps.python.org/pep-0740/), [PyPI announcement](https://blog.pypi.org/posts/2024-11-14-pypi-now-supports-digital-attestations/), [index-hosted attestations spec](https://packaging.python.org/en/latest/specifications/index-hosted-attestations/). This is a similar idea to npm but hosted in the index itself, and the Simple API serves them. Probably closer to what we want for declaring a release's origin in the index itself.
@@ -57,7 +57,7 @@ Registries that opt into this functionality will have a canonical way to expose 
 
 Some design rules:
 
-1. **Divergence from upstream is considered an attack unless declared.** A registry that serves releases not in its upstream must say so per release. Serving a subset of upstream's crates and versions is not divergence; a partial mirror is still a valid mirror. Any change to a crate version it does serve, including index metadata or bytes, is divergence. A local source that only the builder uses, such as a `cargo vendor` directory in an offline distro build, is a different case, since nobody else consumes it. Tooling treats undeclared divergence in a registry served to others as a dependency confusion attack.
+1. **Divergence from upstream is considered an attack unless declared.** A registry that serves releases not in its upstream must say so per release. Serving a subset of upstream's crates and versions is not divergence; a partial mirror is still a valid mirror. Any change to a crate version it does serve, including index metadata or bytes, is divergence. This applies to local vendored sources too, such as a `cargo vendor` directory in a distro build, and tooling such as `cargo vendor` and `cargo-auditable` should be able to record that divergence.
 2. **Upstream releases always win.** A registry release never uses the maintainer's next version number. A real upstream release supersedes it on the next update.
 3. **Consumers stay in control.** Resolving registry releases is opt-out. Lockfiles are respected unless the consumer opts in to taking registry releases on top of them.
 4. **Usage is up to registries.** Our goal adds a spec that covers how to declare and advertise registry releases. We will add Cargo support for resolving them. But, who gets to publish these releases, what goes in them, and to what extent the contents are explained to consumers is up to each registry. crates.io may never enable it.
@@ -66,7 +66,7 @@ Some design rules:
 Out of scope:
 
 - crates.io publishing its own registry releases. This is a policy decision that would require a much deeper discussion, RFC, and its own goal.
-- Supporting modified bytes or metadata under an upstream version number in a registry served to others. The recommended path is a registry release that is clearly differentiated from the upstream version. Local sources that only the builder uses are a separate case.
+- Supporting modified bytes or metadata under an upstream version number in a registry served to others. The recommended path is a registry release that is clearly differentiated from the upstream version.
 - Changes to non-Cargo build tools; they should keep working unchanged and may not recognize registry releases.
 
 ### Work items over the next year
@@ -104,6 +104,7 @@ Two phases, roughly 3-6 months.
 | Design: provenance and how consumers verify registry release = base + diff | @jlizen | |
 | Audit tool: diff a registry against its declared upstream, flag undeclared divergence | needs owner | |
 | Tooling to produce a declared registry release from upstream `.crate` + diff | @CAD97 | |
+| Record modified vendored crates as divergent in `cargo vendor` and `cargo-auditable`, so SBOMs don't report them as the upstream version | @CAD97 | `cargo-auditable` is maintained outside Cargo; coordinate with its maintainers |
 | Blog post: how downstream registries diverge today, the new declared model, and how to audit a mirror | @jlizen | after modeling + audit tooling land |
 
 ## Team asks
@@ -116,7 +117,7 @@ Two phases, roughly 3-6 months.
 
 We also expect a Small review from the proposed ecosystem security team once it exists.
 
-Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions, Alpha-Omega, Akrites, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI), corporate-managed downstream package vendors (Google, Meta?, etc).
+Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions (Fedora, Canonical/Ubuntu, Debian), Alpha-Omega, Akrites, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI), corporate-managed downstream package vendors (Google, Meta?, etc).
 
 ## Help wanted
 
@@ -169,7 +170,6 @@ TBD, but an initial opinion: consumers who update would lose the fix, since upst
 
 Maybe. Registry releases need a version shape that sorts correctly, does not use the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component. Each has costs for older Cargo versions and for tools outside Cargo. The inventory includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
 
-### Does this cover distro packaging and cargo vendor directories?
+### Does this cover distro packaging and `cargo vendor` directories?
 
-TBD. We will consult different packagers during initial inventorying of use cases. The registry release mechanism likely won't apply to builds that only use a local, offline vendored source code.
-We do want to hear whether some way to mark a vendored crate as locally patched, for SBOMs or auditing, would help.
+Yes. Patching a vendored crate is divergence, whether or not the vendored source reaches end users. We will consult packagers during the inventory, and add a way for `cargo vendor` and `cargo-auditable` to record a vendored crate as modified, so SBOMs and advisory tracking don't report it as the upstream version. Whether these builds should also use the registry release version scheme is an open question for the RFC.
