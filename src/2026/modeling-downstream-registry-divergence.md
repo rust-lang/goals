@@ -161,6 +161,10 @@ They are complementary. Signing proves that bytes came from the registry that se
 
 No. Lockfiles are respected by default. The RFC will include an opt-in way to take registry releases on top of an existing lockfile.
 
+### What if a new upstream release doesn't include the registry's fix?
+
+TBD, but an initial opinion: consumers who update would lose the fix, since upstream releases take precedence, so handling this is the registry's job. It can publish a registry release on top of the new upstream version, or hold back the new upstream version until it has checked it. Whether Cargo or the audit tooling should help (for example, by flagging an upstream release that supersedes a registry release, or carrying an advisory forward) is an open question for the RFC.
+
 ### Does this change semver?
 
 Maybe. Registry releases need a version shape that sorts correctly, does not use the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component. Each has costs for older Cargo versions and for tools outside Cargo. The inventory includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
