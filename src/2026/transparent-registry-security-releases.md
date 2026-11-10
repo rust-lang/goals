@@ -58,7 +58,7 @@ As a later step, we will also add support for nudging Cargo to resolve certain "
 Some design rules:
 
 1. **Divergence from upstream is considered an attack unless declared.** A registry that serves releases not in its upstream must say so per release. Tooling treats undeclared divergence as a dependency confusion attack.
-2. **Upstream releases always win.** A registry release never takes over the maintainer's next version number. A real upstream release supersedes it on the next update.
+2. **Upstream releases always win.** A registry release never uses the maintainer's next version number. A real upstream release supersedes it on the next update.
 3. **Consumers stay in control.** Resolving registry releases is opt-out. `--locked` builds never silently change. Even for the "urgent" releases, we will design either an opt-in mechanism or an implicit opt-out by using the `--locked` flag.
 4. **Usage is up to registries.** Our goal adds a spec that covers how to declare and advertise registry releases. We will add Cargo support for resolving them. But, who gets to publish these releases, what goes in them, and to what extent the contents are explained to consumers is up to each registry. crates.io may never enable it.
 5. **Everything is auditable.** Each registry release links to a reason (e.g., an advisory), a base version, and a producer. This al appears in a feed that a third party can compare against upstream.
