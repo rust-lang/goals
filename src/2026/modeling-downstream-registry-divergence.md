@@ -9,7 +9,6 @@
 | Zulip channel | N/A (to be created on request) |
 | [cargo] champion | TBD |
 | [social-media] champion | TBD |
-| [crates-io] champion | TBD |
 
 ## Summary
 
