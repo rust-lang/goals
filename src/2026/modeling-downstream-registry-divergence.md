@@ -66,7 +66,7 @@ Some design rules:
 Out of scope:
 
 - crates.io publishing its own registry releases. This is a policy decision that would require a much deeper discussion, RFC, and its own goal.
-- Modifying bytes of an already-published release under the same version number or any other form of opaque "dependency confusion".
+- Supporting modified bytes or metadata under an upstream version number in a registry served to others. The recommended path is a registry release that is clearly differentiated from the upstream version. Local sources that only the builder uses are a separate case.
 - Changes to non-Cargo build tools; they should keep working unchanged and may not recognize registry releases.
 
 ### Work items over the next year
@@ -168,3 +168,8 @@ TBD, but an initial opinion: consumers who update would lose the fix, since upst
 ### Does this change semver?
 
 Maybe. Registry releases need a version shape that sorts correctly, does not use the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component. Each has costs for older Cargo versions and for tools outside Cargo. The inventory includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
+
+### Does this cover distro packaging and cargo vendor directories?
+
+TBD. We will consult different packagers during initial inventorying of use cases. The registry release mechanism likely won't apply to builds that only use a local, offline vendored source code.
+We do want to hear whether some way to mark a vendored crate as locally patched, for SBOMs or auditing, would help.
