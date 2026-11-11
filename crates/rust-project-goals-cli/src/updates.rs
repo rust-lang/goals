@@ -1,5 +1,4 @@
 use chrono::{Datelike, NaiveDate};
-use regex::Regex;
 use rust_project_goals::re::{HELP_WANTED, TLDR};
 use rust_project_goals::spanned::Result;
 use rust_project_goals::util::{comma, MILESTONE_REGEX};
@@ -40,8 +39,7 @@ pub fn render_updates(
     use_progress_bar: bool,
     comment_order: Order,
 ) -> Result<String> {
-    let milestone_re = Regex::new(MILESTONE_REGEX).unwrap();
-    if !milestone_re.is_match(milestone) {
+    if !MILESTONE_REGEX.is_match(milestone) {
         spanned::bail_here!(
             "the milestone `{}` does not follow the `$year$semester` format, where $semester is `h1` or `h2`",
             milestone,

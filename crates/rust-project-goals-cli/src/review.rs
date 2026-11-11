@@ -4,7 +4,6 @@ use std::collections::BTreeMap;
 use std::fmt::Write;
 use std::path::Path;
 
-use regex::Regex;
 use rust_project_goals::{
     goal::{GoalDocument, SupportLevel},
     spanned::Result,
@@ -88,7 +87,6 @@ fn goal_involves_team(goal: &GoalDocument, team: &TeamName) -> bool {
 
 /// Find the latest milestone directory (e.g., "2026" or "2025h2").
 fn find_latest_milestone() -> Result<std::path::PathBuf> {
-    let regex = Regex::new(MILESTONE_REGEX)?;
     let mut latest: Option<(String, std::path::PathBuf)> = None;
 
     for entry in WalkDir::new("src").max_depth(1) {
@@ -102,7 +100,7 @@ fn find_latest_milestone() -> Result<std::path::PathBuf> {
             continue;
         };
 
-        if !regex.is_match(name) {
+        if !MILESTONE_REGEX.is_match(name) {
             continue;
         }
 

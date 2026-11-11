@@ -143,7 +143,7 @@ pub mod text_processing {
         // Find a good place to insert the new section
         // Look for the last timeframe section or insert after # Summary
         // Match both year-only (2027) and half-year (2026H1) formats
-        let re = Regex::new(&format!(r"# ⏳ {MILESTONE_REGEX} goal process")).unwrap();
+        let re = Regex::new(&format!(r"# ⏳ {} goal process", MILESTONE_REGEX.as_str())).unwrap();
 
         if let Some(last_match) = re.find_iter(content).last() {
             // Find the end of this section (next section or end of file)
@@ -366,8 +366,7 @@ pub fn create_cfp(timeframe: &str, force: bool, dry_run: bool) -> Result<()> {
 
 /// Validates that the timeframe is in the correct format (e.g., "2025h1" or "2025H1" or '2026')
 fn validate_timeframe(timeframe: &str) -> Result<()> {
-    let re = Regex::new(MILESTONE_REGEX).unwrap();
-    if !re.is_match(timeframe) {
+    if !MILESTONE_REGEX.is_match(timeframe) {
         return Err(Error::str("Invalid timeframe format. Expected format: YYYYhN or YYYYHN (e.g., 2025h1, 2025H1, 2025h2, or 2025H2"));
     }
     Ok(())

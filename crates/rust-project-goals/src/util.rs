@@ -2,14 +2,17 @@ use std::{
     collections::BTreeSet,
     fmt::{Display, Write},
     path::{Path, PathBuf},
+    sync::LazyLock,
 };
 
+use regex::Regex;
 use spanned::{Result, Spanned};
 use walkdir::WalkDir;
 
 pub const ARROW: &str = "↳";
 
-pub const MILESTONE_REGEX: &str = r"^\d{4}([hH][12])?$";
+pub static MILESTONE_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\d{4}([hH][12])?$").unwrap());
 
 /// Format a goal title cell for use in markdown tables.
 /// If `subgoal_title` is Some, renders as `↳ subgoal`, otherwise as `[title](link)`.
