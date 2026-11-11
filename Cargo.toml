@@ -11,6 +11,7 @@ resolver = "2"
 opt-level = 1
 
 [workspace.lints.clippy]
+enum_glob_use = "warn"
 explicit_into_iter_loop = "warn"
 explicit_iter_loop = "warn"
 if_not_else = "warn"

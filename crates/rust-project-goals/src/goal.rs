@@ -2229,7 +2229,7 @@ pub fn format_sized_goal_table(goals: &[&GoalDocument], size: GoalSize) -> Resul
             let champion_cell = if let Some(champion) = goal.metadata.champions.get(team) {
                 champion.content.clone()
             } else {
-                use SupportLevel::*;
+                use SupportLevel::{Large, Medium, Small};
                 match level {
                     Large | Medium => "![TBD][]".to_string(),
                     Small => "*n/a*".to_string(),
