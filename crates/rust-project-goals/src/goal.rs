@@ -158,8 +158,7 @@ impl FundingStatus {
     pub fn sponsor(&self) -> Option<&str> {
         match self {
             FundingStatus::No => None,
-            FundingStatus::Partial(s) => s.as_deref(),
-            FundingStatus::Funded(s) => s.as_deref(),
+            FundingStatus::Partial(s) | FundingStatus::Funded(s) => s.as_deref(),
         }
     }
 

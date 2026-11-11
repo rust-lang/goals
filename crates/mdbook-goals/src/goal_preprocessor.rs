@@ -124,9 +124,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                 Ok(())
             }
 
-            BookItem::Separator => Ok(()),
-
-            BookItem::PartTitle(_) => Ok(()),
+            BookItem::Separator | BookItem::PartTitle(_) => Ok(()),
         }
     }
 

@@ -569,8 +569,7 @@ fn try_checkboxes(issue: &ExistingGithubIssue) -> Result<Progress> {
                     re::SEE_ALSO_ISSUE1.captures(issue_url),
                     re::SEE_ALSO_ISSUE2.captures(issue_url),
                 ) {
-                    (Some(c), _) => c,
-                    (None, Some(c)) => c,
+                    (Some(c), _) | (_, Some(c)) => c,
                     (None, None) => {
                         spanned::bail_here!("invalid issue URL `{issue_url}`");
                     }
