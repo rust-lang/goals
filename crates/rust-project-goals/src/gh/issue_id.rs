@@ -60,9 +60,7 @@ impl IssueId {
     }
 
     pub fn from_url(url: &str) -> Option<Self> {
-        let Some(c) = GITHUB_ISSUE_URL.captures(url) else {
-            return None;
-        };
+        let c = GITHUB_ISSUE_URL.captures(url)?;
 
         let repository = Repository::new(&c[1], &c[2]);
         let number = c[3].parse().unwrap();

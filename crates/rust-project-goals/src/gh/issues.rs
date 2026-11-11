@@ -270,7 +270,9 @@ pub fn create_issue(
         }
     }
 
-    Err(Error::str("creating issue did not return a URL".to_string()))
+    Err(Error::str(
+        "creating issue did not return a URL".to_string(),
+    ))
 }
 
 pub fn change_title(repository: &Repository, number: u64, title: &str) -> Result<()> {
@@ -469,14 +471,13 @@ pub fn lock_issue(repository: &Repository, number: u64) -> Result<()> {
         .arg(number.to_string())
         .output()?;
 
-    if !output.status.success()
-        && !output.stderr.starts_with(b"already locked") {
-            return Err(Error::str(format!(
-                "failed to lock issue `{}`: {}",
-                number,
-                String::from_utf8_lossy(&output.stderr)
-            )));
-        }
+    if !output.status.success() && !output.stderr.starts_with(b"already locked") {
+        return Err(Error::str(format!(
+            "failed to lock issue `{}`: {}",
+            number,
+            String::from_utf8_lossy(&output.stderr)
+        )));
+    }
 
     Ok(())
 }

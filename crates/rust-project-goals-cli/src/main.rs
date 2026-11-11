@@ -32,13 +32,13 @@ struct Opt {
 #[allow(dead_code)]
 enum Command {
     /// Print the comment required to initiate FCP
-    FCP { path: PathBuf },
+    Fcp { path: PathBuf },
 
     /// Print the RFC text to stdout
-    RFC { path: PathBuf },
+    Rfc { path: PathBuf },
 
     /// Set up a new Call For Proposals (CFP) period
-    CFP {
+    Cfp {
         /// Timeframe for the new CFP period (e.g., 2025h1)
         timeframe: String,
 
@@ -113,9 +113,9 @@ enum Command {
     },
 
     /// Generate various CSV reports
-    CSV {
+    Csv {
         #[command(subcommand)]
-        cmd: CSVReports,
+        cmd: CsvReports,
     },
 
     /// Generate a markdown summary for a team to review their goals
@@ -131,7 +131,7 @@ enum Command {
 
 #[derive(clap::Subcommand, Debug)]
 #[allow(dead_code)]
-enum CSVReports {
+enum CsvReports {
     Champions {
         /// Milestone for which we generate tracking issue data (e.g., `2024h2`).
         milestone: String,
@@ -142,11 +142,11 @@ fn main() -> Result<()> {
     let opt: Opt = Opt::parse();
 
     match &opt.cmd {
-        Command::FCP { path } => {
+        Command::Fcp { path } => {
             rfc::generate_comment(path)?;
         }
 
-        Command::CFP {
+        Command::Cfp {
             timeframe,
             force,
             dry_run,
@@ -158,7 +158,7 @@ fn main() -> Result<()> {
             check()?;
         }
 
-        Command::RFC { path } => {
+        Command::Rfc { path } => {
             rfc::generate_rfc(path)?;
         }
 
@@ -198,7 +198,7 @@ fn main() -> Result<()> {
             with_champion_from.as_deref(),
         )?,
 
-        Command::CSV { cmd } => csv_reports::csv(&opt.repository, cmd)?,
+        Command::Csv { cmd } => csv_reports::csv(&opt.repository, cmd)?,
 
         Command::Review { team, milestone } => review::review(team, milestone.as_deref())?,
     }

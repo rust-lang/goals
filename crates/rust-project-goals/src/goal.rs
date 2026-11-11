@@ -616,7 +616,7 @@ impl TeamInvolvement {
     }
 
     /// Returns the team asks if this uses the old format, None otherwise.
-    pub fn as_asks(&self) -> Option<&Vec<TeamAsk>> {
+    pub fn as_asks(&self) -> Option<&[TeamAsk]> {
         match self {
             TeamInvolvement::Asks(asks) => Some(asks),
             TeamInvolvement::Support(_) => None,
@@ -624,7 +624,7 @@ impl TeamInvolvement {
     }
 
     /// Returns the team support entries if this uses the new format, None otherwise.
-    pub fn as_support(&self) -> Option<&Vec<TeamSupport>> {
+    pub fn as_support(&self) -> Option<&[TeamSupport]> {
         match self {
             TeamInvolvement::Asks(_) => None,
             TeamInvolvement::Support(supports) => Some(supports),
@@ -2550,7 +2550,7 @@ impl PlanItem {
     fn team_asks(
         &self,
         link_path: &Arc<PathBuf>,
-        goal_titles: &Vec<Spanned<Title>>,
+        goal_titles: &[Spanned<Title>],
         status: Status,
         goal_owners: &str,
     ) -> Result<Vec<TeamAsk>> {
@@ -2581,7 +2581,7 @@ impl PlanItem {
                 link_path: link_path.clone(),
                 status,
                 ask_description: self.text.content.clone(),
-                goal_titles: goal_titles.clone(),
+                goal_titles: goal_titles.to_vec(),
                 teams,
                 owners: goal_owners.to_string(),
                 notes: self.notes.clone(),

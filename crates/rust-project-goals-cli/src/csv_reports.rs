@@ -8,11 +8,11 @@ use rust_project_goals::{
     team::TeamName,
 };
 
-use crate::CSVReports;
+use crate::CsvReports;
 
-pub fn csv(repository: &Repository, cmd: &CSVReports) -> Result<()> {
+pub fn csv(repository: &Repository, cmd: &CsvReports) -> Result<()> {
     match cmd {
-        CSVReports::Champions { milestone } => champions(repository, milestone)?,
+        CsvReports::Champions { milestone } => champions(repository, milestone)?,
     }
     Ok(())
 }

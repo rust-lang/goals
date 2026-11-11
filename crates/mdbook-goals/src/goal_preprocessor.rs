@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use anyhow::Context;
 use chrono::{self, Datelike};
@@ -21,6 +21,8 @@ use rust_project_goals::{
     re,
     team::TeamName,
 };
+
+static HEADING_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(?m)^(#+)\s").unwrap());
 
 /// Extension trait to convert `spanned::Result<T>` into `anyhow::Result<T>`.
 trait IntoAnyhow<T> {
@@ -397,9 +399,8 @@ impl<'c> GoalPreprocessorWithContext<'c> {
 
             filtered_goals.sort_by_key(|g| g.metadata.title.content.clone());
 
-            let heading_re = Regex::new(r"(?m)^(#+)\s").unwrap();
             let preceding = &chapter.content[..range.start];
-            let context_level = heading_re
+            let context_level = HEADING_RE
                 .find_iter(preceding)
                 .last()
                 .map(|m| m.as_str().trim().len())
@@ -593,9 +594,8 @@ impl<'c> GoalPreprocessorWithContext<'c> {
 
             // Search backwards from the directive for the most recent heading to
             // determine the level at which to emit goal sub-headings.
-            let heading_re = Regex::new(r"(?m)^(#+)\s").unwrap();
             let preceding = &chapter.content[..range.start];
-            let context_level = heading_re
+            let context_level = HEADING_RE
                 .find_iter(preceding)
                 .last()
                 .map(|m| m.as_str().trim().len())
@@ -652,12 +652,15 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         }
 
         let goals = self.goal_documents(chapter_path)?;
-        let mut goals_with_status: Vec<&GoalDocument> = goals
-            .iter()
-            .filter(|g| g.metadata.status.content.is_not_not_accepted())
-            .collect();
+        let mut goals_with_status: Vec<&GoalDocument> = goals.iter().collect();
 
-        goals_with_status.sort_by_key(|g| g.metadata.title.content.clone());
+        // note: false < true, so, accepted < not accepted
+        goals_with_status.sort_by_key(|g| {
+            (
+                g.metadata.title.content.clone(),
+                !g.metadata.status.content.is_not_not_accepted(),
+            )
+        });
 
         // Create subchapters for each goal
         let mut parent_names = chapter.parent_names.clone();
@@ -995,11 +998,11 @@ impl<'c> GoalPreprocessorWithContext<'c> {
 
         // Calculate byte offset to the start of the table_end line
         let mut offset = 0;
-        for i in 0..table_end {
+        for (i, line) in lines.iter().enumerate().take(table_end) {
             if i > 0 {
                 offset += 1; // newline
             }
-            offset += lines[i].len();
+            offset += line.len();
         }
 
         if table_end < lines.len() {

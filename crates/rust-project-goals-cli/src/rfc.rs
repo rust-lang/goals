@@ -559,16 +559,24 @@ fn initialize_issues<'doc>(
                     .labels
                     .iter()
                     .cloned()
-                    .chain(existing_issue.labels.iter().filter(|&label| matches!(
-                            label.name.as_str(),
-                            "ex-2025h2"
-                                | "Flagship Goal"
-                                | "R-every-4-weeks"
-                                | "R-every-2-weeks"
-                                | "R-every-week"
-                                | "S-blocked-funding"
-                                | "S-blocked-contributors"
-                        )).map(|label| label.name.clone()))
+                    .chain(
+                        existing_issue
+                            .labels
+                            .iter()
+                            .filter(|&label| {
+                                matches!(
+                                    label.name.as_str(),
+                                    "ex-2025h2"
+                                        | "Flagship Goal"
+                                        | "R-every-4-weeks"
+                                        | "R-every-2-weeks"
+                                        | "R-every-week"
+                                        | "S-blocked-funding"
+                                        | "S-blocked-contributors"
+                                )
+                            })
+                            .map(|label| label.name.clone()),
+                    )
                     .collect();
 
                 if existing_label_names != desired_label_names {
