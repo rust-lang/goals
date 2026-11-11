@@ -744,7 +744,7 @@ mod zulip_tests {
 
 fn issue_text(timeframe: &str, document: &GoalDocument) -> String {
     format!(
-        r##"
+        r"
 | Metadata         | |
 | --------         | --- |
 | Contact          | {contact} |
@@ -758,7 +758,7 @@ fn issue_text(timeframe: &str, document: &GoalDocument) -> String {
 ---
 
 {lock_text}
-"##,
+",
         contact = document.metadata.owner_usernames().join(", "),
         summary = document.summary,
         goaldocument = goal_document_link(timeframe, document),
