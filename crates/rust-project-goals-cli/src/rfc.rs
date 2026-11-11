@@ -326,7 +326,7 @@ pub fn generate_issues(
                 progress_bar::Style::Bold,
             );
             let mut success = 0;
-            for action in actions.into_iter() {
+            for action in actions {
                 progress_bar::print_progress_bar_info(
                     "Action",
                     &format!("{action}"),

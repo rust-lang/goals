@@ -26,7 +26,7 @@ pub mod text_processing {
         let mut filtered_lines = Vec::new();
         let mut in_note_section = false;
 
-        for line in lines.iter() {
+        for line in &lines {
             if line.trim().starts_with("> **NOTE:**") {
                 in_note_section = true;
                 continue;

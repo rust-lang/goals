@@ -131,7 +131,7 @@ impl Updates {
         let mut themes_map: std::collections::BTreeMap<String, Vec<UpdatesGoal>> =
             std::collections::BTreeMap::new();
 
-        for goal in roadmap_goals.iter() {
+        for goal in &roadmap_goals {
             if goal.theme.is_empty() {
                 themes_map
                     .entry("Other".to_string())

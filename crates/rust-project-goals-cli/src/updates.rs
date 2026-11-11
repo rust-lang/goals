@@ -251,7 +251,7 @@ fn prepare_goals(
         }
 
         // Prettify the comments' timestamp after using it for sorting.
-        for comment in comments.iter_mut() {
+        for comment in &mut comments {
             comment.created_at = format!("{}", comment.created_at_date());
         }
 

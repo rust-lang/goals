@@ -58,7 +58,7 @@ pub fn format_table(rows: &[Vec<Spanned<String>>]) -> String {
 
         // Print the `---` row after the headers
         if row == 0 {
-            for width in widths.iter() {
+            for width in &widths {
                 output.push('|');
                 write!(output, " {text:<width$} ", text = ":--", width = width).unwrap();
             }
