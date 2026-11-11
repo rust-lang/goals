@@ -890,8 +890,8 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         .chain(config.team_asks.iter().map(|(name, details)| {
             vec![
                 Spanned::here(format!("{name:?}")),
-                Spanned::here(details.short.to_string()),
-                Spanned::here(details.about.to_string()),
+                Spanned::here(details.short.clone()),
+                Spanned::here(details.about.clone()),
             ]
         }))
         .collect::<Vec<Vec<Spanned<String>>>>();

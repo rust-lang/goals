@@ -14,5 +14,6 @@ opt-level = 1
 explicit_into_iter_loop = "warn"
 explicit_iter_loop = "warn"
 if_not_else = "warn"
+implicit_clone = "warn"
 map_unwrap_or = "warn"
 uninlined_format_args = "warn"

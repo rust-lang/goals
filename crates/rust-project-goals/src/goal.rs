@@ -703,7 +703,7 @@ pub fn validate_username_consistency(goals: &[GoalDocument]) -> Result<()> {
             }
             seen.entry(username.to_lowercase())
                 .or_default()
-                .entry(username.to_string())
+                .entry(username.clone())
                 .or_default()
                 .push(file.clone());
         }
