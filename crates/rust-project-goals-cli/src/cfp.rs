@@ -400,15 +400,15 @@ fn copy_and_process_template(
     );
 
     // Write to destination file
-    if !dry_run {
+    if dry_run {
+        println!("Would create file: {}", dest_path.display());
+    } else {
         File::create(dest_path)
             .with_path_context(dest_path, "Failed to create file")?
             .write_all(processed_content.as_bytes())
             .with_path_context(dest_path, "Failed to write to file")?;
 
         println!("Created file: {}", dest_path.display());
-    } else {
-        println!("Would create file: {}", dest_path.display());
     }
     Ok(())
 }
@@ -424,25 +424,25 @@ fn update_summary_md(timeframe: &str, lowercase_timeframe: &str, dry_run: bool) 
 
     // Check if the content was modified
     if new_content == content {
-        if !dry_run {
+        if dry_run {
             println!(
-                "SUMMARY.md already contains a non-placeholder entry for {timeframe}. Skipping update."
+                "Would skip updating SUMMARY.md (already contains a non-placeholder entry for {timeframe})"
             );
         } else {
             println!(
-                "Would skip updating SUMMARY.md (already contains a non-placeholder entry for {timeframe})"
+                "SUMMARY.md already contains a non-placeholder entry for {timeframe}. Skipping update."
             );
         }
         return Ok(());
     }
 
     // Write the updated content back to SUMMARY.md
-    if !dry_run {
+    if dry_run {
+        println!("Would update SUMMARY.md with {timeframe} section");
+    } else {
         fs::write(summary_path, new_content).with_str_context("Failed to write to SUMMARY.md")?;
 
         println!("Updated SUMMARY.md with {timeframe} section");
-    } else {
-        println!("Would update SUMMARY.md with {timeframe} section");
     }
 
     Ok(())
@@ -459,13 +459,13 @@ fn update_main_readme(timeframe: &str, lowercase_timeframe: &str, dry_run: bool)
 
     // Check if the content was modified
     if new_content == content {
-        if !dry_run {
+        if dry_run {
             println!(
-                "README.md already contains up-to-date information for {timeframe}. Skipping update."
+                "Would skip updating README.md (already contains up-to-date information for {timeframe})"
             );
         } else {
             println!(
-                "Would skip updating README.md (already contains up-to-date information for {timeframe})"
+                "README.md already contains up-to-date information for {timeframe}. Skipping update."
             );
         }
         return Ok(());
@@ -480,40 +480,40 @@ fn update_main_readme(timeframe: &str, lowercase_timeframe: &str, dry_run: bool)
     let specific_re = Regex::new(&specific_timeframe_pattern).unwrap();
 
     if specific_re.is_match(&content) && specific_re.is_match(&new_content) {
-        if !dry_run {
+        if dry_run {
             println!(
-                "Updated existing 'Next goal period ({capitalized_timeframe})' section in src/README.md"
+                "Would update existing 'Next goal period ({capitalized_timeframe})' section in src/README.md"
             );
         } else {
             println!(
-                "Would update existing 'Next goal period ({capitalized_timeframe})' section in src/README.md"
+                "Updated existing 'Next goal period ({capitalized_timeframe})' section in src/README.md"
             );
         }
     } else if Regex::new(r"## Next goal period(?:\s*\([^\)]*\))")
         .unwrap()
         .is_match(&content)
     {
-        if !dry_run {
-            println!("Updated existing 'Next goal period' section in src/README.md");
-        } else {
+        if dry_run {
             println!("Would update existing 'Next goal period' section in src/README.md");
+        } else {
+            println!("Updated existing 'Next goal period' section in src/README.md");
         }
     } else if Regex::new(r"## Current goal period(?:\s*\([^\)]*\))")
         .unwrap()
         .is_match(&content)
     {
-        if !dry_run {
+        if dry_run {
+            println!("Would add new 'Next goal period' section after 'Current goal period' in src/README.md");
+        } else {
             println!(
                 "Added new 'Next goal period' section after 'Current goal period' in src/README.md"
             );
-        } else {
-            println!("Would add new 'Next goal period' section after 'Current goal period' in src/README.md");
         }
     } else {
-        if !dry_run {
-            println!("Added new 'Next goal period' section to src/README.md");
-        } else {
+        if dry_run {
             println!("Would add new 'Next goal period' section to src/README.md");
+        } else {
+            println!("Added new 'Next goal period' section to src/README.md");
         }
     }
 

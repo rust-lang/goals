@@ -287,14 +287,14 @@ pub fn change_title(repository: &Repository, number: u64, title: &str) -> Result
         .arg(title);
 
     let output = command.output()?;
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to change milestone `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -310,14 +310,14 @@ pub fn change_milestone(repository: &Repository, number: u64, milestone: &str) -
         .arg(milestone);
 
     let output = command.output()?;
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to change milestone `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -332,14 +332,14 @@ pub fn create_comment(repository: &Repository, number: u64, body: &str) -> Resul
         .arg(body)
         .output()?;
 
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to leave comment on issue `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -354,14 +354,14 @@ pub fn update_issue_body(repository: &Repository, number: u64, body: &str) -> Re
         .arg(body)
         .output()?;
 
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to adjust issue body on issue `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -388,14 +388,14 @@ pub fn sync_assignees(
     }
 
     let output = command.output()?;
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to sync issue assignees `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -422,14 +422,14 @@ pub fn sync_labels(
     }
 
     let output = command.output()?;
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to sync issue labels `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 

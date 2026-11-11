@@ -11,5 +11,6 @@ resolver = "2"
 opt-level = 1
 
 [workspace.lints.clippy]
+if_not_else = "warn"
 map_unwrap_or = "warn"
 uninlined_format_args = "warn"

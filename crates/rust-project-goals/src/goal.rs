@@ -991,7 +991,44 @@ pub fn format_goal_table(
 
     let mut table;
 
-    if !show_champions {
+    if show_champions {
+        table = vec![vec![
+            Spanned::here("Goal".to_string()),
+            Spanned::here("Contact".to_string()),
+            Spanned::here("Task Owners and Champions".to_string()),
+        ]];
+
+        for goal in goals {
+            // Collect task owners, excluding those who are already the contact
+            let mut contributors: Vec<String> = goal
+                .task_owners
+                .iter()
+                .filter(|owner| !goal.metadata.contacts.contains(owner.as_str()))
+                .cloned()
+                .collect();
+
+            // Collect champions with team affiliation
+            let mut champions: Vec<String> = goal
+                .metadata
+                .champions
+                .iter()
+                .map(|(team, champion)| format!("{} ({})", champion.content, team))
+                .collect();
+
+            // Combine task owners and champions
+            contributors.append(&mut champions);
+
+            table.push(vec![
+                Spanned::here(format!(
+                    "[{}]({})",
+                    goal.title_with_status(),
+                    goal.link_path.display()
+                )),
+                Spanned::here(goal.contact_for_goal_list()),
+                Spanned::here(contributors.join(", ")),
+            ]);
+        }
+    } else {
         table = vec![vec![
             Spanned::here("Goal".to_string()),
             Spanned::here("Contact".to_string()),
@@ -1048,43 +1085,6 @@ pub fn format_goal_table(
                 )),
                 Spanned::here(goal.contact_for_goal_list()),
                 Spanned::here(progress_bar),
-            ]);
-        }
-    } else {
-        table = vec![vec![
-            Spanned::here("Goal".to_string()),
-            Spanned::here("Contact".to_string()),
-            Spanned::here("Task Owners and Champions".to_string()),
-        ]];
-
-        for goal in goals {
-            // Collect task owners, excluding those who are already the contact
-            let mut contributors: Vec<String> = goal
-                .task_owners
-                .iter()
-                .filter(|owner| !goal.metadata.contacts.contains(owner.as_str()))
-                .cloned()
-                .collect();
-
-            // Collect champions with team affiliation
-            let mut champions: Vec<String> = goal
-                .metadata
-                .champions
-                .iter()
-                .map(|(team, champion)| format!("{} ({})", champion.content, team))
-                .collect();
-
-            // Combine task owners and champions
-            contributors.append(&mut champions);
-
-            table.push(vec![
-                Spanned::here(format!(
-                    "[{}]({})",
-                    goal.title_with_status(),
-                    goal.link_path.display()
-                )),
-                Spanned::here(goal.contact_for_goal_list()),
-                Spanned::here(contributors.join(", ")),
             ]);
         }
     }
