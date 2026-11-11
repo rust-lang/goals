@@ -1256,7 +1256,7 @@ fn format_funding_table_row(output: &mut String, goal: &GoalDocument, include_co
             .map(|f| f.cost.clone())
             .collect::<Vec<_>>(),
     );
-    let cost_str = total.map(|c| c.display()).unwrap_or_default();
+    let cost_str = total.map_or_default(|c| c.display());
     let status = goal.funding_status();
     output.push_str(&format!(
         "| {} | [{}]({}#funding) | {} |",

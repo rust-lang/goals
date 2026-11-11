@@ -254,8 +254,7 @@ fn format_team_table(
             .metadata
             .champions
             .get(team)
-            .map(|c| c.content.as_str())
-            .unwrap_or("");
+            .map_or("", |c| c.content.as_str());
 
         let notes = get_team_notes(goal, team);
         // Truncate long notes for the table
@@ -342,9 +341,7 @@ fn format_roadmap_themes(
         // List goals in this roadmap that involve this team
         writeln!(output, "**Goals in this theme:**\n")?;
         for goal in roadmap_goals {
-            let level = get_team_support_level(goal, team)
-                .map(|l| format!(" ({l})"))
-                .unwrap_or_default();
+            let level = get_team_support_level(goal, team).map_or_default(|l| format!(" ({l})"));
             writeln!(
                 output,
                 "- [{}]({}){}",
@@ -386,8 +383,7 @@ fn format_by_champion_table(
                 .metadata
                 .champions
                 .get(team)
-                .map(|c| c.content.clone())
-                .unwrap_or_else(|| "(no champion)".to_string());
+                .map_or_else(|| "(no champion)".to_string(), |c| c.content.clone());
 
             by_champion
                 .entry(champion)

@@ -109,8 +109,7 @@ pub mod text_processing {
                     // Find the start of the next section header (if any)
                     let next_section_start = content[content_start..]
                         .find("\n# ")
-                        .map(|pos| content_start + pos)
-                        .unwrap_or(content.len());
+                        .map_or(content.len(), |pos| content_start + pos);
 
                     // Extract the section content
                     let section_content = &content[content_start..next_section_start];

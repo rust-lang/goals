@@ -403,8 +403,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             let context_level = HEADING_RE
                 .find_iter(preceding)
                 .last()
-                .map(|m| m.as_str().trim().len())
-                .unwrap_or(1);
+                .map_or(1, |m| m.as_str().trim().len());
 
             let output = if capture_value == "Funding" {
                 goal::format_funding_goal_sections(&filtered_goals, context_level + 1)
@@ -598,8 +597,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             let context_level = HEADING_RE
                 .find_iter(preceding)
                 .last()
-                .map(|m| m.as_str().trim().len())
-                .unwrap_or(1);
+                .map_or(1, |m| m.as_str().trim().len());
 
             let output = goal::format_highlight_goal_sections(&filtered_goals, context_level + 1)
                 .into_anyhow()?;
@@ -987,8 +985,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         let table_end = lines[table_start..]
             .iter()
             .position(|line| !line.trim_start().starts_with('|'))
-            .map(|pos| table_start + pos)
-            .unwrap_or(lines.len());
+            .map_or(lines.len(), |pos| table_start + pos);
 
         // Calculate byte offset to the start of the table_end line
         let mut offset = 0;
