@@ -905,7 +905,10 @@ impl<'c> GoalPreprocessorWithContext<'c> {
     /// e.g., if invoked with `2024h2/xxx.md`, will find all goal documents in `2024h2`.
     fn goal_documents(&mut self, chapter_path: &Path) -> anyhow::Result<Arc<Vec<GoalDocument>>> {
         let Some(milestone_path) = chapter_path.parent() else {
-            anyhow::bail!("cannot get goal documents from `{chapter_path:?}`")
+            anyhow::bail!(
+                "cannot get goal documents from `{}`",
+                chapter_path.display()
+            )
         };
 
         if let Some(goals) = self.goal_document_map.get(milestone_path) {
@@ -926,7 +929,10 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         chapter_path: &Path,
     ) -> anyhow::Result<Arc<Vec<RoadmapDocument>>> {
         let Some(milestone_path) = chapter_path.parent() else {
-            anyhow::bail!("cannot get roadmap documents from `{chapter_path:?}`")
+            anyhow::bail!(
+                "cannot get roadmap documents from `{}`",
+                chapter_path.display()
+            )
         };
 
         if let Some(roadmaps) = self.roadmap_document_map.get(milestone_path) {
@@ -1157,7 +1163,10 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             .and_then(|p| p.file_name())
             .and_then(|n| n.to_str())
             .ok_or_else(|| {
-                anyhow::anyhow!("Could not determine milestone from chapter path: {chapter_path:?}")
+                anyhow::anyhow!(
+                    "Could not determine milestone from chapter path: {}",
+                    chapter_path.display()
+                )
             })?;
 
         let mut parent_names = parent_chapter.parent_names.clone();
