@@ -15,7 +15,7 @@ pub const MILESTONE_REGEX: &str = r"^\d{4}([hH][12])?$";
 /// If `subgoal_title` is Some, renders as `↳ subgoal`, otherwise as `[title](link)`.
 pub fn goal_title_cell(title: &str, link: &Path, subgoal_title: Option<&str>) -> String {
     if let Some(subgoal) = subgoal_title {
-        format!("{} {}", ARROW, subgoal)
+        format!("{ARROW} {subgoal}")
     } else {
         format!("[{}]({})", title, link.display())
     }
@@ -101,7 +101,7 @@ pub fn commas(iter: impl IntoIterator<Item: Display>) -> String {
         if i > 0 {
             write!(output, ", ").unwrap();
         }
-        write!(output, "{}", elem).unwrap();
+        write!(output, "{elem}").unwrap();
     }
     output
 }
@@ -182,7 +182,7 @@ impl Footnotes {
     /// Write all accumulated footnotes to the output.
     pub fn write_to(&self, output: &mut String) -> std::fmt::Result {
         for footnote in &self.entries {
-            write!(output, "\n\n{}\n", footnote)?;
+            write!(output, "\n\n{footnote}\n")?;
         }
         Ok(())
     }

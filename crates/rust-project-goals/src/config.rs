@@ -117,8 +117,8 @@ impl GoalsConfig {
             .linkifiers
             .into_iter()
             .map(|(pattern, url_template)| {
-                let regex = Regex::new(&format!(r"\[{}\]", pattern))
-                    .context(format!("Invalid linkifier pattern: {}", pattern))?;
+                let regex = Regex::new(&format!(r"\[{pattern}\]"))
+                    .context(format!("Invalid linkifier pattern: {pattern}"))?;
                 Ok((regex, url_template))
             })
             .collect::<anyhow::Result<Vec<_>>>()?;

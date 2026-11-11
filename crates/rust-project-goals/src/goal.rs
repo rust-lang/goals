@@ -966,7 +966,7 @@ fn generate_progress_html(progress: &Progress, state: &GithubIssueState) -> Stri
             r#"<img src="https://img.shields.io/badge/Will%20not%20complete%20%3A%28-yellow" alt="Incomplete">"#.to_string()
         },
         (Progress::Tracked { completed, total }, _) => {
-            format!(r#"<progress value="{}" max="{}">{}/{}</progress>"#, completed, total, completed, total)
+            format!(r#"<progress value="{completed}" max="{total}">{completed}/{total}</progress>"#)
         },
         (Progress::Binary { is_closed: true }, _) => {
             r#"<img src="https://img.shields.io/badge/Completed!%20%3D%29-green" alt="Completed">"#.to_string()
@@ -975,7 +975,7 @@ fn generate_progress_html(progress: &Progress, state: &GithubIssueState) -> Stri
             r#"<progress value="0" max="1">0/1</progress>"#.to_string()
         },
         (Progress::Error { message }, _) => {
-            format!(r#"<span title="{}">⚠️</span>"#, message)
+            format!(r#"<span title="{message}">⚠️</span>"#)
         }
     }
 }

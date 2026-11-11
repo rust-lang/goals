@@ -9,3 +9,6 @@ resolver = "2"
 
 [profile.dev]
 opt-level = 1
+
+[workspace.lints.clippy]
+uninlined_format_args = "warn"

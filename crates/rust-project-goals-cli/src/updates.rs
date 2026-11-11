@@ -130,7 +130,7 @@ pub fn render_updates(
     // Filter issues by champion team if specified
     let filtered_issues: Vec<ExistingGithubIssue> = if let Some(team_name) = with_champion_from {
         let team_name = team::get_team_name(team_name)?
-            .ok_or_else(|| spanned::Error::str(format!("unknown team: {}", team_name)))?;
+            .ok_or_else(|| spanned::Error::str(format!("unknown team: {team_name}")))?;
 
         // Create a set of issue numbers for goals that have a champion from the specified team
         let champion_issue_numbers: std::collections::HashSet<u64> = goal_documents

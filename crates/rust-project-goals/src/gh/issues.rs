@@ -140,13 +140,13 @@ pub fn list_issues_in_milestone(
     list_issues_cached(
         repository,
         &[("-m", &milestone_name)],
-        Some(format!(".issues-{}.json", timeframe)),
+        Some(format!(".issues-{timeframe}.json")),
     )
 }
 
 /// Clear the cached issues for a given milestone/timeframe
 pub fn clear_milestone_issues_cache(timeframe: &str) -> Result<()> {
-    let cache_file = format!(".issues-{}.json", timeframe);
+    let cache_file = format!(".issues-{timeframe}.json");
     if std::path::Path::new(&cache_file).exists() {
         std::fs::remove_file(&cache_file)
             .with_str_context(format!("Failed to remove cache file {cache_file}"))?;

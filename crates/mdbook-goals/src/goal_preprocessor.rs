@@ -775,10 +775,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                     match self.get_or_load_milestone_issues(milestone) {
                         Ok(issues) => Some(issues),
                         Err(e) => {
-                            eprintln!(
-                                "⚠️ Failed to load milestone issues for {}: {}",
-                                milestone, e
-                            );
+                            eprintln!("⚠️ Failed to load milestone issues for {milestone}: {e}");
                             None
                         }
                     }
@@ -953,19 +950,16 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         milestone: &str,
     ) -> anyhow::Result<Arc<Vec<rust_project_goals::gh::issues::ExistingGithubIssue>>> {
         if let Some(cached_issues) = self.milestone_issues_cache.get(milestone) {
-            eprintln!("📦 Using cached issues for milestone: {}", milestone);
+            eprintln!("📦 Using cached issues for milestone: {milestone}");
             return Ok(cached_issues.clone());
         }
 
-        eprintln!(
-            "🌐 Loading issues from GitHub API for milestone: {}",
-            milestone
-        );
+        eprintln!("🌐 Loading issues from GitHub API for milestone: {milestone}");
         let repository = rust_project_goals::gh::issue_id::Repository::new("rust-lang", "goals");
         let issues =
             rust_project_goals::gh::issues::list_issues_in_milestone(&repository, milestone)
                 .map_err(|e| {
-                    anyhow::anyhow!("Failed to load milestone issues for {}: {}", milestone, e)
+                    anyhow::anyhow!("Failed to load milestone issues for {milestone}: {e}")
                 })?;
 
         eprintln!(
@@ -1072,8 +1066,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
 
             if let Some(table_end) = Self::find_markdown_table_end(&chapter.content) {
                 let insertion_text = format!(
-                    "| Teams            | {} |\n| Task owners      | {} |\n",
-                    teams_text, task_owners_text
+                    "| Teams            | {teams_text} |\n| Task owners      | {task_owners_text} |\n"
                 );
                 chapter.content.insert_str(table_end, &insertion_text);
             }
@@ -1100,7 +1093,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             };
 
             if let Some(table_end) = Self::find_markdown_table_end(&chapter.content) {
-                let insertion_text = format!("| Task owners      | {} |\n", task_owners_text);
+                let insertion_text = format!("| Task owners      | {task_owners_text} |\n");
                 chapter.content.insert_str(table_end, &insertion_text);
             }
         }
@@ -1167,10 +1160,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             .and_then(|p| p.file_name())
             .and_then(|n| n.to_str())
             .ok_or_else(|| {
-                anyhow::anyhow!(
-                    "Could not determine milestone from chapter path: {:?}",
-                    chapter_path
-                )
+                anyhow::anyhow!("Could not determine milestone from chapter path: {chapter_path:?}")
             })?;
 
         let mut parent_names = parent_chapter.parent_names.clone();
@@ -1182,8 +1172,8 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             // Reverse to show newest first
             let blog_content = self.generate_blog_post_content(milestone, *year, *month)?;
 
-            let chapter_name = format!("{} Blog Post", month_name);
-            let virtual_path = format!("blog-post-{:04}-{:02}.md", year, month);
+            let chapter_name = format!("{month_name} Blog Post");
+            let virtual_path = format!("blog-post-{year:04}-{month:02}.md");
             let path = Path::new(&virtual_path);
 
             let mut blog_chapter =
@@ -1204,11 +1194,11 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         for team_name in teams_with_champions {
             let team_name_str = &team_name.data().name;
             // Create a team folder chapter
-            let team_chapter_name = format!("{} Team Reports", team_name_str);
-            let team_virtual_path = format!("{}/index.md", team_name_str);
+            let team_chapter_name = format!("{team_name_str} Team Reports");
+            let team_virtual_path = format!("{team_name_str}/index.md");
             let team_path = Path::new(&team_virtual_path);
 
-            let team_content = format!("# {} Team Champion Reports\n\nThis section contains champion reports for the {} team.", team_name_str, team_name_str);
+            let team_content = format!("# {team_name_str} Team Champion Reports\n\nThis section contains champion reports for the {team_name_str} team.");
             let mut team_chapter = Chapter::new(
                 &team_chapter_name,
                 team_content,
@@ -1268,21 +1258,18 @@ impl<'c> GoalPreprocessorWithContext<'c> {
     ) -> anyhow::Result<String> {
         use chrono::NaiveDate;
 
-        eprintln!(
-            "📝 Generating blog post for {}-{:02} (milestone: {})",
-            year, month, milestone
-        );
+        eprintln!("📝 Generating blog post for {year}-{month:02} (milestone: {milestone})");
 
         // Calculate start and end dates for the month
         let start_date = NaiveDate::from_ymd_opt(year, month, 1)
-            .ok_or_else(|| anyhow::anyhow!("Invalid date: {}-{:02}-01", year, month))?;
+            .ok_or_else(|| anyhow::anyhow!("Invalid date: {year}-{month:02}-01"))?;
         // The `end_date` is an exclusive range, so this will match comments within the given `month`
         let end_date = if month == 12 {
             NaiveDate::from_ymd_opt(year + 1, 1, 1)
         } else {
             NaiveDate::from_ymd_opt(year, month + 1, 1)
         }
-        .ok_or_else(|| anyhow::anyhow!("Invalid end date calculation for {}-{:02}", year, month))?;
+        .ok_or_else(|| anyhow::anyhow!("Invalid end date calculation for {year}-{month:02}"))?;
 
         // Get repository from context - assuming rust-lang/goals as default
         let repository = rust_project_goals::gh::issue_id::Repository::new("rust-lang", "goals");
@@ -1301,7 +1288,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             false,
             Order::OldestFirst,
         )
-        .map_err(|e| anyhow::anyhow!("Failed to generate blog post content: {}", e))?;
+        .map_err(|e| anyhow::anyhow!("Failed to generate blog post content: {e}"))?;
 
         Ok(content)
     }
@@ -1316,8 +1303,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         let start_date = end_date - chrono::TimeDelta::days(90);
 
         eprintln!(
-            "👥 Generating champion report for {} team, {start_date} - {end_date} (milestone: {})",
-            team_name, milestone
+            "👥 Generating champion report for {team_name} team, {start_date} - {end_date} (milestone: {milestone})"
         );
 
         // Get repository from context - assuming rust-lang/goals as default
@@ -1337,7 +1323,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             false,
             Order::NewestFirst,
         )
-        .map_err(|e| anyhow::anyhow!("Failed to generate champion report content: {}", e))?;
+        .map_err(|e| anyhow::anyhow!("Failed to generate champion report content: {e}"))?;
 
         Ok(content)
     }

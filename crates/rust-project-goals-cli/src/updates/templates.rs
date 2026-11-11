@@ -25,10 +25,7 @@ impl<'h> Templates<'h> {
         let book_toml_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../book.toml");
         let goals_config = if book_toml_path.exists() {
             GoalsConfig::from_book_toml(book_toml_path).map_err(|e| {
-                rust_project_goals::spanned::Error::str(format!(
-                    "Failed to load goals config: {}",
-                    e
-                ))
+                rust_project_goals::spanned::Error::str(format!("Failed to load goals config: {e}"))
             })?
         } else {
             GoalsConfig::default()
@@ -91,7 +88,7 @@ impl HelperDef for MarkdownToHtmlHelper {
                 .processor
                 .process_markdown(md, &mut local_state)
                 .map_err(|e| {
-                    RenderErrorReason::Other(format!("Markdown processing failed: {}", e))
+                    RenderErrorReason::Other(format!("Markdown processing failed: {e}"))
                 })?;
 
             // Convert to HTML

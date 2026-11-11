@@ -329,14 +329,14 @@ pub fn generate_issues(
             for action in actions.into_iter() {
                 progress_bar::print_progress_bar_info(
                     "Action",
-                    &format!("{}", action),
+                    &format!("{action}"),
                     progress_bar::Color::Green,
                     progress_bar::Style::Bold,
                 );
                 if let Err(e) = action.execute(repository, &timeframe) {
                     progress_bar::print_progress_bar_info(
                         "Error",
-                        &format!("{}", e),
+                        &format!("{e}"),
                         progress_bar::Color::Red,
                         progress_bar::Style::Bold,
                     );
@@ -355,7 +355,7 @@ pub fn generate_issues(
             // Clear the cached issues since we just modified them
             if let Err(e) = rust_project_goals::gh::issues::clear_milestone_issues_cache(&timeframe)
             {
-                eprintln!("Warning: Failed to clear issues cache: {}", e);
+                eprintln!("Warning: Failed to clear issues cache: {e}");
             }
         } else {
             eprintln!("Actions to be executed:");
@@ -808,22 +808,22 @@ impl Display for GithubAction<'_> {
             GithubAction::CreateLabel {
                 label: GhLabel { name, color },
             } => {
-                write!(f, "create label `{}` with color `{}`", name, color)
+                write!(f, "create label `{name}` with color `{color}`")
             }
             GithubAction::CreateIssue { issue } => {
                 write!(f, "create issue \"{}\"", issue.title,)
             }
             GithubAction::ChangeMilestone { number, milestone } => {
-                write!(f, "update issue #{} milestone to \"{}\"", number, milestone)
+                write!(f, "update issue #{number} milestone to \"{milestone}\"")
             }
             GithubAction::ChangeTitle { number, title } => {
-                write!(f, "update issue #{} title to \"{}\"", number, title)
+                write!(f, "update issue #{number} title to \"{title}\"")
             }
             GithubAction::Comment { number, body } => {
-                write!(f, "post comment on issue #{}: \"{}\"", number, body)
+                write!(f, "post comment on issue #{number}: \"{body}\"")
             }
             GithubAction::UpdateIssueBody { number, body: _ } => {
-                write!(f, "update the body on issue #{}", number)
+                write!(f, "update the body on issue #{number}")
             }
             GithubAction::SyncAssignees {
                 number,
@@ -836,8 +836,8 @@ impl Display for GithubAction<'_> {
                     number,
                     remove_owners
                         .iter()
-                        .map(|s| format!("-{}", s))
-                        .chain(add_owners.iter().map(|s| format!("+{}", s)))
+                        .map(|s| format!("-{s}"))
+                        .chain(add_owners.iter().map(|s| format!("+{s}")))
                         .collect::<Vec<_>>()
                         .join(", ")
                 )
@@ -853,14 +853,14 @@ impl Display for GithubAction<'_> {
                     number,
                     remove_labels
                         .iter()
-                        .map(|s| format!("-{}", s))
-                        .chain(add_labels.iter().map(|s| format!("+{}", s)))
+                        .map(|s| format!("-{s}"))
+                        .chain(add_labels.iter().map(|s| format!("+{s}")))
                         .collect::<Vec<_>>()
                         .join(", ")
                 )
             }
             GithubAction::LockIssue { number } => {
-                write!(f, "lock issue #{}", number)
+                write!(f, "lock issue #{number}")
             }
         }
     }
