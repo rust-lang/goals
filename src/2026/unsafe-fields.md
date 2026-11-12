@@ -86,3 +86,9 @@ Over the next year, we will complete tooling support, documentation, and stabili
 | [style]    | Small         | Will need approval for style guide changes.     |
 | [rustdoc]  | Small         | Will need approval for rustdoc support.         |
 | [rustfmt]  | Small         | Will need approval for rustfmt support.         |
+
+## Funding
+
+| Purpose | Cost | Funded | Sponsor(s) |
+|---------|------|--------|------------|
+| Rustdoc support for unsafe fields | Ask | Full | Google |

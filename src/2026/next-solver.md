@@ -67,7 +67,7 @@ Stabilize `-Znext-solver=globally` and rip out the old implementation
 
 | Purpose           | Cost | Funded | Sponsor(s)     |
 |-------------------|------|--------|----------------|
-| Core contribution | Ask | Full   | Anon1, Anon2 |
+| Core contribution | Ask | Full   | Google, Anon1, Anon2 |
 | Acceleration      | Ask | No     |
 
 ## Frequently asked questions

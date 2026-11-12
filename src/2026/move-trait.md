@@ -93,6 +93,12 @@ on `Pin`, and would need a migration story to be able to use `Move`. However dep
 | [lang]  | Large         | Design session needed to work through design |
 | [types] | Large         | Involved in implementation + review          |
 
+## Funding
+
+| Purpose | Cost | Funded | Sponsor(s) |
+|---------|------|--------|------------|
+| Contributor | Ask | Partial | Google |
+
 ## Frequently asked questions
 
 ### How does this relate to the Sized hierarchy work?

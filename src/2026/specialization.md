@@ -56,6 +56,6 @@ Given that specialization is largely blocked on design work to address known sou
 
 | Purpose | Cost | Funded | Sponsor(s) |
 |---------|------|--------|------------|
-| Contributor | TBD | Partial | |
+| Contributor | TBD | Full | Google |
 
 ## Frequently asked questions

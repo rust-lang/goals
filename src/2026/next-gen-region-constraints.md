@@ -56,6 +56,12 @@ into account these implied bounds when handling region constraints.
 | ---------- | ------------- | --------------------------------------- |
 | [types]    | Large | Be kept abrest of the design work and sign off on stabilizations |
 
+## Funding
+
+| Purpose | Cost | Funded | Sponsor(s) |
+|---------|------|--------|------------|
+| Contributor | Ask | Full | Google |
+
 ## Frequently asked questions
 
 ### Interactions with -Zhigher-ranked-assumptions
