@@ -145,6 +145,13 @@ Precise updates require that every consumer know about and point-install each re
 `cargo update` to pick it up. RFC 3493 also doesn't include any clear declaration that a release is registry-injected or allow audits or 
 opt-out. The pre-release machinery is a good building block, but this goal extends it.
 
+### Why not use `[patch.crates-io]` in each project?
+
+`[patch]` requires every consumer to opt in, crate by crate, and to keep the list current as versions change. That often isn't practical
+for organizations with many independent teams. Switching to a registry should be a one-line change in `config.toml`. The fix also has
+to be hosted somewhere: a git URL is a muddy provenance story, and many locked-down build environments only allow a private registry.
+Security boundaries are best enforced at the registry, with client configuration as a supplement.
+
 ### Who decides what releases a registry publishes?
 
 A registry. From this goal's perspective, all users will be downstream of the Rust Project. Some expected users are: corporate security
