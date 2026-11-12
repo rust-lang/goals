@@ -8,7 +8,6 @@
 | Status | Proposed |
 | Zulip channel | N/A (to be created on request) |
 | [cargo] champion | TBD |
-| [social-media] champion | TBD |
 
 Ecosystem security champion: TBD. (Team is still being chartered, [ref](https://github.com/rust-lang/leadership-council/issues/352).)
 
