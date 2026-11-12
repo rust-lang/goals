@@ -7,7 +7,7 @@
 | What and why | Downstream registries already serve releases upstream never published, mostly for security fixes; document that reality and give it a declared, auditable, resolvable shape so it is distinguishable from a dependency confusion attack |
 | Status | Proposed |
 | Zulip channel | N/A (to be created on request) |
-| [cargo] champion | TBD |
+| [cargo] champion | @weihanglo |
 
 Ecosystem security champion: TBD. (Team is still being chartered, [ref](https://github.com/rust-lang/leadership-council/issues/352).)
 
@@ -151,6 +151,12 @@ opt-out. The pre-release machinery is a good building block, but this goal exten
 for organizations with many independent teams. Switching to a registry should be a one-line change in `config.toml`. The fix also has
 to be hosted somewhere: a git URL is a muddy provenance story, and many locked-down build environments only allow a private registry.
 Security boundaries are best enforced at the registry, with client configuration as a supplement.
+
+### Why not have the registry stop serving vulnerable versions?
+
+Pulling a vulnerable release without a newer one available can break builds, including builds that need to ship some other critical fix.
+That release may also carry other security or performance fixes. Whether to build against vulnerable versions is best left to the
+consumer at consumption time. A registry may still publish a fix and yank the old release, but that is up to each registry.
 
 ### Who decides what releases a registry publishes?
 
