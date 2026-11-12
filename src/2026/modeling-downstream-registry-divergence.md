@@ -46,7 +46,7 @@ Prior art falls into three buckets: downstream publication of fixes, provenance,
 - **Package URL (PURL)**: [spec](https://github.com/package-url/purl-spec). A standard identifier for a package release across ecosystems (`pkg:cargo/tokio@1.48.0`), used by SBOM and vulnerability tooling. A registry release needs a PURL distinct from the upstream release it is based on, e.g. via a distinct version or a `repository_url` qualifier, so SBOMs and advisory matching don't report it as upstream. AboutCode's VulnerableCode [models fixes](https://github.com/aboutcode-org/vulnerablecode/blob/9e1aeb7dba1a4c951ea1c7739dad59c13167e4d0/vulnerabilities/models.py#L1812) as code changes tied to a base package version by PURL.
 - **Hatch environment sources** ([docs](https://hatch.pypa.io/latest/config/environment/sources/)): Hatch lets a project redirect a named dependency to a local path, git ref, URL, or another index. This is client-side, like Cargo's `[patch]` and `[source]`, not registry-side. Two relevant pieces: `HATCH_NO_SOURCES` turns off all redirection so CI can check that the published metadata resolves by itself, and `dep show sources` lists each redirection and the dependencies it affects.
 - **Cargo**: [RFC 3493](https://rust-lang.github.io/rfcs/3493-precise-pre-release-cargo-update.html) lets `cargo update --precise` target a pre-release. This is the closest existing hook for resolving a non-upstream release; we likely would build on top of it.
-- **Central Patches draft RFC** ([HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g), @celinval): one exploration of the Cargo side of this goal, written before a full inventory of cargo source replacement usage. Registries reserve a pre-release tag for their own releases, Cargo resolves them within existing requirements, and consumers control uptake per registry. It is a starting point for discussion. The RFC will start from the problem and alternatives, and this draft will be rewritten or replaced based on what the real-world usage inventory finds.
+- **Registry release alternatives survey** ([HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g), @celinval): an in-progress survey of how Cargo could model registry releases, evaluated against a shared set of use cases and constraints (lockfile stability, opt-out, downstream pass-through, semver ordering, older Cargo versions). Options include a reserved pre-release tag on the next version (currently leading), a tag on the base version, build metadata, a new semver component, serving registry releases outside the index, and extending `[patch]` to accept registry coordinates.
 
 ### What we propose to do about it
 
@@ -88,7 +88,8 @@ Two phases, roughly 3-6 months.
 | Docs: describe how source replacement is used today and its risks; define terms (mirror, downstream registry, registry release) | @jlizen | |
 | Requirements doc; gather use cases from registry operators, Alpha-Omega, Akrites, Linux packagers, Rust contracting shops (Ferrous Systems, Mainmatter) | @jlizen | |
 | Requirements from the TUF / [verifiable mirroring](./mirroring.md) work: registry releases must fit the signing model | @jlizen | with @arlosi |
-| RFC: Registry release declarations, Cargo resolver behavior, registry advertisement, consumer opt-out, lockfile interaction | @jlizen, @celinval | may split into two; informed by the [Central Patches draft](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g) |
+| Survey Cargo-side alternatives for modeling registry releases | @celinval | in progress; [HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g) |
+| RFC: Registry release declarations, Cargo resolver behavior, registry advertisement, consumer opt-out, lockfile interaction | @jlizen, @celinval | may split into two; informed by the alternatives survey |
 | Cargo implementation behind unstable flag | @jlizen, @celinval | |
 | Reference implementation in an alternate registry or static index | @jlizen, @celinval | end to end without crates.io |
 | RustSec advisory DB: represent "fixed in registry X with registry release Y" | @jlizen | with RustSec maintainers |
@@ -147,10 +148,9 @@ opt-out. The pre-release machinery is a good building block, but this goal exten
 
 ### Why not use `[patch.crates-io]` in each project?
 
-`[patch]` requires every consumer to opt in, crate by crate, and to keep the list current as versions change. That often isn't practical
-for organizations with many independent teams. Switching to a registry should be a one-line change in `config.toml`. The fix also has
-to be hosted somewhere: a git URL is a muddy provenance story, and many locked-down build environments only allow a private registry.
-Security boundaries are best enforced at the registry, with client configuration as a supplement.
+Today, `[patch]` points a crate at a git URL or local path. Every consumer has to opt in, crate by crate, and keep the list current as versions change, whether in `Cargo.toml` or in `.cargo/config.toml`. That often isn't practical for organizations with many independent teams; switching to a registry should be a one-line change in `config.toml`. A git URL is also a muddy provenance story, and many locked-down build environments only allow a private registry.
+
+TBD, but an initial opinion: extending `[patch]` to accept registry coordinates, one option in the [alternatives survey](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g), would solve the hosting and provenance problems, since the fix lives in a registry. It still leaves the per-crate opt-in list with each consumer. It can't reach transitive consumers or `cargo install` users who don't carry that config, and it doesn't tell the registry's other consumers that the release exists. Security boundaries are best enforced at the registry, with client configuration as a supplement.
 
 ### Why not have the registry stop serving vulnerable versions?
 
@@ -183,7 +183,7 @@ TBD, but an initial opinion: consumers who update would lose the fix, since upst
 
 ### Does this change semver?
 
-Maybe. Registry releases need a version shape that sorts correctly, does not use the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component. Each has costs for older Cargo versions and for tools outside Cargo. The inventory includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
+Maybe. Registry releases need a version shape that sorts correctly, does not use the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component; the [alternatives survey](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g) is evaluating each against older Cargo versions and semver ordering. Each has costs for older Cargo versions and for tools outside Cargo. The inventory includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
 
 ### Does this cover distro packaging and `cargo vendor` directories?
 
