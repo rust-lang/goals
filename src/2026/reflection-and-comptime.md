@@ -1,28 +1,24 @@
-# reflection and comptime
+# min-type-reflection
 
 | Metadata             |                                    |
 |:---------------------|:-----------------------------------|
-| Contact     | @oli-obk                           |
+| Contact              | @yara-blue                         |
+| Funding contact      | [Hexcat](https://hexcat.nl)        |
 | Status               | Accepted                           |
-| What and why         | Compile-time type reflection via `const fn` so `serialize(&my_struct)` works without derives |
-| Timespan             | 2026-2028                          |
+| What and why         | Compile-time type reflection to make `serialize(&my_struct)` work without derives |
+| Timespan             | 2026-2027                          |
 | Roadmap              | Constify all the things            |
-| Tracking issue       | [rust-lang/goals#406] |
+| Tracking issue       | [rust-lang/goals#406]              |
 | Other Tracking issue | [rust-lang/rust#142577]            |
 | Highlight            | Const and reflection               |
-| Zulip channel        | N/A                                |
+| Zulip channel        | https://rust-lang.zulipchat.com/#narrow/channel/572285-goals.2Freflection |
 | [compiler] champion  | @oli-obk                           |
 | [lang] champion      | @scottmcm                          |
 | [libs] champion      | @joshtriplett                      |
 
 
 ## Summary
-
-Finish the implemented reflection scheme based on `const fn` that can only be called at compile time.
-Validate it against existing reflection libraries by giving them a nightly feature that obsoletes having derives and makes the derives no-ops.
-Obtain T-lang and T-libs buy-in for the scheme and write an RFC.
-This proposal is solely for producing const eval values, not for putting types back into the type system.
-That will be a follow-up once this proposal has a merged MVP.
+Enable anyone to write general purpose functionality that works on any data type from any crate. We do this by adding compile time only functions to the language. With these we add functions which query the compiler directly during constant evaluation. We aim to stabilize the minimum set of functions required for introspection applications like serialization and logging. Expanding reflection beyond this will be a separate goal.
 
 ## Motivation
 
@@ -32,78 +28,76 @@ This often hinders rollout and will never reach every crate. Most crate maintain
 causing everyone to either pick the large popular crates or be limited in what they can serializer/log. This is a hindrance to innovation and will (imo) long term cause the ecosystem to
 stop evolving even when an objectively better solution to a problem is found.
 
+A lot of crates also expose features for deriving various common ecosystem traits to save on compile time when those derives are not needed. With reflection, only the actual usage costs compile time, and only for those types that actually get processed. Similarly embedded devs want to suppress all the `Debug` derives as they blow up binary size significantly.
+
 Reflection offers a way out of this dilemma, as you can write your logic for all types.
 You would be processing the type information at runtime (or even preprocess it at compile-time, e.g. in const blocks) without requiring trait bounds on your functions or trait impls anywhere.
 This means no one but consumers of your serialization/logging/game-engine will need to know about your crate, and you do not need the entire crates.io ecosystem to add derives for your traits.
 Your consumers immediately are able to interoperate with tuples of any size, arbitrary structs and enums from arbitrary crates that neither depend on yours nor you on theirs.
 
-If this experiment is successful, crates like `bevy` will be able to "just work" with arbitrary types instead of requiring authors to `#[derive(Component)]`, `#[derive(Bundle)]`, or `#[derive(Resource)]` their types
-just to get the `bevy_reflect` information built at compile-time. Crates like `bevy_reflect` and `facet` will still exist, but only as different libraries with different goals and methods for exposing reflection information.
-
-Furthermore it opens up new possibilities of reflection-like behaviour by
-* specializing serialization on specific formats (e.g. serde won't support changing serialization depending on the serializer  [serde-rs/serde#2877]),
-* specializing trait impl method bodies to have more performant code paths for specific types, groups of types or shapes (e.g. based on the layout) of types.
-
-I consider reflection orthogonal to derives as they solve similar problems from different directions. Reflection lets you write the logic that processes your types in a way very similar to dynamic languages, by inspecting values' types during the execution of the reflection code, while derives generate the code that processes types ahead of time. Proc macros derives have historically been shown to be fairly hard to debug and bootstrap from scratch (we should totally also improve proc macro workflows). While reflection can get similarly complex fast, it allows for a more dynamic approach where you can easily debug the state your are in, as you do not have to pair the derive logic with the consumer logic (e.g. a serializer) and are instead directly writing just the consumer logic.
-
-Reflection often is not as efficient as derives, as the derives can generate the ideal code ahead of time, but once a fully functioning reflection system has been written for a use case, and performance becomes a problem, it should be significantly easier to now write a derive for the performance critical cases than to have started doing so from the start.
-
 #### Design axioms
 
 * Prefer procedural const-eval code over associated const based designs (see also "why not uwuflection" in the FAQ).
     * We picked `const fn` in general evaluation over associated const based designs that are equally expressive but are essentially a DSL
+* Favor small targeted queries over an ergonomic interface. 
 * Ensure privacy is upheld, modulo things like `size_of` exposing whether new private fields have been added
-    * This is important to ensure that we cannot break abstractions. We will experiment with allowing const items in the same module to access private fields even if the access is in a comptime fn defined in another crate. Or with a comptime fn defined in the same module of a private field accessing that private field even if called in a const item outside of it.
-* Avoid new semver hazards and document any if unavoidable.
-    * e.g. do not expose private fields, methods, or types
-
+    * This is important to ensure that we cannot break abstractions. Anything breaking that is out of scope for min-reflection, but we're separately considering how such things could be enabled for different use cases that do not cause ecosystem problems.
+    * e.g. do not expose method ordering, documentation text, ...
 
 #### The "shiny future" we are working towards
 
-Create basic building blocks that allow `facet`, `bevy-reflect` and `reflect` to process types without requiring derives or trait bounds.
+We expect there to be simple building blocks on crates.io for various applications, that can be mixed and matched to build exactly the kind of serialization/introspection scheme desired. This also pushes most of the compile-time effort to the crates actually performing such serialization/introspection, while still being organizable in a separate crate to improve caching.
+
+Everyone can write a library for serialization, debug printing, runtime-introspection, ... that works on all public fields of Adts, and definitely works on all other types.
+
+Runtime reflection crates like `bevy_reflect` and `facet` will still exist, but they essentially just differ in their user experience.
+
+Furthermore it opens up new possibilities of reflection-like behaviour by
+* specializing serialization on specific formats (e.g. serde won't support changing serialization depending on the serializer  [serde-rs/serde#2877]),
+* specializing trait impl method bodies to have more performant code paths for specific types, groups of types or shapes (e.g. based on the layout) of types. 
+
+Once we have reflection providing a stable interface to the compiler, we can extend that interface to answer deeper questions about what is being compiled. This could power linters and proof checkers running as compiler plugins. Both extending the reflection interface and enabling it's used by compiler plugins are separate project goals.
 
 ### Status quo
 
-The [Reflection MVP](https://github.com/rust-lang/rust/pull/146923) landed. It implements a `TypeId::info` method that returns a `Type` struct. `Type` has fields that contain information about the type, including `kind` which tells you whether it's e.g. a tuple, struct etc.
-
-A new type kind is supported every week, with open PRs for hard ones like Adts and dyn trait
-
-Open PRs:
-
-* [Add very basic "comptime" fn implementation rust#148820](https://github.com/rust-lang/rust/pull/148820)
-* [Remove 'static requirement on try_as_dyn rust#150161](https://github.com/rust-lang/rust/pull/150161)
-
+* `#[rustc_comptime]` attribute making a normal function only callable from const blocks or const/static item initializers, or other `#[rustc_comptime]` functions
+* Various `#[rustc_comptime]` methods on `TypeId` that expose information about the type represented by that `TypeId`
+    * Nested information (about fields or variants) has its own `FieldId` or `VariantId` types
+    * Functions to instantiate a shim for a specific type and return a function pointer to the "generated" function (this is used to access discriminants at runtime).
+* There are demonstrators showing that you can use these reflection APIs to debug or serialize any type without any trait bounds.
 
 ### What we propose to do about it
 
-* add an attribute for `const fn` that prevents them from being called from runtime code or `const fn` without the attribute
-    * See the FAQ for why we need `#[rustc_comptime] const fn() {}` declarations
-* add basic data structures to libcore that represent common information about types and the APIs to obtain that information
+* stabilize minimally useful subset of reflection next year
+* stabilize comptime functions and inherent methods next year
 
 ### Work items over the next year
 
-#### Explore design space for comptime `const fn`
+| Task                                                     | Owner(s)   | Notes |
+|----------------------------------------------------------|------------|-------|
+| Flesh out the minimal API more                           | @yara-blue |       |
+| Workout privacy and semver considerations                | @yara-blue |       |
+| Author call for testing blog post                        | @yara-blue |       |
+| Demonstrate uses in existing and new crates              | @yara-blue |       |
+| Get T-lang feedback on current design                    | @yara-blue |       |
+| Get T-libs feedback on API surface                       | @yara-blue |       |
+| Stabilize                                                | @yara-blue |       |
 
-Implement and validate `#[compile_time_only]` attribute for `const fn` that enables type reflection without runtime overhead.
-
-| Task                                                     | Owner(s) | Notes |
-|----------------------------------------------------------|----------|-------|
-| Continue the experiment (land open PRs)                  | @oli-obk | [^1]  |
-| Add more fields to `Type` and variants to `TypeKind`     | @oli-obk |       |
-| Restrict information from structs outside current module | @oli-obk |       |
-| Author call for testing blog post                        | @oli-obk |       |
-
-[^1]: Needs libstd data structures (lang items) to make the specialization data available
 
 ## Team asks
 
 | Team       | Support level | Notes                                                    |
 |------------|---------------|--------------------------------------------------------- |
 | [compiler] | Medium        | Standard reviews                                         |
-| [lang]     | Large         | Design meeting, experiment                               |
-| [libs]     | Medium        | Reviews                                                  |
+| [lang]     | Large         | Design meeting, Stabilization                            |
+| [libs]     | Medium        | ACP discussion & approval                                |
 | [types]    | Small         | General discussion on any additional type-system changes |
 
+## Funding
+
+| Purpose | Cost | Funded | Sponsor(s) |
+|---------|------|--------|------------|
+| Contributor | Ask | No | - |
 
 ## Frequently asked questions
 
@@ -117,16 +111,14 @@ const fn type_of(id: TypeId) -> &'static Type;
 
 function, that has the special requirement of, unlike every other `const fn`, not being callable at runtime, then we could work with type descriptions from normal procedural rust code.
 
-So for this experimental impl we would do
+So for this impl we would do
 
 ```rust
-#[compile_time_only]
+#[rustc_comptime]
 const fn type_of(id: TypeId) -> &'static Type;
 ```
 
-These functions can't be run at runtime, because that would require there to be some global table somewhere that maps all `TypeId`s to their repr. This is an obvious no-go in my book.
-
-A demonstration impl (absolutely not salvageable for anything that could be landed!) can be found [here](https://github.com/rust-lang/rust/compare/main...oli-obk:rust:compile-time-reflection).
+These functions can't be run at runtime, because that would require there to be some global table somewhere that maps all `TypeId`s to their repr. This is an obvious no-go.
 
 ### Why not continue where uwuflection left off?
 
@@ -162,6 +154,12 @@ zig's approach to comptime from a very high level is effectively
 we do not experiment with this approach at this time, because the compiler is not set up in a way to permit proc macros from accessing type information from the current crate.
 While there are ongoing refactorings that go into the direction of potentially allowing more of that in the future, that future seems to be more than 5 years away at my best guess.
 
-* the compiler is not set up to add AST nodes while type information is already available. It possibly never will, and it would be an immense amount of work to get there. I'm doing lots of refactorings that would need to be done for sth like that anyway, even if the goal is just better incremental and general compiler architecture.
+* the compiler is not set up to add AST nodes while type information is already available. It possibly never will, and it would be an immense amount of work to get there. I'm doing lots of refactorings that would need to be done for something like that anyway, even if the goal is just better incremental and general compiler architecture.
 * there are too many open language questions about it that we haven't even started to discuss
-* a hacky comptime reflection prototype that works for just tuples and that works with regular const eval exists right now, so pursuing the definitely possible implementation will pay off in a shorter term.
+* a working comptime reflection implementation that works for most types and that works with regular const eval exists right now, so pursuing the definitely possible implementation will pay off in a shorter term.
+
+### Tradeoffs with derives
+
+Reflection is orthogonal to derives as they solve similar problems from different directions. Reflection lets you write the logic that processes your types in a way very similar to dynamic languages, by inspecting values' types during the execution of the reflection code, while derives generate the code that processes types ahead of time. Proc macros derives have historically been shown to be fairly hard to debug and bootstrap from scratch (we should totally also improve proc macro workflows). While reflection can get similarly complex fast, it allows for a more dynamic approach where you can easily debug the state your are in, as you do not have to pair the derive logic with the consumer logic (e.g. a serializer) and are instead directly writing just the consumer logic.
+
+Derives can generate the code ahead of time, but don't have type information to do so, while reflection doesn't generate code, but instead allows you to build an interpreter for the minimal subset of rust metadata that you need, which often optimizes down to the ideal target machine code. It is also possible to special case the logic for individual types or types implementing specific traits, in case manual hot path optimizations are desirable.
