@@ -3,7 +3,7 @@
 | Metadata                |                                                |
 | :--                     | :--                                            |
 | Contact        | @WaffleLapkin                                  |
-| Status                  | Accepted                                       |
+| Status                  | Completed                                      |
 | Tracking issue          | [rust-lang/goals#653]             |
 | Other tracking issues   | [rust-lang/rust#35121]                         |
 | Highlight               | Try, never, extern types                       |
