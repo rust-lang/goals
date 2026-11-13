@@ -55,4 +55,10 @@ BorrowSanitizer is open source and available on [GitHub](https://github.com/borr
 | [lang]     |    Small      | Champion: @tmandry. General support and guidance.   |
 | [infra]    |    Small      | Upstream integration.                               |
 
+## Funding
+
+| Purpose | Cost | Funded | Sponsor(s) |
+|---------|------|--------|------------|
+| Contributor | Ask | Full | Google |
+
 ## Frequently asked questions

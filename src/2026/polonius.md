@@ -123,6 +123,12 @@ Stable support for the polonius alpha analysis, followed by gradually improving 
 
 We expect most support to be needed from the types team, for design review, reviews, and the stabilization decision. We expect @nikomatsakis to provide design guidance, and @jackh726 and @matthewjasper to help with reviews.
 
+## Funding
+
+| Purpose | Cost | Funded | Sponsor(s) |
+|---------|------|--------|------------|
+| Contributor | Ask | Full | Google |
+
 ## Frequently asked questions
 
 ### What is the polonius alpha analysis?
