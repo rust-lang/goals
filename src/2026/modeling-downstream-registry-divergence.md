@@ -150,7 +150,7 @@ opt-out. The pre-release machinery is a good building block, but this goal exten
 
 Today, `[patch]` points a crate at a git URL or local path. Every consumer has to opt in, crate by crate, and keep the list current as versions change, whether in `Cargo.toml` or in `.cargo/config.toml`. That often isn't practical for organizations with many independent teams; switching to a registry should be a one-line change in `config.toml`. A git URL is also a muddy provenance story, and many locked-down build environments only allow a private registry.
 
-TBD, but an initial opinion: extending `[patch]` to accept registry coordinates, one option in the [alternatives survey](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g), would solve the hosting and provenance problems, since the fix lives in a registry. It still leaves the per-crate opt-in list with each consumer. It can't reach transitive consumers or `cargo install` users who don't carry that config, and it doesn't tell the registry's other consumers that the release exists. Security boundaries are best enforced at the registry, with client configuration as a supplement.
+In general, security boundaries are best enforced at the registry, with client configuration as a supplement.
 
 ### Why not have the registry stop serving vulnerable versions?
 
