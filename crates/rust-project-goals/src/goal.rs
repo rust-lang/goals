@@ -158,8 +158,7 @@ impl FundingStatus {
     pub fn sponsor(&self) -> Option<&str> {
         match self {
             FundingStatus::No => None,
-            FundingStatus::Partial(s) => s.as_deref(),
-            FundingStatus::Funded(s) => s.as_deref(),
+            FundingStatus::Partial(s) | FundingStatus::Funded(s) => s.as_deref(),
         }
     }
 
@@ -616,7 +615,7 @@ impl TeamInvolvement {
     }
 
     /// Returns the team asks if this uses the old format, None otherwise.
-    pub fn as_asks(&self) -> Option<&Vec<TeamAsk>> {
+    pub fn as_asks(&self) -> Option<&[TeamAsk]> {
         match self {
             TeamInvolvement::Asks(asks) => Some(asks),
             TeamInvolvement::Support(_) => None,
@@ -624,7 +623,7 @@ impl TeamInvolvement {
     }
 
     /// Returns the team support entries if this uses the new format, None otherwise.
-    pub fn as_support(&self) -> Option<&Vec<TeamSupport>> {
+    pub fn as_support(&self) -> Option<&[TeamSupport]> {
         match self {
             TeamInvolvement::Asks(_) => None,
             TeamInvolvement::Support(supports) => Some(supports),
@@ -703,7 +702,7 @@ pub fn validate_username_consistency(goals: &[GoalDocument]) -> Result<()> {
             }
             seen.entry(username.to_lowercase())
                 .or_default()
-                .entry(username.to_string())
+                .entry(username.clone())
                 .or_default()
                 .push(file.clone());
         }
@@ -966,7 +965,7 @@ fn generate_progress_html(progress: &Progress, state: &GithubIssueState) -> Stri
             r#"<img src="https://img.shields.io/badge/Will%20not%20complete%20%3A%28-yellow" alt="Incomplete">"#.to_string()
         },
         (Progress::Tracked { completed, total }, _) => {
-            format!(r#"<progress value="{}" max="{}">{}/{}</progress>"#, completed, total, completed, total)
+            format!(r#"<progress value="{completed}" max="{total}">{completed}/{total}</progress>"#)
         },
         (Progress::Binary { is_closed: true }, _) => {
             r#"<img src="https://img.shields.io/badge/Completed!%20%3D%29-green" alt="Completed">"#.to_string()
@@ -975,7 +974,7 @@ fn generate_progress_html(progress: &Progress, state: &GithubIssueState) -> Stri
             r#"<progress value="0" max="1">0/1</progress>"#.to_string()
         },
         (Progress::Error { message }, _) => {
-            format!(r#"<span title="{}">⚠️</span>"#, message)
+            format!(r#"<span title="{message}">⚠️</span>"#)
         }
     }
 }
@@ -991,7 +990,44 @@ pub fn format_goal_table(
 
     let mut table;
 
-    if !show_champions {
+    if show_champions {
+        table = vec![vec![
+            Spanned::here("Goal".to_string()),
+            Spanned::here("Contact".to_string()),
+            Spanned::here("Task Owners and Champions".to_string()),
+        ]];
+
+        for goal in goals {
+            // Collect task owners, excluding those who are already the contact
+            let mut contributors: Vec<String> = goal
+                .task_owners
+                .iter()
+                .filter(|owner| !goal.metadata.contacts.contains(owner.as_str()))
+                .cloned()
+                .collect();
+
+            // Collect champions with team affiliation
+            let mut champions: Vec<String> = goal
+                .metadata
+                .champions
+                .iter()
+                .map(|(team, champion)| format!("{} ({})", champion.content, team))
+                .collect();
+
+            // Combine task owners and champions
+            contributors.append(&mut champions);
+
+            table.push(vec![
+                Spanned::here(format!(
+                    "[{}]({})",
+                    goal.title_with_status(),
+                    goal.link_path.display()
+                )),
+                Spanned::here(goal.contact_for_goal_list()),
+                Spanned::here(contributors.join(", ")),
+            ]);
+        }
+    } else {
         table = vec![vec![
             Spanned::here("Goal".to_string()),
             Spanned::here("Contact".to_string()),
@@ -1048,43 +1084,6 @@ pub fn format_goal_table(
                 )),
                 Spanned::here(goal.contact_for_goal_list()),
                 Spanned::here(progress_bar),
-            ]);
-        }
-    } else {
-        table = vec![vec![
-            Spanned::here("Goal".to_string()),
-            Spanned::here("Contact".to_string()),
-            Spanned::here("Task Owners and Champions".to_string()),
-        ]];
-
-        for goal in goals {
-            // Collect task owners, excluding those who are already the contact
-            let mut contributors: Vec<String> = goal
-                .task_owners
-                .iter()
-                .filter(|owner| !goal.metadata.contacts.contains(owner.as_str()))
-                .cloned()
-                .collect();
-
-            // Collect champions with team affiliation
-            let mut champions: Vec<String> = goal
-                .metadata
-                .champions
-                .iter()
-                .map(|(team, champion)| format!("{} ({})", champion.content, team))
-                .collect();
-
-            // Combine task owners and champions
-            contributors.append(&mut champions);
-
-            table.push(vec![
-                Spanned::here(format!(
-                    "[{}]({})",
-                    goal.title_with_status(),
-                    goal.link_path.display()
-                )),
-                Spanned::here(goal.contact_for_goal_list()),
-                Spanned::here(contributors.join(", ")),
             ]);
         }
     }
@@ -1256,7 +1255,7 @@ fn format_funding_table_row(output: &mut String, goal: &GoalDocument, include_co
             .map(|f| f.cost.clone())
             .collect::<Vec<_>>(),
     );
-    let cost_str = total.map(|c| c.display()).unwrap_or_default();
+    let cost_str = total.map_or_default(|c| c.display());
     let status = goal.funding_status();
     output.push_str(&format!(
         "| {} | [{}]({}#funding) | {} |",
@@ -2229,7 +2228,7 @@ pub fn format_sized_goal_table(goals: &[&GoalDocument], size: GoalSize) -> Resul
             let champion_cell = if let Some(champion) = goal.metadata.champions.get(team) {
                 champion.content.clone()
             } else {
-                use SupportLevel::*;
+                use SupportLevel::{Large, Medium, Small};
                 match level {
                     Large | Medium => "![TBD][]".to_string(),
                     Small => "*n/a*".to_string(),
@@ -2550,7 +2549,7 @@ impl PlanItem {
     fn team_asks(
         &self,
         link_path: &Arc<PathBuf>,
-        goal_titles: &Vec<Spanned<Title>>,
+        goal_titles: &[Spanned<Title>],
         status: Status,
         goal_owners: &str,
     ) -> Result<Vec<TeamAsk>> {
@@ -2581,7 +2580,7 @@ impl PlanItem {
                 link_path: link_path.clone(),
                 status,
                 ask_description: self.text.content.clone(),
-                goal_titles: goal_titles.clone(),
+                goal_titles: goal_titles.to_vec(),
                 teams,
                 owners: goal_owners.to_string(),
                 notes: self.notes.clone(),

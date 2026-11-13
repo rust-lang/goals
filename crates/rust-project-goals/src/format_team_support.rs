@@ -66,7 +66,7 @@ pub fn format_team_support(goals: &[&GoalDocument]) -> Result<String> {
         write!(output, "\n#### {} team\n", team_data.name)?;
 
         let table_output = format_team_support_for_team(goals, team_name)?;
-        write!(output, "{}", table_output)?;
+        write!(output, "{table_output}")?;
     }
 
     Ok(output)

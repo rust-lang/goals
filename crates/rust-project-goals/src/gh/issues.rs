@@ -140,13 +140,13 @@ pub fn list_issues_in_milestone(
     list_issues_cached(
         repository,
         &[("-m", &milestone_name)],
-        Some(format!(".issues-{}.json", timeframe)),
+        Some(format!(".issues-{timeframe}.json")),
     )
 }
 
 /// Clear the cached issues for a given milestone/timeframe
 pub fn clear_milestone_issues_cache(timeframe: &str) -> Result<()> {
-    let cache_file = format!(".issues-{}.json", timeframe);
+    let cache_file = format!(".issues-{timeframe}.json");
     if std::path::Path::new(&cache_file).exists() {
         std::fs::remove_file(&cache_file)
             .with_str_context(format!("Failed to remove cache file {cache_file}"))?;
@@ -270,7 +270,9 @@ pub fn create_issue(
         }
     }
 
-    Err(Error::str("creating issue did not return a URL".to_string()))
+    Err(Error::str(
+        "creating issue did not return a URL".to_string(),
+    ))
 }
 
 pub fn change_title(repository: &Repository, number: u64, title: &str) -> Result<()> {
@@ -285,14 +287,14 @@ pub fn change_title(repository: &Repository, number: u64, title: &str) -> Result
         .arg(title);
 
     let output = command.output()?;
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to change milestone `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -308,14 +310,14 @@ pub fn change_milestone(repository: &Repository, number: u64, milestone: &str) -
         .arg(milestone);
 
     let output = command.output()?;
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to change milestone `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -330,14 +332,14 @@ pub fn create_comment(repository: &Repository, number: u64, body: &str) -> Resul
         .arg(body)
         .output()?;
 
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to leave comment on issue `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -352,14 +354,14 @@ pub fn update_issue_body(repository: &Repository, number: u64, body: &str) -> Re
         .arg(body)
         .output()?;
 
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to adjust issue body on issue `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -386,14 +388,14 @@ pub fn sync_assignees(
     }
 
     let output = command.output()?;
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to sync issue assignees `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -420,14 +422,14 @@ pub fn sync_labels(
     }
 
     let output = command.output()?;
-    if !output.status.success() {
+    if output.status.success() {
+        Ok(())
+    } else {
         Err(Error::str(format!(
             "failed to sync issue labels `{}`: {}",
             number,
             String::from_utf8_lossy(&output.stderr)
         )))
-    } else {
-        Ok(())
     }
 }
 
@@ -469,14 +471,13 @@ pub fn lock_issue(repository: &Repository, number: u64) -> Result<()> {
         .arg(number.to_string())
         .output()?;
 
-    if !output.status.success()
-        && !output.stderr.starts_with(b"already locked") {
-            return Err(Error::str(format!(
-                "failed to lock issue `{}`: {}",
-                number,
-                String::from_utf8_lossy(&output.stderr)
-            )));
-        }
+    if !output.status.success() && !output.stderr.starts_with(b"already locked") {
+        return Err(Error::str(format!(
+            "failed to lock issue `{}`: {}",
+            number,
+            String::from_utf8_lossy(&output.stderr)
+        )));
+    }
 
     Ok(())
 }
@@ -568,8 +569,7 @@ fn try_checkboxes(issue: &ExistingGithubIssue) -> Result<Progress> {
                     re::SEE_ALSO_ISSUE1.captures(issue_url),
                     re::SEE_ALSO_ISSUE2.captures(issue_url),
                 ) {
-                    (Some(c), _) => c,
-                    (None, Some(c)) => c,
+                    (Some(c), _) | (_, Some(c)) => c,
                     (None, None) => {
                         spanned::bail_here!("invalid issue URL `{issue_url}`");
                     }

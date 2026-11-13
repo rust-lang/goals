@@ -84,7 +84,7 @@ struct TomlGoalsConfig {
 
 /// Parsed and processed goals configuration ready for use
 /// This is the public interface that components should use
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct GoalsConfig {
     /// Static link definitions (name -> URL)
     pub links: HashMap<String, String>,
@@ -117,8 +117,8 @@ impl GoalsConfig {
             .linkifiers
             .into_iter()
             .map(|(pattern, url_template)| {
-                let regex = Regex::new(&format!(r"\[{}\]", pattern))
-                    .context(format!("Invalid linkifier pattern: {}", pattern))?;
+                let regex = Regex::new(&format!(r"\[{pattern}\]"))
+                    .context(format!("Invalid linkifier pattern: {pattern}"))?;
                 Ok((regex, url_template))
             })
             .collect::<anyhow::Result<Vec<_>>>()?;
@@ -129,16 +129,6 @@ impl GoalsConfig {
             users: config.users,
             ignore_users: config.ignore_users,
         })
-    }
-
-    /// Create empty/default configuration
-    pub fn default() -> Self {
-        Self {
-            links: HashMap::new(),
-            linkifiers: Vec::new(),
-            users: HashMap::new(),
-            ignore_users: Vec::new(),
-        }
     }
 }
 

@@ -26,7 +26,7 @@ pub mod text_processing {
         let mut filtered_lines = Vec::new();
         let mut in_note_section = false;
 
-        for line in lines.iter() {
+        for line in &lines {
             if line.trim().starts_with("> **NOTE:**") {
                 in_note_section = true;
                 continue;
@@ -83,15 +83,14 @@ pub mod text_processing {
         };
 
         let new_section_content = format!(
-            "# ⏳ {} goal process\n\n\
-             - [Overview](./{}/README.md)\n\
-             - [Proposed goals](./{}/goals.md)\n\
-             - [Goals not accepted](./{}/not_accepted.md)\n",
-            capitalized_timeframe, lowercase_timeframe, lowercase_timeframe, lowercase_timeframe
+            "# ⏳ {capitalized_timeframe} goal process\n\n\
+             - [Overview](./{lowercase_timeframe}/README.md)\n\
+             - [Proposed goals](./{lowercase_timeframe}/goals.md)\n\
+             - [Goals not accepted](./{lowercase_timeframe}/not_accepted.md)\n"
         );
 
         // Check if the timeframe is already in the SUMMARY.md
-        let section_header = format!("# ⏳ {} goal process", capitalized_timeframe);
+        let section_header = format!("# ⏳ {capitalized_timeframe} goal process");
 
         if content.contains(&section_header) {
             // The section exists, but it might have placeholder content
@@ -110,8 +109,7 @@ pub mod text_processing {
                     // Find the start of the next section header (if any)
                     let next_section_start = content[content_start..]
                         .find("\n# ")
-                        .map(|pos| content_start + pos)
-                        .unwrap_or(content.len());
+                        .map_or(content.len(), |pos| content_start + pos);
 
                     // Extract the section content
                     let section_content = &content[content_start..next_section_start];
@@ -122,10 +120,9 @@ pub mod text_processing {
                     {
                         // Format the replacement content (just the links, not the section header)
                         let replacement_content = format!(
-                            "\n- [Overview](./{}/README.md)\n\
-                             - [Proposed goals](./{}/goals.md)\n\
-                             - [Goals not accepted](./{}/not_accepted.md)\n",
-                            lowercase_timeframe, lowercase_timeframe, lowercase_timeframe
+                            "\n- [Overview](./{lowercase_timeframe}/README.md)\n\
+                             - [Proposed goals](./{lowercase_timeframe}/goals.md)\n\
+                             - [Goals not accepted](./{lowercase_timeframe}/not_accepted.md)\n"
                         );
 
                         // Replace just the section content, preserving the section header and any following sections
@@ -141,12 +138,12 @@ pub mod text_processing {
         }
 
         // If we get here, the section doesn't exist, so we need to add it
-        let new_section = format!("\n{}", new_section_content);
+        let new_section = format!("\n{new_section_content}");
 
         // Find a good place to insert the new section
         // Look for the last timeframe section or insert after # Summary
         // Match both year-only (2027) and half-year (2026H1) formats
-        let re = Regex::new(&format!(r"# ⏳ {MILESTONE_REGEX} goal process")).unwrap();
+        let re = Regex::new(&format!(r"# ⏳ {} goal process", MILESTONE_REGEX.as_str())).unwrap();
 
         if let Some(last_match) = re.find_iter(content).last() {
             // Find the end of this section (next section or end of file)
@@ -192,12 +189,11 @@ pub mod text_processing {
         let new_section = if timeframe.len() == 4 {
             // Year-only format - no date range
             format!(
-                "\n## Next goal period ({})\n\n\
-                 The next goal period will be {}. \
+                "\n## Next goal period ({capitalized_timeframe})\n\n\
+                 The next goal period will be {capitalized_timeframe}. \
                  We are currently in the process of assembling goals. \
-                 [Click here](./{}/goals.md) to see the current list. \
-                 If you'd like to propose a goal, [instructions can be found here](./how_to/propose_a_goal.md).\n",
-                capitalized_timeframe, capitalized_timeframe, lowercase_timeframe
+                 [Click here](./{lowercase_timeframe}/goals.md) to see the current list. \
+                 If you'd like to propose a goal, [instructions can be found here](./how_to/propose_a_goal.md).\n"
             )
         } else {
             // Half-year format - include date range
@@ -208,12 +204,11 @@ pub mod text_processing {
                 ("July", "December")
             };
             format!(
-                "\n## Next goal period ({})\n\n\
-                 The next goal period will be {}, running from the start of {} to the end of {}. \
+                "\n## Next goal period ({capitalized_timeframe})\n\n\
+                 The next goal period will be {capitalized_timeframe}, running from the start of {start_month} to the end of {end_month}. \
                  We are currently in the process of assembling goals. \
-                 [Click here](./{}/goals.md) to see the current list. \
-                 If you'd like to propose a goal, [instructions can be found here](./how_to/propose_a_goal.md).\n",
-                capitalized_timeframe, capitalized_timeframe, start_month, end_month, lowercase_timeframe
+                 [Click here](./{lowercase_timeframe}/goals.md) to see the current list. \
+                 If you'd like to propose a goal, [instructions can be found here](./how_to/propose_a_goal.md).\n"
             )
         };
 
@@ -358,12 +353,9 @@ pub fn create_cfp(timeframe: &str, force: bool, dry_run: bool) -> Result<()> {
     // Update main README.md with the new timeframe section
     update_main_readme(timeframe, &lowercase_timeframe, dry_run)?;
 
-    println!("\nCFP setup for {} completed successfully!", timeframe);
+    println!("\nCFP setup for {timeframe} completed successfully!");
     println!("\nNext steps:");
-    println!(
-        "1. Review and customize the generated files in src/{}/",
-        lowercase_timeframe
-    );
+    println!("1. Review and customize the generated files in src/{lowercase_timeframe}/");
     println!(
         "2. Prepare a Call For Proposals blog post based on the sample in src/admin/samples/cfp.md"
     );
@@ -374,8 +366,7 @@ pub fn create_cfp(timeframe: &str, force: bool, dry_run: bool) -> Result<()> {
 
 /// Validates that the timeframe is in the correct format (e.g., "2025h1" or "2025H1" or '2026')
 fn validate_timeframe(timeframe: &str) -> Result<()> {
-    let re = Regex::new(MILESTONE_REGEX).unwrap();
-    if !re.is_match(timeframe) {
+    if !MILESTONE_REGEX.is_match(timeframe) {
         return Err(Error::str("Invalid timeframe format. Expected format: YYYYhN or YYYYHN (e.g., 2025h1, 2025H1, 2025h2, or 2025H2"));
     }
     Ok(())
@@ -408,15 +399,15 @@ fn copy_and_process_template(
     );
 
     // Write to destination file
-    if !dry_run {
+    if dry_run {
+        println!("Would create file: {}", dest_path.display());
+    } else {
         File::create(dest_path)
             .with_path_context(dest_path, "Failed to create file")?
             .write_all(processed_content.as_bytes())
             .with_path_context(dest_path, "Failed to write to file")?;
 
         println!("Created file: {}", dest_path.display());
-    } else {
-        println!("Would create file: {}", dest_path.display());
     }
     Ok(())
 }
@@ -432,27 +423,25 @@ fn update_summary_md(timeframe: &str, lowercase_timeframe: &str, dry_run: bool) 
 
     // Check if the content was modified
     if new_content == content {
-        if !dry_run {
+        if dry_run {
             println!(
-                "SUMMARY.md already contains a non-placeholder entry for {}. Skipping update.",
-                timeframe
+                "Would skip updating SUMMARY.md (already contains a non-placeholder entry for {timeframe})"
             );
         } else {
             println!(
-                "Would skip updating SUMMARY.md (already contains a non-placeholder entry for {})",
-                timeframe
+                "SUMMARY.md already contains a non-placeholder entry for {timeframe}. Skipping update."
             );
         }
         return Ok(());
     }
 
     // Write the updated content back to SUMMARY.md
-    if !dry_run {
+    if dry_run {
+        println!("Would update SUMMARY.md with {timeframe} section");
+    } else {
         fs::write(summary_path, new_content).with_str_context("Failed to write to SUMMARY.md")?;
 
-        println!("Updated SUMMARY.md with {} section", timeframe);
-    } else {
-        println!("Would update SUMMARY.md with {} section", timeframe);
+        println!("Updated SUMMARY.md with {timeframe} section");
     }
 
     Ok(())
@@ -469,15 +458,13 @@ fn update_main_readme(timeframe: &str, lowercase_timeframe: &str, dry_run: bool)
 
     // Check if the content was modified
     if new_content == content {
-        if !dry_run {
+        if dry_run {
             println!(
-                "README.md already contains up-to-date information for {}. Skipping update.",
-                timeframe
+                "Would skip updating README.md (already contains up-to-date information for {timeframe})"
             );
         } else {
             println!(
-                "Would skip updating README.md (already contains up-to-date information for {})",
-                timeframe
+                "README.md already contains up-to-date information for {timeframe}. Skipping update."
             );
         }
         return Ok(());
@@ -492,42 +479,40 @@ fn update_main_readme(timeframe: &str, lowercase_timeframe: &str, dry_run: bool)
     let specific_re = Regex::new(&specific_timeframe_pattern).unwrap();
 
     if specific_re.is_match(&content) && specific_re.is_match(&new_content) {
-        if !dry_run {
+        if dry_run {
             println!(
-                "Updated existing 'Next goal period ({})' section in src/README.md",
-                capitalized_timeframe
+                "Would update existing 'Next goal period ({capitalized_timeframe})' section in src/README.md"
             );
         } else {
             println!(
-                "Would update existing 'Next goal period ({})' section in src/README.md",
-                capitalized_timeframe
+                "Updated existing 'Next goal period ({capitalized_timeframe})' section in src/README.md"
             );
         }
     } else if Regex::new(r"## Next goal period(?:\s*\([^\)]*\))")
         .unwrap()
         .is_match(&content)
     {
-        if !dry_run {
-            println!("Updated existing 'Next goal period' section in src/README.md");
-        } else {
+        if dry_run {
             println!("Would update existing 'Next goal period' section in src/README.md");
+        } else {
+            println!("Updated existing 'Next goal period' section in src/README.md");
         }
     } else if Regex::new(r"## Current goal period(?:\s*\([^\)]*\))")
         .unwrap()
         .is_match(&content)
     {
-        if !dry_run {
+        if dry_run {
+            println!("Would add new 'Next goal period' section after 'Current goal period' in src/README.md");
+        } else {
             println!(
                 "Added new 'Next goal period' section after 'Current goal period' in src/README.md"
             );
-        } else {
-            println!("Would add new 'Next goal period' section after 'Current goal period' in src/README.md");
         }
     } else {
-        if !dry_run {
-            println!("Added new 'Next goal period' section to src/README.md");
-        } else {
+        if dry_run {
             println!("Would add new 'Next goal period' section to src/README.md");
+        } else {
+            println!("Added new 'Next goal period' section to src/README.md");
         }
     }
 
