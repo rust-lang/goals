@@ -20,7 +20,7 @@ Cargo's stable source replacement functionality is under-documented and powerful
 
 ### The status quo
 
-Today, downstream registries can serve crate releases that upstream never published as part of [source replacement](https://doc.rust-lang.org/cargo/reference/source-replacement.html). By "downstream registry" we mean any source Cargo uses in place of an upstream registry (usually crates.io) through source replacement. Most are Cargo registries, such as a private mirror or a caching proxy, but local directory sources such as `cargo vendor` output count too. The Cargo team canonically considers this a "dependency
+Today, downstream registries can serve crate releases that upstream never published as part of [source replacement](https://doc.rust-lang.org/cargo/reference/source-replacement.html). By "downstream registry" we mean any source Cargo uses in place of an upstream registry (usually crates.io). Most are Cargo registries, such as a private mirror or a caching proxy, but local directory sources such as `cargo vendor` output count too. The Cargo team canonically considers this a "dependency
 confusion attack" and considers any mirror that does it as badly behaving.
 But, in practice, many private downstream registries do this anyway and will continue to. Treating this as "off the beaten path" is sweeping legitimate use cases under the rug.
 A frequent reason is to apply security fixes. We expect such usage to grow as the number of discovered vulnerabilities grows. Based on trends in other language ecosystems, we also expect to see new public registries form that vend security releases for the
