@@ -23,8 +23,7 @@ Cargo's stable source replacement functionality is under-documented and powerful
 Today, downstream registries can serve crate releases that upstream never published as part of [source replacement](https://doc.rust-lang.org/cargo/reference/source-replacement.html). By "downstream registry" we mean any source Cargo uses in place of an upstream registry (usually crates.io). Most are Cargo registries, such as a private mirror or a caching proxy, but local directory sources such as `cargo vendor` output count too. The Cargo team canonically considers this a "dependency
 confusion attack" and considers any mirror that does it as badly behaving.
 But, in practice, many private downstream registries do this anyway and will continue to. Treating this as "off the beaten path" is sweeping legitimate use cases under the rug.
-A frequent reason is to apply security fixes. We expect such usage to grow as the number of discovered vulnerabilities grows. Based on trends in other language ecosystems, we also expect to see new public registries form that vend security releases for the
-world to consume.
+A frequent reason is to apply security fixes.
 Users ought to be attempting to upstream fixes, and largely do, but maintainer capacity is limited and not everybody agrees with what is fix-worthy.
 For instance, registries might want to backport security fixes for versions that maintainers have no interest in supporting.
 
@@ -38,8 +37,8 @@ We call this type of release a "registry release", where a registry serves a rel
 Prior art falls into three buckets: downstream publication of fixes, provenance, and mirror auditing.
 
 - **Maven Central CARE** ([Sonatype RFC, 2026](https://www.sonatype.com/blog/request-for-comments-care-and-maven-central)): Maven Central has proposed central, registry-level security fixes. Under this model, pre-approved remediation actors publish emergency fixes into the existing coordinate under a reserved version form. This leaves the maintainer's next version untouched. The release author goes in release metadata rather than the version string. It involves no resolver changes.
-- **Linux distributions**: Some distributions, such as Fedora, Ubuntu, and Debian, vendor crates into a local, offline source replacement directory and patch them under the upstream version number, for example to remove non-Linux dependencies. Their own versioning and signed advisories live at the package level (the RPM or deb release), not in the crate version Cargo sees. In Ubuntu and Debian the vendored crates also ship as installable `librust-*-dev` packages, so they reach end users in source form. This is a mature, accepted model for divergence from upstream, but it is declared outside of Cargo. Other distributions may differ and serve more conventionally modeled registries with patched releases. We will consult with Linux distribution packagers to understand whether this goal's new features can make their lives easier.
-- **Sigstore / transparency logs**: [sigstore.dev](https://www.sigstore.dev/), [Rekor](https://docs.sigstore.dev/logging/overview/). This is a public, append-only Merkle tree transparency log, and a model for the feed of registry releases: a registry cannot quietly add a release and later deny it. This is related but distinct from the registry signing / TUF work, we can look at how these models might relate.
+- **Linux distributions**: Some distributions, such as Fedora, Ubuntu, and Debian, vendor crates into a local, offline source replacement directory and patch them under the upstream version number, for example to remove non-Linux dependencies. Their own versioning and signed advisories live at the package level (the RPM or deb release), not in the crate version Cargo sees. In Ubuntu and Debian the vendored crates also ship as installable `librust-*-dev` packages, so they reach end users in source form. This is a mature, accepted model for divergence from upstream, but it is declared outside of Cargo. We will consult with Linux distribution packagers to understand whether this goal's new features can make their lives easier.
+- **Sigstore / transparency logs**: [sigstore.dev](https://www.sigstore.dev/), [Rekor](https://docs.sigstore.dev/logging/overview/). This is a public, append-only Merkle tree transparency log, and a model for the feed of registry releases: a registry cannot quietly add a release and later deny it. This is related but distinct from the registry signing / TUF work.
 - **npm provenance**: [docs](https://docs.npmjs.com/generating-provenance-statements), [launch post](https://github.blog/security/supply-chain-security/introducing-npm-package-provenance/), [npm/provenance spec](https://github.com/npm/provenance). This is a system that uses Sigstore and is logged in Rekor to validate that a release came from a given source repo and committed via a specific CI workflow, with various attestations. It is interacted with via `npm publish --provenance` and `npm audit signatures` but not stored inline in the index.
 - **PyPI attestations / PEP 740**: [PEP 740](https://peps.python.org/pep-0740/), [PyPI announcement](https://blog.pypi.org/posts/2024-11-14-pypi-now-supports-digital-attestations/), [index-hosted attestations spec](https://packaging.python.org/en/latest/specifications/index-hosted-attestations/). This is a similar idea to npm but hosted in the index itself, and the Simple API serves them. Probably closer to what we want for declaring a release's origin in the index itself.
 - **Go checksum database**: [database](https://sum.golang.org/), [launch post](https://blog.golang.org/module-mirror-launch), [Trillian](https://github.com/google/trillian). This is along the lines of the audit tooling we are interested in: Go makes it easy to audit a mirror to see if its bytes diverge from upstream. Though, it doesn't have any concept of declared/intended divergence, so corporate users end up turning `GOSUMDB` off. There also was [a recent bypass](https://freenode.net/article/gos-checksum-database-meets-its-trust-assumptions).
@@ -138,7 +137,7 @@ more control.
 
 ### Is a mirror that serves only some of crates.io diverging?
 
-No. A mirror that serves a subset of upstream's crates and versions is a valid mirror. Any change to a crate version it serves, including index metadata or bytes, is divergence. Companies often vet a subset, some mirrors carry only the top N most-downloaded crates, and large mirrors may one day carry only popular crates and defer the rest to upstream. The spec should let a mirror declare "subset of upstream" separately from "publishes registry releases", and the audit tooling should treat missing crates differently from changed or added ones.
+No. A mirror that serves a subset of upstream's crates and versions is a valid mirror. Any change to a crate version it serves, including index metadata or bytes, is divergence. Companies often vet a subset, and some mirrors carry only the top N most-downloaded crates. The spec should let a mirror declare "subset of upstream" separately from "publishes registry releases", and the audit tooling should treat missing crates differently from changed or added ones.
 
 ### Why not just `cargo update --precise` ([RFC 3493](https://rust-lang.github.io/rfcs/3493-precise-pre-release-cargo-update.html))?
 
@@ -161,8 +160,7 @@ consumer at consumption time. A registry may still publish a fix and yank the ol
 ### Who decides what releases a registry publishes?
 
 A registry. From this goal's perspective, all users will be downstream of the Rust Project. Some expected users are: corporate security
-teams running internal mirrors; a pre-approved remediation actor list for a public, shared mirror; a security team that produces fixes
-that can be consumed by many mirrors.
+teams running internal mirrors; caching proxies such as Haven; Linux packagers.
 
 ### Does crates.io have to do anything?
 
