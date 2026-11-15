@@ -13,7 +13,7 @@
 | Highlight            | Const and reflection               |
 | Zulip channel        | https://rust-lang.zulipchat.com/#narrow/channel/572285-goals.2Freflection |
 | [compiler] champion  | @oli-obk                           |
-| [lang] champion      | @scottmcm                          |
+| [lang] champion      | @nikomatsakis                          |
 | [libs] champion      | @joshtriplett                      |
 
 
