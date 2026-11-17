@@ -11,7 +11,7 @@
 
 ## Summary
 
-Cargo's stable source replacement functionality is under-documented and powerful. It is being used in many ways, including some not considered when the feature was last documented. We will inventory how it is being used and abused, and update the documentation to describe what tangible risks to look out for under "use at your own risk". Many companies rely on source replacement to emergency-replace open source code when a vulnerability is found in it. Given that this is already technically possible, we will propose an RFC for a recommended way to do so, with Cargo support, that can be distinguished from a malicious dependency confusion attack.
+Cargo's stable source replacement functionality is under-documented and powerful. It is being used in many ways, including some not considered when the feature was last documented. We will inventory how it is being used and abused, and update the documentation to describe what tangible risks to look out for under "use at your own risk". Many companies rely on source replacement to emergency-replace open source code when a vulnerability is found in it. Given that this is already technically possible, we will propose a RFC, followed by stabilization, for a recommended way to do so, with Cargo support, that can be distinguished from a malicious dependency confusion attack. We will also build supporting tooling such as for auditing registries for undeclared divergence.
 
 
 ## Motivation
