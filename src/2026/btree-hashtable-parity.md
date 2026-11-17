@@ -36,12 +36,13 @@ We effectively need to give the `BTree` the same treatment we gave `HashMap`, wh
 
 ### Work items over the next year
 
-| Task                                               | Owner(s) | Notes                         |
-| -------------------------------------------------- | -------- | ----------------------------- |
-| Move `BTreeMap`/`Set` implementations to new crate | None yet |                               |
-| Raw `BTree` implementation/API                     | None yet |                               |
-| Custom allocator support                           | None yet | Currently exists, but brittle |
-| Unsafe code auditing/refactoring                   | None yet |                               |
+| Task                                               | Owner(s)               | Notes                         |
+| -------------------------------------------------- | ---------------------- | ----------------------------- |
+| Move `BTreeMap`/`Set` implementations to new crate | @clarfonthey, @RustyYato |                               |
+| Raw `BTree` implementation/API                     | @RustyYato              |                               |
+| Custom allocator support                           | @RustyYato              | Currently exists, but brittle |
+| Unsafe code auditing/refactoring                   | @RustyYato              |                               |
+| Reviewing changes                                  | @clarfonthey            |                               |
 
 ## Team asks
 
@@ -51,20 +52,11 @@ We effectively need to give the `BTree` the same treatment we gave `HashMap`, wh
 | [infra]     | Small         | New repository and CI setup        |
 | [bootstrap] | Small         | Subtree for new crate              |
 
-## Help wanted
-
-Right now, it's likely that @clarfonthey will be prioritizing work on `hashbrown` over this implementation, and so, someone else would need to own the implementation. Since the implementation involves a lot of complex memory management and unsafe code, we would be looking for an expert-level Rust developer with both comfort working with unsafe code *and* the experience to ensure that it is sound and correct.
-
-Time estimates are currently vague due to the amount of work that would be needed, and the overlap with the `hashbrown` goal, but it would definitely be on the order of months, not weeks.
-
-| Task           | Experience level              | Time investment |
-| -------------- | ----------------------------- | --------------- |
-| Implementation | Expert (unsafe B-tree code)   | ??? months      |
-
 ## Funding
 
-Minimum funding would enable at least one developer to fully devote themselves to implementing these changes, which otherwise will be put off until work on `hashbrown` is complete before commencing.
+Funding would help devote more time to implementing these changes and reviewing them. Right now, priority is for the [`hashbrown` refactor goal](./hashbrown-refactor.md), otherwise @clarfonthey (reviewer) and @RustyYato would be doing this on a volunteer/best-effort basis.
 
 | Purpose        | Cost    | Funded | Sponsor(s) |
 | -------------- | ------- | ------ | ---------- |
 | Implementation | Unknown | No     |            |
+| Reviewer       | Unknown | No     |            |
