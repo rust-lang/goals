@@ -1,4 +1,4 @@
-# min-type-reflection
+# min type reflection
 
 | Metadata             |                                    |
 |:---------------------|:-----------------------------------|
@@ -11,7 +11,7 @@
 | Tracking issue       | [rust-lang/goals#406]              |
 | Other Tracking issue | [rust-lang/rust#142577]            |
 | Highlight            | Const and reflection               |
-| Zulip channel        | https://rust-lang.zulipchat.com/#narrow/channel/572285-goals.2Freflection |
+| Zulip channel        | [#goals/reflection](https://rust-lang.zulipchat.com/#narrow/channel/572285-goals.2Freflection) |
 | [compiler] champion  | @oli-obk                           |
 | [lang] champion      | @nikomatsakis                          |
 | [libs] champion      | @joshtriplett                      |
@@ -97,7 +97,7 @@ Once we have reflection providing a stable interface to the compiler, we can ext
 
 | Purpose | Cost | Funded | Sponsor(s) |
 |---------|------|--------|------------|
-| Contributor | Ask | No | - |
+| Contributor | Ask | No | |
 
 ## Frequently asked questions
 
