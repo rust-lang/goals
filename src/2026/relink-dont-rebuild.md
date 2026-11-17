@@ -15,9 +15,9 @@
 
 ## Summary
 
-Implement the MCP [Relink Don't Rebuild](https://github.com/rust-lang/compiler-team/issues/790), which can give large speedups on [certain edits](https://github.com/rust-lang/cargo/issues/14604#issuecomment-4371471225) when rebuilding large projects with many crates.
+Implement the MCP [Relink Don't Rebuild](https://github.com/rust-lang/compiler-team/issues/790), which can give [massive speedups](#expected-speedup) on [certain edits](https://github.com/rust-lang/cargo/issues/14604#issuecomment-4371471225) when rebuilding large projects with many crates.
 
-There is an existing implementation (#156940) waiting for review. The first goal is to get that through the review process, integrate with cargo, and get it to nightly users.
+There is an [existing implementation](https://github.com/rust-lang/rust/pull/156940), waiting for review. The first goal is to get that through the review process, integrate with cargo, and get it to nightly users. Next is to start work required for stabilization, largely optimization.
 
 ## Motivation
 
@@ -112,3 +112,43 @@ In agentic workflows, different agents typically work in separate Git worktrees.
 An alternative is to share a single build directory between agents. However, Cargo locks the build directory during compilation, effectively serializing build operations. The time each compilation takes therefore limits how many agents can efficiently share the same build directory without spending significant time waiting for the lock. This becomes particularly problematic in large projects, where incremental rebuilds can still take considerable time.
 
 **RDR can significantly alleviate this bottleneck.** When applicable (currently [estimated at 50–90% of rebuilds](https://github.com/rust-lang/cargo/issues/14604#issuecomment-4371471225), potentially even more when agents are instructed to write RDR-compatible code), it can make rebuilds an order of magnitude faster. This means less time spent holding the build-directory lock and potentially an order of magnitude more agents sharing the same build directory efficiently.
+
+<a id="expected-speedup"></a>
+### Expected speedup when an edit does not change the public api of a leaf crate
+
+Setup: 16 cores and 32 threads, using the wild linker
+
+Edit used: add a newline in a leaf crate (`zed_actions` for Zed, `codex-utils-absolute-path` for Codex).
+
+#### Zed (edit: newline in `zed_actions`)
+
+| Scenario | Current | RDR (estimated) | Speedup |
+|----------|--------:|----------------:|--------:|
+| Check    |      8s | 1.2s (0.5 + 0.7) |   6.7x |
+| Build    |     20s | 2.8s (0.5 + 1.0 + 1.3) |   7.1x |
+
+#### Codex (edit: newline in `codex-utils-absolute-path`)
+
+| Scenario | Current | RDR (estimated) | Speedup |
+|----------|--------:|----------------:|--------:|
+| Check    |     26s | 0.75s (0.45 + 0.3) |  34.7x |
+| Build    |     42s | 1.55s (0.45 + 0.3 + 0.8) |  27.1x |
+
+#### Estimated RDR time
+
+RDR numbers are calculated, not measured:
+
+- RDR check = unchanged check + leaf crate only check
+- RDR build = unchanged rebuild + leaf crate only build + link
+- Speedup = Current / RDR
+
+#### Raw inputs
+
+| Measurement                | Zed   | Codex |
+|----------------------------|------:|------:|
+| Check (current)            | 8s    | 26s   |
+| Build (current)            | 20s   | 42s   |
+| Link (current)             | 1.3s  | 0.8s  |
+| Unchanged rebuild          | 0.5s  | 0.45s |
+| Leaf crate build only      | 1s    | 0.3s  |
+| Leaf crate check only      | 0.7s  | 0.3s  |
