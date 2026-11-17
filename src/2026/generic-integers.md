@@ -49,8 +49,8 @@ At least initially, the goal will *not* be to implement the full RFC and some of
 
 ### Work items over the next year
 
-| Task                                  | Owner(s) | Notes |
-| ------------------------------------- | -------- | ----- |
+| Task                                  | Owner(s)     | Notes |
+| ------------------------------------- | ------------ | ----- |
 | Implementation                        | @clarfonthey |       |
 | Incorporate feedback/changes into RFC | @clarfonthey |       |
 
