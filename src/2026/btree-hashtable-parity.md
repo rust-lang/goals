@@ -38,11 +38,11 @@ We effectively need to give the `BTree` the same treatment we gave `HashMap`, wh
 
 | Task                                               | Owner(s)               | Notes                         |
 | -------------------------------------------------- | ---------------------- | ----------------------------- |
-| Move `BTreeMap`/`Set` implementations to new crate | clarfonthey, RustyYato |                               |
-| Raw `BTree` implementation/API                     | RustyYato              |                               |
-| Custom allocator support                           | RustyYato              | Currently exists, but brittle |
-| Unsafe code auditing/refactoring                   | RustyYato              |                               |
-| Reviewing changes                                  | clarfonthey            |                               |
+| Move `BTreeMap`/`Set` implementations to new crate | @clarfonthey, @RustyYato |                               |
+| Raw `BTree` implementation/API                     | @RustyYato              |                               |
+| Custom allocator support                           | @RustyYato              | Currently exists, but brittle |
+| Unsafe code auditing/refactoring                   | @RustyYato              |                               |
+| Reviewing changes                                  | @clarfonthey            |                               |
 
 ## Team asks
 
@@ -54,7 +54,7 @@ We effectively need to give the `BTree` the same treatment we gave `HashMap`, wh
 
 ## Funding
 
-Funding would help devote more time to implementing these changes and reviewing them. Right now, priority is for the [`hashbrown` refactor goal](./hashbrown-refactor.md) otherwise for clarfonthey (reviewer) and RustyYato would be doing this on a volunteer/best-effort basis.
+Funding would help devote more time to implementing these changes and reviewing them. Right now, priority is for the [`hashbrown` refactor goal](./hashbrown-refactor.md), otherwise @clarfonthey (reviewer) and @RustyYato would be doing this on a volunteer/best-effort basis.
 
 | Purpose        | Cost    | Funded | Sponsor(s) |
 | -------------- | ------- | ------ | ---------- |
