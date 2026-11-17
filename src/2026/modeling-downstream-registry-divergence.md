@@ -8,6 +8,7 @@
 | Status | Proposed |
 | Zulip channel | N/A (to be created on request) |
 | [cargo] champion | @weihanglo |
+| [crates.io] champion | TBD |
 
 ## Summary
 
@@ -113,7 +114,7 @@ Two phases, roughly 3-6 months.
 | Team | Support level | Notes |
 | :-- | :-- | :-- |
 | [cargo] | Large | Review: Resolver and lockfile semantics; source-replacement trust model and docs; RFCs and implementation |
-| [crates-io] | Small | Steward the registry index spec changes so alternate registries interoperate; crates.io not expected to publish registry releases itself |
+| [crates-io] | Medium | Advise on approach and steward any registry index spec changes so alternate registries interoperate; crates.io not expected to publish registry releases itself |
 | [social-media] | Small | Advice + edits for blog post |
 
 We also expect a Small review from the proposed ecosystem security team [once it exists](https://github.com/rust-lang/leadership-council/issues/352).
