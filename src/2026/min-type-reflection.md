@@ -165,9 +165,10 @@ Reflection is orthogonal to derives as they solve similar problems from differen
 Derives can generate the code ahead of time, but don't have type information to do so, while reflection doesn't generate code, but instead allows you to build an interpreter for the minimal subset of rust metadata that you need, which often optimizes down to the ideal target machine code. It is also possible to special case the logic for individual types or types implementing specific traits, in case manual hot path optimizations are desirable.
 
 ### Future ergonomic API
-The entry point to reflection is methods on TypeId. For various reasons, we're making the API fine grained and targeted. We'll end up with a wide and shallow API with many methods on TypeId. This is not nice to use directly, however we intend for end-users to use an ergonomic wrapper crate. We'll ensure there is at least one of those. We're doing this for the usual reasons (1).
 
-At some point, potentially many years in the future (2), the ecosystem may coalesce on a single nice ergonomic wrapper for all use cases. If we end up stabilizing many reflection methods on TypeId any future API using TypeId as the entry point will have it's methods drowned out by the existing stable ones. Instead we can keep TypeId "clean" at the cost of worse ergonomics when not using a wrapper crate now.
+The entry point to reflection is methods on `TypeId`. For various reasons, we're making the API fine grained and targeted. We'll end up with a wide and shallow API with many methods on `TypeId`. This is not nice to use directly, however we intend for end-users to use an ergonomic wrapper crate. We'll ensure there is at least one of those. We're doing this for the usual reasons (1).
+
+At some point, potentially many years in the future (2), the ecosystem may coalesce on a single nice ergonomic wrapper for all use cases. If we end up stabilizing many reflection methods on `TypeId` any future API using `TypeId` as the entry point will have it's methods drowned out by the existing stable ones. Instead we can keep `TypeId` "clean" at the cost of worse ergonomics when not using a wrapper crate now.
 
 (1): faster iteration, more accessible to people outside the compiler, less code in the compiler, avoid stabilizing a nice API that turns out to be bad later etc etc.
 (2): we may even have reflection synthesize new code at some point. That could very well change what an ergonomic API looks like.
