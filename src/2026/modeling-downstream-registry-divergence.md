@@ -4,12 +4,10 @@
 | :-- | :-- |
 | Contact | @jlizen |
 | Short title | Downstream registry divergence |
-| What and why | Downstream registries already serve releases upstream never published, mostly for security fixes; document that reality and give it a declared, auditable, resolvable shape so it is distinguishable from a dependency confusion attack |
+| What and why | Distinguish intended source replacement in downstream registries from supply chain attacks |
 | Status | Proposed |
 | Zulip channel | N/A (to be created on request) |
 | [cargo] champion | @weihanglo |
-
-Ecosystem security champion: TBD. (Team is still being chartered, [ref](https://github.com/rust-lang/leadership-council/issues/352).)
 
 ## Summary
 
@@ -20,7 +18,9 @@ Cargo's stable source replacement functionality is under-documented and powerful
 
 ### The status quo
 
-Today, downstream registries can serve crate releases that upstream never published as part of [source replacement](https://doc.rust-lang.org/cargo/reference/source-replacement.html). By "downstream registry" we mean any source Cargo uses in place of an upstream registry (usually crates.io). Most are Cargo registries, such as a private mirror or a caching proxy, but local directory sources such as `cargo vendor` output count too. The Cargo team canonically considers this a "dependency
+Today, downstream registries can serve crate releases that upstream never published as part of [source replacement](https://doc.rust-lang.org/cargo/reference/source-replacement.html). By "downstream registry" we mean any source Cargo uses in place of an upstream registry (usually crates.io). Most are Cargo registries, such as a private mirror or a caching proxy, but local directory sources such as `cargo vendor` output count too.
+
+The Cargo team canonically considers source replacement a "dependency
 confusion attack" and considers any mirror that does it as badly behaving.
 But, in practice, many private downstream registries do this anyway and will continue to. Treating this as "off the beaten path" is sweeping legitimate use cases under the rug.
 A frequent reason is to apply security fixes.
@@ -116,7 +116,7 @@ Two phases, roughly 3-6 months.
 | [crates-io] | Small | Steward the registry index spec changes so alternate registries interoperate; crates.io not expected to publish registry releases itself |
 | [social-media] | Small | Advice + edits for blog post |
 
-We also expect a Small review from the proposed ecosystem security team once it exists.
+We also expect a Small review from the proposed ecosystem security team [once it exists](https://github.com/rust-lang/leadership-council/issues/352).
 
 Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions (Fedora, Canonical/Ubuntu, Debian), Alpha-Omega, Akrites, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI), corporate-managed downstream package vendors (Google, Meta?, etc).
 
