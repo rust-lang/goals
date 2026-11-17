@@ -51,8 +51,8 @@ At least initially, the goal will *not* be to implement the full RFC and some of
 
 | Task                                  | Owner(s) | Notes |
 | ------------------------------------- | -------- | ----- |
-| Implementation                        | None yet |       |
-| Incorporate feedback/changes into RFC | None yet |       |
+| Implementation                        | @clarfonthey |       |
+| Incorporate feedback/changes into RFC | @clarfonthey |       |
 
 ## Team asks
 
