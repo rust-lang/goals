@@ -124,7 +124,7 @@ Two phases, roughly 3-6 months.
 
 We also expect a Small review from the proposed ecosystem security team [once it exists](https://github.com/rust-lang/leadership-council/issues/352).
 
-Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions (Fedora, Canonical/Ubuntu, Debian), Alpha-Omega, Akrites, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI), corporate-managed downstream package vendors (Google, Meta?, etc).
+Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions (Fedora, Canonical/Ubuntu, Debian), Git forge (GitLab, GitHub), ecosyste.ms, Alpha-Omega, Akrites, OpenSSF Security Software Repos working group, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI), corporate-managed downstream package vendors (Google, Meta, etc).
 
 ## Help wanted
 
