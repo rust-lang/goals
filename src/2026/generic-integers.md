@@ -3,11 +3,13 @@
 | Metadata            |                                                             |
 | ------------------- | ----------------------------------------------------------- |
 | Contact             | @clarfonthey                                                |
-| Status              | Proposed                                                    |
+| Status              | Accepted                                                    |
 | What and why        | Allow writing code that's generic over the size of integers |
 | [compiler] champion | @beetrees                                                   |
 | [lang] champion     | @scottmcm                                                   |
 | [types] champion    | @oli-obk                                                    |
+| Tracking issue      | [rust-lang/goals#871]                                       |
+
 
 ## Summary
 
