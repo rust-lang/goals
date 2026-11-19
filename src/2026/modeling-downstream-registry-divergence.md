@@ -12,8 +12,7 @@
 
 ## Summary
 
-Cargo's stable source replacement functionality is under-documented and powerful. It is being used in many ways, including some not considered when the feature was last documented. We will inventory how it is being used and abused, and update the documentation to describe what tangible risks to look out for under "use at your own risk". Many companies rely on source replacement to emergency-replace open source code when a vulnerability is found in it. Given that this is already technically possible, we will propose a RFC, followed by stabilization, for a recommended way to do so, with Cargo support, that can be distinguished from a malicious dependency confusion attack. We will also build supporting tooling such as for auditing registries for undeclared divergence.
-
+Cargo's stable source replacement functionality is under-documented and powerful. It is being used in many ways, including some not considered when the feature was last documented. We will inventory how it is being used and abused, and update the documentation to describe what tangible risks to look out for under "use at your own risk". Many companies rely on source replacement to emergency-replace open source code when a vulnerability is found in it. Given that this is already technically possible, we will propose a RFC, for a recommended way to do so, with Cargo support, that can be distinguished from a malicious dependency confusion attack. Outside of Cargo and the Rust Project, we will experiment with supporting tooling such as for auditing registries for undeclared divergence, and sample implementation of a self-hosted dowstream registry that serves registry releases.
 
 ## Motivation
 
@@ -63,20 +62,23 @@ registry spec, via RFC. We'll implement the RFC's approach as experimental flags
 With experimental support in place in the Rust toolchain, we will experiment with supporting tooling outside of Cargo: audit tooling to track whether a downstream registry declares all divergence from upstream, tools for packaging patches for offline installs / `cargo-auditable`, integrations with metadata consumers like [ecosyste.ms](ecosyste.ms), and explorations of reachability analysis 
 for CVEs that consider modified security releases.
 
+In addition to client-side tooling, we will contribute a sample implementation of a self-hosted downstream registry that serves registry releases, which will live in an ecosyste.ms-managed repository. Using this code, ecosyste.ms will host its own downstreamregistry of crates.io, as an extension of its pre-existing [caching crates.io proxy](https://proxy.ecosyste.ms). To kick the tires on the new registry release support, the ecosyste.ms downstream will be initially backfilled with a range of releases backpatching security-related fixes from historical CVEs.
+
 Out of scope:
 
 - crates.io publishing its own registry releases. This is a policy decision that would require a much deeper discussion, RFC, and its own goal.
 
 ### Work items over the next year
 
-This goal is co-authored by @jlizen and @celinval. @jlizen leads the inventory (survey, requirements, initial docs); the RFC and Cargo implementation are shared.
+This goal is co-authored by @jlizen and @celinval.
 
-Two phases, roughly 3-6 months.
+Three phases, roughly 4-8 months.
 
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
 | Declared registry releases: spec, resolver support, docs | @jlizen, @celinval | |
-| Feed, audit tooling, producer tooling | @jlizen, @CAD97 | |
+| Feed, audit tooling, producer tooling | @CAD97, vladh@ | |
+| Self-hosted downstream registry implementation | @srckln, @andrew, @vladh |
 
 #### Declared registry releases: spec, resolver support, docs
 
@@ -98,13 +100,25 @@ Two phases, roughly 3-6 months.
 
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
-| Design: provenance and how consumers verify registry release = base + diff | @jlizen | |
+| Design: provenance and how consumers verify registry release = base + diff | @CAD97, @vladh | |
 | Tooling to produce a declared registry release from upstream `.crate` + diff | @CAD97 | |
 | Record modified vendored crates `cargo vendor` and `cargo-auditable`, so SBOMs don't report them as the upstream version | @CAD97 |  |
 | Audit tool: diff a registry against its declared upstream, flag undeclared divergence | @vladh | |
 | Improvements to reachability analysis for CVEs with downstream registry releases | @vladh | |
 | Represent registry releases and modified vendored crates with a distinct [PURL](https://github.com/package-url/purl-spec) in SBOM tooling | @vladh | |
 | Blog post: discussion of the producer/consumer tooling, some ways people are using it, how to audit a mirror | @vladh, @CAD97 |  |
+
+#### Self-hosted downstream registry implementation
+| Task | Owner(s) | Notes |
+| :-- | :-- | :-- |
+| Design: self-hosted downstream that serves registry releases | @smrckln | High level, focuses on interfaces + architecture |
+| Design: event feed of registry releases, signing | @andrew | |
+| Application code for self-hosted downstream registry | @smrckln | |
+| Infrastructure code for self-hosted downstream registry | @andrew | |
+| Prepare a series of registry releases to fix historical CVEs on old versions | @vladh | |
+| Launch ecosyste.ms-managed downstream registry serving the historical CVE fixes | @andrew | |
+| Integrate event feed from downstream registry with ecosyste.ms | @andrew | |
+| Blog post: ecosyste.ms-hosted downstream, what we learned along the way, next steps | @andrew, @smrckln | |
 
 
 ## Team asks
