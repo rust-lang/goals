@@ -8,7 +8,7 @@
 | Status | Proposed |
 | Zulip channel | N/A (to be created on request) |
 | [cargo] champion | @weihanglo |
-| [crates-io] champion | TBD |
+| [crates-io] champion | @LawnGnome |
 | Funding contact  | [Software Stewardship Lab](https://stewardshiplab.org/contact/)        |
 
 ## Summary
