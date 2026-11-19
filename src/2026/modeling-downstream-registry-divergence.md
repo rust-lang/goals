@@ -185,8 +185,8 @@ That said, we expect that normative guidance will distinguish between undeclared
 
 ## Funding
 
-Funding will cover vladh@'s contributions on audit tooling, reachability analysis, and preparing registry releases to fix historical CVEs for the ecosyste.ms-hosted downstream registry. Fiscal sponsorship is provided by the [Software Stewardship Lab](https://stewardshiplab.org).
+Funding will cover @vladh's contributions on audit tooling, reachability analysis, and preparing registry releases to fix historical CVEs for the ecosyste.ms-hosted downstream registry. Fiscal sponsorship is provided by the [Software Stewardship Lab](https://stewardshiplab.org).
 
 | Purpose | Cost | Funded | Sponsor(s) |
 | :-- | :-- | :-- | :-- |
-| vladh@'s contributions | $30,000 | No | TBD |
+| @vladh's contributions | $30,000 | No | TBD |
