@@ -57,8 +57,8 @@ Other research:
 
 We will start by documenting how source replacement is used today and what risks come with it.
 
-Then, we will propose a recommended way to add releases via downstream registries, including tooling support in Cargo and/or the Cargo
-registry spec, via RFC. We'll implement the RFC's approach as experimental flags.
+Then, we will propose a recommended way to add releases via downstream registries, including any tooling support in Cargo and/or Cargo 
+registry spec changes, via RFC. We'll implement the RFC's approach as experimental flags.
 
 With experimental support in place in the Rust toolchain, we will experiment with supporting tooling outside of Cargo: audit tooling to track whether a downstream registry declares all divergence from upstream, tools for packaging patches for offline installs / `cargo-auditable`, integrations with metadata consumers like [ecosyste.ms](ecosyste.ms), and explorations of reachability analysis 
 for CVEs that consider modified security releases.
