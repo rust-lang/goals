@@ -6,7 +6,7 @@
 | Status              | Accepted                     |
 | Tracking issue      | [rust-lang/goals#702]        |
 | Zulip channel       | N/A                          |
-| [compiler] champion | @oli-obk                     |
+| [types] champion    | @oli-obk                     |
 | Funding contact     | [Hexcat](https://hexcat.nl/) |
 | Roadmap             | The Borrow Checker Within    |
 
@@ -234,9 +234,9 @@ language easier to learn and adopt.
 
 | Team       | Support level | Notes                                               |
 | ---------- | ------------- | --------------------------------------------------- |
-| [compiler] | Medium        | Code review, questions                              |
+| [compiler] | Small         | Code review, questions                              |
 | [lang]     | Small         | Suggestion of alternative syntaxes                  |
-| [types]    | Small         | Add the `Contiguous` marker trait and implied bound |
+| [types]    | Large         | Add the `Contiguous` marker trait and implied bound |
 
 ## Funding
 
