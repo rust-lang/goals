@@ -9,6 +9,7 @@
 | Zulip channel | N/A (to be created on request) |
 | [cargo] champion | @weihanglo |
 | [crates-io] champion | TBD |
+| Funding contact  | [Software Stewardship Lab](https://stewardshiplab.org/contact/)        |
 
 ## Summary
 
@@ -190,3 +191,12 @@ Maybe. Registry releases need a version shape that sorts correctly, does not use
 To some extent. We want to add nicer support for distro packagers that want clearer provenance of their patched dependencies, for instance with `cargo-auditable`.
 
 That said, we expect that normative guidance will distinguish between undeclared divergence in dependencies served directly to end users, versus only used for bundling binaries. Linux packagers applying patches when bundling binaries, is not a dependency confusion attack in the same way as serving modified releases via a mirror that claims to match upstream.
+
+
+## Funding
+
+Funding will cover vladh@'s contributions on audit tooling, reachability analysis, and preparing registry releases to fix historical CVEs for the ecosyste.ms-hosted downstream registry. Fiscal sponsorship is provided by the [Software Stewardship Lab](https://stewardshiplab.org).
+
+| Purpose | Cost | Funded | Sponsor(s) |
+| :-- | :-- | :-- | :-- |
+| vladh@'s contributions | $30,000 | No | TBD |
