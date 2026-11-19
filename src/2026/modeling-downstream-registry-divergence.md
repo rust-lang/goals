@@ -178,14 +178,6 @@ They are complementary. Signing proves that bytes came from the registry that se
 
 Needs to be discussed in the RFC, but almost certainly not. There might be an opt-in way to take registry releases in lockfiles.
 
-### What if a new upstream release doesn't include the registry's fix?
-
-TBD, but an initial opinion: consumers who update would lose the fix, since upstream releases take precedence, so handling this is the registry's job. It can publish a registry release on top of the new upstream version, or hold back the new upstream version until it has checked it. Whether Cargo or the audit tooling should help (for example, by flagging an upstream release that supersedes a registry release, or carrying an advisory forward) is an open question for the RFC.
-
-### Does this change semver?
-
-Maybe. Registry releases need a version shape that sorts correctly, does not use the maintainer's next version, and is recognizable as not upstream's. Candidates include a reserved pre-release tag, a post-release identifier, build metadata, or a fourth version component; the [alternatives survey](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g) is evaluating each against older Cargo versions and semver ordering. Each has costs for older Cargo versions and for tools outside Cargo. The inventory includes talking to the semver maintainers and crates.io about this. The RFC will weigh the options rather than assume one.
-
 ### Does this cover distro packaging and `cargo vendor` directories?
 
 To some extent. We want to add nicer support for distro packagers that want clearer provenance of their patched dependencies, for instance with `cargo-auditable`.
