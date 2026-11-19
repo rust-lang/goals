@@ -71,8 +71,6 @@ Out of scope:
 
 ### Work items over the next year
 
-This goal is co-authored by @jlizen and @celinval.
-
 Three phases, roughly 4-8 months.
 
 | Task | Owner(s) | Notes |
