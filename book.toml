@@ -48,6 +48,6 @@ level = 0
 "/2026/reference.html" = "goals.html"
 "/introduction.html" = "index.html"
 "/about/provisional_goals.html" = "about/invited_goals.html"
-"/2026/reflection-and-comptime.html" = "2026/min-type-reflection.html"
+"/2026/reflection-and-comptime.html" = "min-type-reflection.html"
 
 [output.markdown]
