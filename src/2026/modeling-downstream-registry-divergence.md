@@ -63,7 +63,7 @@ registry spec, via RFC. We'll implement the RFC's approach as experimental flags
 With experimental support in place in the Rust toolchain, we will experiment with supporting tooling outside of Cargo: audit tooling to track whether a downstream registry declares all divergence from upstream, tools for packaging patches for offline installs / `cargo-auditable`, integrations with metadata consumers like [ecosyste.ms](ecosyste.ms), and explorations of reachability analysis 
 for CVEs that consider modified security releases.
 
-In addition to client-side tooling, @srckln, with AWS, will contribute a sample implementation of a self-hosted downstream registry that serves registry releases, which will live in an ecosyste.ms-managed repository. Using this code, ecosyste.ms will host its own downstreamregistry of crates.io, as an extension of its pre-existing [caching crates.io proxy](https://proxy.ecosyste.ms). To kick the tires on the new registry release support, the ecosyste.ms downstream will be initially backfilled with a range of releases backpatching security-related fixes from historical CVEs. This hosted implementation will not be endorsed by the Rust Project but will help us evaluate the feature for stabilization with an emphasis on usability by open source communities.
+In addition to client-side tooling, @srckln, with AWS, will contribute a sample implementation of a self-hosted downstream registry that serves registry releases. This will live in a registry outside of the Rust Project. Using this code, we will publicly host (outside of the Rust Project) a sample downstreamregistry of crates.io. To kick the tires on the new registry release support, this downstream will be initially backfilled with a range of releases backpatching security-related fixes from historical CVEs.
 
 Out of scope:
 
@@ -118,9 +118,9 @@ This work all will hosted outside of the Rust Project, with no Project endorseme
 | Application code for self-hosted downstream registry | @smrckln | |
 | Infrastructure code for self-hosted downstream registry | @andrew | |
 | Prepare a series of registry releases to fix historical CVEs on old versions | @vladh | |
-| Launch ecosyste.ms-managed downstream registry serving the historical CVE fixes | @andrew | |
+| Launch sample downstream registry serving the historical CVE fixes | @andrew | |
 | Integrate event feed from downstream registry with ecosyste.ms | @andrew | |
-| Blog post: ecosyste.ms-hosted downstream, what we learned along the way, next steps | @andrew, @smrckln | This will likely go on Andrew or ecosyste.ms's blog, or may the AWS Open Source blog |
+| Blog post: sample downstream downstream, what we learned along the way, next steps | @andrew, @smrckln | This will likely go on Andrew or ecosyste.ms's blog, or may the AWS Open Source blog |
 
 
 ## Team asks
@@ -188,7 +188,7 @@ That said, we expect that normative guidance will distinguish between undeclared
 
 ## Funding
 
-Funding will cover @vladh's contributions on audit tooling, reachability analysis, and preparing registry releases to fix historical CVEs for the ecosyste.ms-hosted downstream registry. Fiscal sponsorship is provided by the [Software Stewardship Lab](https://stewardshiplab.org).
+Funding will cover @vladh's contributions on audit tooling, reachability analysis, and preparing registry releases to fix historical CVEs for the sample registry. Fiscal sponsorship is provided by the [Software Stewardship Lab](https://stewardshiplab.org).
 
 | Purpose | Cost | Funded | Sponsor(s) |
 | :-- | :-- | :-- | :-- |
