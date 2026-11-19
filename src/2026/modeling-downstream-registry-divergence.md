@@ -131,7 +131,7 @@ This work all will hosted outside of the Rust Project, with no Project endorseme
 | [crates-io] | Medium | Advise on approach and steward any registry index spec changes so alternate registries interoperate; crates.io not expected to publish registry releases itself |
 | [social-media] | Small | Advice + edits for blog post |
 
-We also expect a Small review from the proposed ecosystem security team [once it exists](https://github.com/rust-lang/leadership-council/issues/352).
+We also expect a Medium support level and a champion from the proposed ecosystem security team [once it exists](https://github.com/rust-lang/leadership-council/issues/352).
 
 Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions (Fedora, Canonical/Ubuntu, Debian), Git forge (GitLab, GitHub), ecosyste.ms, Alpha-Omega, Akrites, OpenSSF Security Software Repos working group, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI), corporate-managed downstream package vendors (Google, Meta, etc).
 
