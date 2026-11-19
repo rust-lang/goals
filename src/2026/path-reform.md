@@ -103,10 +103,10 @@ Really, the split-at-separator logic could be useful for a broad number of other
 
 | Task                        | Owner(s)     | Notes                       |
 | --------------------------- | ------------ | --------------------------- |
-| `std::path::windows` ACP    | None yet     |                             |
+| `std::path::windows` ACP    | @ChrisDenton |                             |
 | `std::path::unix` ACP       | @clarfonthey |                             |
 | `std::path::v2` ACP         | @clarfonthey |                             |
-| Windows path implementation | None yet     |                             |
+| Windows path implementation | @ChrisDenton |                             |
 | Unix path implementation    | @clarfonthey |                             |
 
 ## Team asks
@@ -117,7 +117,7 @@ Really, the split-at-separator logic could be useful for a broad number of other
 
 ## Funding
 
-Minimum funding would enable @clarfonthey and potentially others to devote time to actually design and implement these new APIs. While it may be possible also to fund other library team members to review the proposals, that is probably better funded via a mechanism such as the [Rust Foundation Maintainers Fund](https://rust-lang.org/funding/#rfmf).
+Minimum funding would enable @clarfonthey and @ChrisDenton to devote time to actually design and implement these new APIs. While it may be possible also to fund other library team members to review the proposals, that is probably better funded via a mechanism such as the [Rust Foundation Maintainers Fund](https://rust-lang.org/funding/#rfmf).
 
 | Purpose            | Cost    | Funded | Sponsor(s) |
 | ------------------ | ------- | ------ | ---------- |
