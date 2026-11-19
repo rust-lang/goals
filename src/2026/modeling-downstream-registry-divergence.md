@@ -22,7 +22,7 @@ Cargo's stable source replacement functionality is under-documented and powerful
 Today, downstream registries can serve crate releases that upstream never published as part of [source replacement](https://doc.rust-lang.org/cargo/reference/source-replacement.html). By "downstream registry" we mean any source Cargo uses in place of an upstream registry (usually crates.io). Most are Cargo registries, such as a private mirror or a caching proxy, but local directory sources such as `cargo vendor` output count too.
 
 The Cargo team canonically considers source replacement a "dependency
-confusion attack" and considers any mirror that does it as badly behaving.
+confusion attack" and considers any mirror that does it as badly behaving. 
 But, in practice, many private downstream registries do this anyway and will continue to. Treating this as "off the beaten path" is sweeping legitimate use cases under the rug.
 A frequent reason is to apply security fixes.
 Users ought to be attempting to upstream fixes, and largely do, but maintainer capacity is limited and not everybody agrees with what is fix-worthy.
@@ -90,7 +90,7 @@ Three phases, roughly 4-8 months.
 | Requirements doc; gather use cases and constraints for prospective consumers and registry operators | @jlizen | |
 | Requirements from the TUF / verifiable work; make sure approach co-exists | @jlizen | with @arlosi |
 | Survey Cargo-side alternatives for modeling registry releases | @celinval | in progress; [HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g) |
-| RFC: Registry release declarations, Cargo support, registry spec changes | @jlizen, @celinval | may split into two; informed by the alternatives survey |
+| RFC: Registry release declarations, Cargo support, registry spec changes | @jlizen, @celinval |  |
 | Cargo implementation behind unstable flag | @jlizen, @celinval | |
 | Simple reference implementation in an alternate registry or static index | @jlizen, @celinval | |
 | Docs: update source-replacement / mirroring docs for registry releases | @jlizen | |
