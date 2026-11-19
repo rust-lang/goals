@@ -120,8 +120,7 @@ This work all will hosted outside of the Rust Project, with no Project endorseme
 | Prepare a series of registry releases to fix historical CVEs on old versions | @vladh | |
 | Launch sample downstream registry serving the historical CVE fixes | @andrew | |
 | Integrate event feed from downstream registry with ecosyste.ms | @andrew | |
-| Blog post: sample downstream downstream, what we learned along the way, next steps | @andrew, @smrckln | This will likely go on Andrew or ecosyste.ms's blog, or may the AWS Open Source blog |
-
+| Blog post: sample downstream downstream, what we learned along the way, next steps | @andrew, @smrckln | This will likely go on Andrew or ecosyste.ms's blog, or maybe the AWS Open Source blog |
 
 ## Team asks
 
