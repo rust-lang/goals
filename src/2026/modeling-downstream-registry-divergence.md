@@ -57,22 +57,15 @@ Other research:
 
 We will start by documenting how source replacement is used today and what risks come with it.
 
-We will then allow registries to advertise that they publish registry releases (as well as propagate registry releases from their upstreams). Those releases will be clearly marked in the index. Cargo will resolve them by default, unless the user opts out, including a way to take them on top of an existing lockfile. They will respect semver, and new maintainer releases will take precedence.
-Registries that opt into this functionality will have a canonical way to expose a feed of registry releases they published, with metadata such as relevant advisories. Tooling will be available to audit that all registry releases are tagged properly and advertised in the feed.
+Then, we will propose a recommended way to add releases via downstream registries, including tooling support in Cargo and/or the Cargo
+registry spec, via RFC. We'll implement the RFC's approach as experimental flags.
 
-Some design rules:
-
-1. **Divergence from upstream is considered an attack unless declared.** A registry that serves releases not in its upstream must say so per release. Serving a subset of upstream's crates and versions is not divergence; a partial mirror is still a valid mirror. Any change to a crate version it does serve, including index metadata or bytes, is divergence. This applies to local vendored sources too, such as a `cargo vendor` directory in a distro build, and tooling such as `cargo vendor` and `cargo-auditable` should be able to record that divergence.
-2. **Upstream releases always win.** A registry release never uses the maintainer's next version number. A real upstream release supersedes it on the next update.
-3. **Consumers stay in control.** Resolving registry releases is opt-out. Lockfiles are respected unless the consumer opts in to taking registry releases on top of them.
-4. **Usage is up to registries.** Our goal adds a spec that covers how to declare and advertise registry releases. We will add Cargo support for resolving them. But, who gets to publish these releases, what goes in them, and to what extent the contents are explained to consumers is up to each registry. crates.io may never enable it.
-5. **Everything is auditable.** Each registry release links to a reason (e.g., an advisory), a base version, and a producer. This all appears in a feed that a third party can compare against upstream.
+With experimental support in place in the Rust toolchain, we will experiment with supporting tooling outside of Cargo: audit tooling to track whether a downstream registry declares all divergence from upstream, tools for packaging patches for offline installs / `cargo-auditable`, integrations with metadata consumers like [ecosyste.ms](ecosyste.ms), and explorations of reachability analysis 
+for CVEs that consider modified security releases.
 
 Out of scope:
 
 - crates.io publishing its own registry releases. This is a policy decision that would require a much deeper discussion, RFC, and its own goal.
-- Supporting modified bytes or metadata under an upstream version number in a registry served to others. The recommended path is a registry release that is clearly differentiated from the upstream version.
-- Changes to non-Cargo build tools; they should keep working unchanged and may not recognize registry releases.
 
 ### Work items over the next year
 
@@ -90,29 +83,29 @@ Two phases, roughly 3-6 months.
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
 | Survey alternate registries and mirrors for how they diverge today | @jlizen | including behaviors that amount to dependency confusion in practice |
-| Docs: describe how source replacement is used today and its risks; define terms (mirror, downstream registry, registry release) | @jlizen | |
-| Requirements doc; gather use cases from registry operators, Alpha-Omega, Akrites, Linux packagers, Rust contracting shops (Ferrous Systems, Mainmatter) | @jlizen | |
-| Requirements from the TUF / [verifiable mirroring](./mirroring.md) work: registry releases must fit the signing model | @jlizen | with @arlosi |
+| Cargo docs PR: describe how source replacement is used today and its risks; define terms (mirror, downstream registry, registry release) | @jlizen | |
+| Requirements doc; gather use cases and constraints for prospective consumers and registry operators | @jlizen | |
+| Requirements from the TUF / verifiable work; make sure approach co-exists | @jlizen | with @arlosi |
 | Survey Cargo-side alternatives for modeling registry releases | @celinval | in progress; [HackMD](https://hackmd.io/GvCnMrbWSAuUo2fR8E2E-g) |
-| RFC: Registry release declarations, Cargo resolver behavior, registry advertisement, consumer opt-out, lockfile interaction | @jlizen, @celinval | may split into two; informed by the alternatives survey |
+| RFC: Registry release declarations, Cargo support, registry spec changes | @jlizen, @celinval | may split into two; informed by the alternatives survey |
 | Cargo implementation behind unstable flag | @jlizen, @celinval | |
-| Reference implementation in an alternate registry or static index | @jlizen, @celinval | end to end without crates.io |
-| RustSec advisory DB: represent "fixed in registry X with registry release Y" | @jlizen | with RustSec maintainers |
+| Simple reference implementation in an alternate registry or static index | @jlizen, @celinval | |
 | Docs: update source-replacement / mirroring docs for registry releases | @jlizen | |
 | Docs: Guidance for registry operators who diverge from upstream | @jlizen | |
-| Stabilization | @jlizen, @celinval | |
+| Blog post: overview of new registry release support, what's coming next | @jlizen | |
 
 #### Feed, audit tooling, producer tooling
 
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
-| Design: event feed of registry releases, signing, relation to [verifiable mirroring](./mirroring.md) | @jlizen | |
 | Design: provenance and how consumers verify registry release = base + diff | @jlizen | |
-| Audit tool: diff a registry against its declared upstream, flag undeclared divergence | needs owner | |
 | Tooling to produce a declared registry release from upstream `.crate` + diff | @CAD97 | |
-| Record modified vendored crates as divergent in `cargo vendor` and `cargo-auditable`, so SBOMs don't report them as the upstream version | @CAD97 | `cargo-auditable` is maintained outside Cargo; coordinate with its maintainers |
-| Represent registry releases and modified vendored crates with a distinct [PURL](https://github.com/package-url/purl-spec) in SBOM tooling | needs owner | coordinate with PURL spec maintainers (AboutCode) |
-| Blog post: how downstream registries diverge today, the new declared model, and how to audit a mirror | @jlizen | after modeling + audit tooling land |
+| Record modified vendored crates `cargo vendor` and `cargo-auditable`, so SBOMs don't report them as the upstream version | @CAD97 |  |
+| Audit tool: diff a registry against its declared upstream, flag undeclared divergence | @vladh | |
+| Improvements to reachability analysis for CVEs with downstream registry releases | @vladh | |
+| Represent registry releases and modified vendored crates with a distinct [PURL](https://github.com/package-url/purl-spec) in SBOM tooling | @vladh | |
+| Blog post: discussion of the producer/consumer tooling, some ways people are using it, how to audit a mirror | @vladh, @CAD97 |  |
+
 
 ## Team asks
 
@@ -125,13 +118,6 @@ Two phases, roughly 3-6 months.
 We also expect a Small review from the proposed ecosystem security team [once it exists](https://github.com/rust-lang/leadership-council/issues/352).
 
 Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions (Fedora, Canonical/Ubuntu, Debian), Git forge (GitLab, GitHub), ecosyste.ms, Alpha-Omega, Akrites, OpenSSF Security Software Repos working group, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI), corporate-managed downstream package vendors (Google, Meta, etc).
-
-## Help wanted
-
-| Task | Experience level | Time investment |
-| :-- | :-- | :-- |
-| Audit tool (registry vs. upstream diff) | Intermediate Rust | 1-2 months |
-| Distinct PURLs for registry releases and modified vendored crates in SBOM tooling | Intermediate | 2-4 weeks |
 
 ## Frequently asked questions
 
@@ -155,18 +141,14 @@ opt-out. The pre-release machinery is a good building block, but this goal exten
 
 Today, `[patch]` points a crate at a git URL or local path. Every consumer has to opt in, crate by crate, and keep the list current as versions change, whether in `Cargo.toml` or in `.cargo/config.toml`. That often isn't practical for organizations with many independent teams; switching to a registry should be a one-line change in `config.toml`. A git URL is also a muddy provenance story, and many locked-down build environments only allow a private registry.
 
-In general, security boundaries are best enforced at the registry, with client configuration as a supplement.
-
-### Why not have the registry stop serving vulnerable versions?
-
-Pulling a vulnerable release without a newer one available can break builds, including builds that need to ship some other critical fix.
-That release may also carry other security or performance fixes. Whether to build against vulnerable versions is best left to the
-consumer at consumption time. A registry may still publish a fix and yank the old release, but that is up to each registry.
-
 ### Who decides what releases a registry publishes?
 
 A registry. From this goal's perspective, all users will be downstream of the Rust Project. Some expected users are: corporate security
-teams running internal mirrors; caching proxies such as Haven; Linux packagers.
+teams running internal mirrors; caching proxies such as Haven; Linux packagers. Registries may opt to accept releases from other trusted parties, but that is a registry-by-registry decision.
+
+### Does this hurt maintainer autonomy?
+
+No; we don't know the solution yet, but we will be discussing this with a variety of maintainers during research tasks and we expect that any viable approach will need to be respectful of people's ownership of their projects. We shouldn't incentivize downstream registries bundling releases using larger and larger stacks of patches that they don't upstream. We expect that any Cargo resolver changes would prioritize newer semver-compatible releases from maintainers over existing registries releass, unles a registry explicitly packages further registry release on top of newer upstream.
 
 ### Does crates.io have to do anything?
 
@@ -179,7 +161,7 @@ They are complementary. Signing proves that bytes came from the registry that se
 
 ### Does this change lockfile behavior?
 
-No. Lockfiles are respected by default. The RFC will include an opt-in way to take registry releases on top of an existing lockfile.
+Needs to be discussed in the RFC, but almost certainly not. There might be an opt-in way to take registry releases in lockfiles.
 
 ### What if a new upstream release doesn't include the registry's fix?
 
@@ -191,4 +173,6 @@ Maybe. Registry releases need a version shape that sorts correctly, does not use
 
 ### Does this cover distro packaging and `cargo vendor` directories?
 
-Yes. Patching a vendored crate is divergence, whether or not the vendored source reaches end users. We will consult packagers during the inventory, and add a way for `cargo vendor` and `cargo-auditable` to record a vendored crate as modified, so SBOMs and advisory tracking don't report it as the upstream version. Whether these builds should also use the registry release version scheme is an open question for the RFC.
+To some extent. We want to add nicer support for distro packagers that want clearer provenance of their patched dependencies, for instance with `cargo-auditable`.
+
+That said, we expect that normative guidance will distinguish between undeclared divergence in dependencies served directly to end users, versus only used for bundling binaries. Linux packagers applying patches when bundling binaries, is not a dependency confusion attack in the same way as serving modified releases via a mirror that claims to match upstream.
