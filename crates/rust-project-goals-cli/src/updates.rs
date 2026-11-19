@@ -1,5 +1,4 @@
 use chrono::{Datelike, NaiveDate};
-use regex::Regex;
 use rust_project_goals::re::{HELP_WANTED, TLDR};
 use rust_project_goals::spanned::Result;
 use rust_project_goals::util::{comma, MILESTONE_REGEX};
@@ -40,8 +39,7 @@ pub fn render_updates(
     use_progress_bar: bool,
     comment_order: Order,
 ) -> Result<String> {
-    let milestone_re = Regex::new(MILESTONE_REGEX).unwrap();
-    if !milestone_re.is_match(milestone) {
+    if !MILESTONE_REGEX.is_match(milestone) {
         spanned::bail_here!(
             "the milestone `{}` does not follow the `$year$semester` format, where $semester is `h1` or `h2`",
             milestone,
@@ -130,7 +128,7 @@ pub fn render_updates(
     // Filter issues by champion team if specified
     let filtered_issues: Vec<ExistingGithubIssue> = if let Some(team_name) = with_champion_from {
         let team_name = team::get_team_name(team_name)?
-            .ok_or_else(|| spanned::Error::str(format!("unknown team: {}", team_name)))?;
+            .ok_or_else(|| spanned::Error::str(format!("unknown team: {team_name}")))?;
 
         // Create a set of issue numbers for goals that have a champion from the specified team
         let champion_issue_numbers: std::collections::HashSet<u64> = goal_documents
@@ -251,7 +249,7 @@ fn prepare_goals(
         }
 
         // Prettify the comments' timestamp after using it for sorting.
-        for comment in comments.iter_mut() {
+        for comment in &mut comments {
             comment.created_at = format!("{}", comment.created_at_date());
         }
 

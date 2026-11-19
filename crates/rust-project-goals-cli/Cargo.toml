@@ -24,3 +24,6 @@ clap = { version = "4.5.23", features = ["derive"] }
 rust-project-goals-json = { version = "0.1.0", path = "../rust-project-goals-json" }
 handlebars = { version = "6.2.0", features = ["dir_source"] }
 comrak = "0.31.0"
+
+[lints]
+workspace = true

@@ -4,7 +4,6 @@ use std::collections::BTreeMap;
 use std::fmt::Write;
 use std::path::Path;
 
-use regex::Regex;
 use rust_project_goals::{
     goal::{GoalDocument, SupportLevel},
     spanned::Result,
@@ -59,17 +58,14 @@ pub fn review(team_name: &str, milestone: Option<&str>) -> Result<()> {
         .collect();
 
     if team_goals.is_empty() {
-        println!(
-            "# Goals review for {} team ({})\n",
-            team_name, milestone_name
-        );
-        println!("No goals involve the {} team.", team_name);
+        println!("# Goals review for {team_name} team ({milestone_name})\n");
+        println!("No goals involve the {team_name} team.");
         return Ok(());
     }
 
     // Generate the output
     let output = format_review(&team_goals, team, milestone_name)?;
-    println!("{}", output);
+    println!("{output}");
 
     Ok(())
 }
@@ -91,7 +87,6 @@ fn goal_involves_team(goal: &GoalDocument, team: &TeamName) -> bool {
 
 /// Find the latest milestone directory (e.g., "2026" or "2025h2").
 fn find_latest_milestone() -> Result<std::path::PathBuf> {
-    let regex = Regex::new(MILESTONE_REGEX)?;
     let mut latest: Option<(String, std::path::PathBuf)> = None;
 
     for entry in WalkDir::new("src").max_depth(1) {
@@ -105,7 +100,7 @@ fn find_latest_milestone() -> Result<std::path::PathBuf> {
             continue;
         };
 
-        if !regex.is_match(name) {
+        if !MILESTONE_REGEX.is_match(name) {
             continue;
         }
 
@@ -125,7 +120,7 @@ fn goal_url(goal: &GoalDocument, milestone: &str) -> String {
     let path = goal.link_path.display().to_string();
     // Remove .md extension and use .html
     let path = path.trim_end_matches(".md");
-    format!("{}/{}/{}.html", BASE_URL, milestone, path)
+    format!("{BASE_URL}/{milestone}/{path}.html")
 }
 
 /// Format the review output.
@@ -152,7 +147,7 @@ fn format_review(
             "The following roadmaps include goals that involve the {} team:\n",
             team_data.name
         )?;
-        write!(output, "{}", roadmap_section)?;
+        write!(output, "{roadmap_section}")?;
     }
 
     // Section 2: Summary table by support level
@@ -208,18 +203,18 @@ fn format_review(
 
         // Support level for this team
         if let Some(level) = get_team_support_level(goal, team) {
-            writeln!(output, "**Support level:** {}", level)?;
+            writeln!(output, "**Support level:** {level}")?;
         }
 
         // Notes for this team
         let notes = get_team_notes(goal, team);
         if !notes.is_empty() {
-            writeln!(output, "**Notes:** {}", notes)?;
+            writeln!(output, "**Notes:** {notes}")?;
         }
 
         // Summary as blockquote
         for line in goal.summary.lines() {
-            writeln!(output, "> {}", line)?;
+            writeln!(output, "> {line}")?;
         }
         writeln!(output)?;
 
@@ -257,8 +252,7 @@ fn format_team_table(
             .metadata
             .champions
             .get(team)
-            .map(|c| c.content.as_str())
-            .unwrap_or("");
+            .map_or("", |c| c.content.as_str());
 
         let notes = get_team_notes(goal, team);
         // Truncate long notes for the table
@@ -317,7 +311,7 @@ fn format_roadmap_themes(
     let milestone_path = Path::new("src").join(milestone);
 
     for ((roadmap_name, slug), roadmap_goals) in &by_roadmap {
-        let roadmap_file = milestone_path.join(format!("roadmap-{}.md", slug));
+        let roadmap_file = milestone_path.join(format!("roadmap-{slug}.md"));
 
         // Try to read the roadmap file and extract its summary
         let summary = if roadmap_file.exists() {
@@ -326,7 +320,7 @@ fn format_roadmap_themes(
             String::new()
         };
 
-        let roadmap_url = format!("{}/{}/roadmap-{}.html", BASE_URL, milestone, slug);
+        let roadmap_url = format!("{BASE_URL}/{milestone}/roadmap-{slug}.html");
 
         writeln!(
             output,
@@ -337,7 +331,7 @@ fn format_roadmap_themes(
 
         if !summary.is_empty() {
             for line in summary.lines() {
-                writeln!(output, "> {}", line)?;
+                writeln!(output, "> {line}")?;
             }
             writeln!(output)?;
         }
@@ -345,9 +339,7 @@ fn format_roadmap_themes(
         // List goals in this roadmap that involve this team
         writeln!(output, "**Goals in this theme:**\n")?;
         for goal in roadmap_goals {
-            let level = get_team_support_level(goal, team)
-                .map(|l| format!(" ({})", l))
-                .unwrap_or_default();
+            let level = get_team_support_level(goal, team).map_or_default(|l| format!(" ({l})"));
             writeln!(
                 output,
                 "- [{}]({}){}",
@@ -389,8 +381,7 @@ fn format_by_champion_table(
                 .metadata
                 .champions
                 .get(team)
-                .map(|c| c.content.clone())
-                .unwrap_or_else(|| "(no champion)".to_string());
+                .map_or_else(|| "(no champion)".to_string(), |c| c.content.clone());
 
             by_champion
                 .entry(champion)

@@ -89,18 +89,18 @@ pub fn format_team_asks(asks_of_any_team: &[&TeamAsk]) -> Result<String> {
                 continue;
             };
 
-            let text = if !ask.notes.is_empty() {
-                &ask.notes
-            } else {
+            let text = if ask.notes.is_empty() {
                 CHECK
+            } else {
+                &ask.notes
             };
 
             let cell = footnotes.maybe_footnote(text, &ask.link_path);
 
-            if !row[index].is_empty() {
-                row[index] = format!("{} {}", row[index], cell);
-            } else {
+            if row[index].is_empty() {
                 row[index] = cell;
+            } else {
+                row[index] = format!("{} {}", row[index], cell);
             }
         }
 

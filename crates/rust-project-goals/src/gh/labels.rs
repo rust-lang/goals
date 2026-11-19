@@ -51,14 +51,14 @@ impl GhLabel {
             .arg("--force")
             .output()?;
 
-        if !output.status.success() {
+        if output.status.success() {
+            Ok(())
+        } else {
             Err(Error::str(format!(
                 "failed to create label `{}`: {}",
                 self.name,
                 String::from_utf8_lossy(&output.stderr)
             )))
-        } else {
-            Ok(())
         }
     }
 }

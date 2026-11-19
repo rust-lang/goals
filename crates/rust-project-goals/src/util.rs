@@ -2,20 +2,23 @@ use std::{
     collections::BTreeSet,
     fmt::{Display, Write},
     path::{Path, PathBuf},
+    sync::LazyLock,
 };
 
+use regex::Regex;
 use spanned::{Result, Spanned};
 use walkdir::WalkDir;
 
 pub const ARROW: &str = "↳";
 
-pub const MILESTONE_REGEX: &str = r"^\d{4}([hH][12])?$";
+pub static MILESTONE_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\d{4}([hH][12])?$").unwrap());
 
 /// Format a goal title cell for use in markdown tables.
 /// If `subgoal_title` is Some, renders as `↳ subgoal`, otherwise as `[title](link)`.
 pub fn goal_title_cell(title: &str, link: &Path, subgoal_title: Option<&str>) -> String {
     if let Some(subgoal) = subgoal_title {
-        format!("{} {}", ARROW, subgoal)
+        format!("{ARROW} {subgoal}")
     } else {
         format!("[{}]({})", title, link.display())
     }
@@ -58,7 +61,7 @@ pub fn format_table(rows: &[Vec<Spanned<String>>]) -> String {
 
         // Print the `---` row after the headers
         if row == 0 {
-            for width in widths.iter() {
+            for width in &widths {
                 output.push('|');
                 write!(output, " {text:<width$} ", text = ":--", width = width).unwrap();
             }
@@ -101,7 +104,7 @@ pub fn commas(iter: impl IntoIterator<Item: Display>) -> String {
         if i > 0 {
             write!(output, ", ").unwrap();
         }
-        write!(output, "{}", elem).unwrap();
+        write!(output, "{elem}").unwrap();
     }
     output
 }
@@ -182,7 +185,7 @@ impl Footnotes {
     /// Write all accumulated footnotes to the output.
     pub fn write_to(&self, output: &mut String) -> std::fmt::Result {
         for footnote in &self.entries {
-            write!(output, "\n\n{}\n", footnote)?;
+            write!(output, "\n\n{footnote}\n")?;
         }
         Ok(())
     }
