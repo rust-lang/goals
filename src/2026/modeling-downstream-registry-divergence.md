@@ -76,7 +76,7 @@ Three phases, roughly 4-8 months.
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
 | Declared registry releases: spec, resolver support, docs | @jlizen, @celinval | |
-| Feed, audit tooling, producer tooling | @CAD97, vladh@ | |
+| Feed, audit tooling, producer tooling | @CAD97, @vladh | |
 | Self-hosted downstream registry implementation | @srckln, @andrew, @vladh |
 
 #### Declared registry releases: spec, resolver support, docs
