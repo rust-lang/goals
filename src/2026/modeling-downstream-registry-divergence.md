@@ -63,7 +63,7 @@ registry spec changes, via RFC. We'll implement the RFC's approach as experiment
 With experimental support in place in the Rust toolchain, we will experiment with supporting tooling outside of Cargo: audit tooling to track whether a downstream registry declares all divergence from upstream, tools for packaging patches for offline installs / `cargo-auditable`, integrations with metadata consumers like [ecosyste.ms](ecosyste.ms), and explorations of reachability analysis 
 for CVEs that consider modified security releases.
 
-In addition to client-side tooling, @srckln, with AWS, will contribute a sample implementation of a self-hosted downstream registry that serves registry releases. This will live in a registry outside of the Rust Project. Using this code, we will publicly host (outside of the Rust Project) a sample downstreamregistry of crates.io. To kick the tires on the new registry release support, this downstream will be initially backfilled with a range of releases backpatching security-related fixes from historical CVEs.
+In addition to client-side tooling, @smrckln, with AWS, will contribute a sample implementation of a self-hosted downstream registry that serves registry releases. This will live in a registry outside of the Rust Project. Using this code, we will publicly host (outside of the Rust Project) a sample downstreamregistry of crates.io. To kick the tires on the new registry release support, this downstream will be initially backfilled with a range of releases backpatching security-related fixes from historical CVEs.
 
 Out of scope:
 
@@ -77,7 +77,7 @@ Three phases, roughly 4-8 months.
 | :-- | :-- | :-- |
 | Declared registry releases: spec, resolver support, docs | @jlizen, @celinval | |
 | Feed, audit tooling, producer tooling | @CAD97, @vladh | |
-| Self-hosted downstream registry implementation | @srckln, @andrew, @vladh |
+| Self-hosted downstream registry implementation | @smrckln, @andrew, @vladh |
 
 #### Declared registry releases: spec, resolver support, docs
 
