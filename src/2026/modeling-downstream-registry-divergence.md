@@ -1,15 +1,16 @@
 # Modeling downstream registry divergence
 
-| Metadata | |
-| :-- | :-- |
-| Contact | @jlizen |
-| Short title | Downstream registry divergence |
-| What and why | Distinguish intended source replacement in downstream registries from supply chain attacks |
-| Status | Proposed |
-| Zulip channel | N/A (to be created on request) |
-| [cargo] champion | @weihanglo |
-| [crates-io] champion | @LawnGnome |
-| Funding contact  | [Software Stewardship Lab](https://stewardshiplab.org/contact/)        |
+| Metadata             |                                                                                            |
+| :--                  | :--                                                                                        |
+| Contact              | @jlizen                                                                                    |
+| Short title          | Downstream registry divergence                                                             |
+| What and why         | Distinguish intended source replacement in downstream registries from supply chain attacks |
+| Status               | Accepted                                                                                   |
+| [cargo] champion     | @weihanglo                                                                                 |
+| [crates-io] champion | @LawnGnome                                                                                 |
+| Funding contact      | [Software Stewardship Lab](https://stewardshiplab.org/contact/)                            |
+| Tracking issue       | [rust-lang/goals#877]                                                                      |
+
 
 ## Summary
 
