@@ -135,6 +135,14 @@ We also expect a Medium support level and a champion from the proposed ecosystem
 
 Feedback from outside the Project: RustSec maintainers, alternate registry operators (JFrog, Sonatype, Cloudsmith, kellnr), Linux distributions (Fedora, Canonical/Ubuntu, Debian), Git forge (GitLab, GitHub), ecosyste.ms, Alpha-Omega, Akrites, OpenSSF Security Software Repos working group, Rust contracting shops (Ferrous Systems, Mainmatter), external build tools (Bazel, Buck2, Yocto, Nix), corporate-managed downstream registries (Amazon, Microsoft, OpenAI), corporate-managed downstream package vendors (Google, Meta, etc).
 
+## Funding
+
+Funding will cover @vladh's contributions on audit tooling, reachability analysis, and preparing registry releases to fix historical CVEs for the sample registry. Fiscal sponsorship is provided by the [Software Stewardship Lab](https://stewardshiplab.org).
+
+| Purpose | Cost | Funded | Sponsor(s) |
+| :-- | :-- | :-- | :-- |
+| @vladh's contributions | $30,000 | No | TBD |
+
 ## Frequently asked questions
 
 ### Isn't this just sanctioning dependency confusion?
@@ -184,12 +192,3 @@ Needs to be discussed in the RFC, but almost certainly not. There might be an op
 To some extent. We want to add nicer support for distro packagers that want clearer provenance of their patched dependencies, for instance with `cargo-auditable`.
 
 That said, we expect that normative guidance will distinguish between undeclared divergence in dependencies served directly to end users, versus only used for bundling binaries. Linux packagers applying patches when bundling binaries, is not a dependency confusion attack in the same way as serving modified releases via a mirror that claims to match upstream.
-
-
-## Funding
-
-Funding will cover @vladh's contributions on audit tooling, reachability analysis, and preparing registry releases to fix historical CVEs for the sample registry. Fiscal sponsorship is provided by the [Software Stewardship Lab](https://stewardshiplab.org).
-
-| Purpose | Cost | Funded | Sponsor(s) |
-| :-- | :-- | :-- | :-- |
-| @vladh's contributions | $30,000 | No | TBD |
