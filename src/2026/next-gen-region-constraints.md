@@ -60,7 +60,7 @@ into account these implied bounds when handling region constraints.
 
 | Purpose | Cost | Funded | Sponsor(s) |
 |---------|------|--------|------------|
-| Contributor | Ask | Full | Google |
+| Contributor | Ask | Partial | Google, Anon1 |
 
 ## Frequently asked questions
 
