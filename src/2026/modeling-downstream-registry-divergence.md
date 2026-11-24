@@ -77,8 +77,8 @@ Three phases, roughly 4-8 months.
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
 | Declared registry releases: spec, resolver support, docs | @jlizen, @celinval | |
-| Feed, audit tooling, producer tooling | @CAD97, @vladh | |
-| Self-hosted downstream registry implementation | @smrckln, @andrew, @vladh |
+| Feed, audit tooling, producer tooling | @CAD97, [@vladh] | |
+| Self-hosted downstream registry implementation | [@smrckln], [@andrew], [@vladh] |
 
 #### Declared registry releases: spec, resolver support, docs
 
@@ -100,13 +100,13 @@ Three phases, roughly 4-8 months.
 
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
-| Design: provenance and how consumers verify registry release = base + diff | @CAD97, @vladh | |
+| Design: provenance and how consumers verify registry release = base + diff | @CAD97, [@vladh] | |
 | Tooling to produce a declared registry release from upstream `.crate` + diff | @CAD97 | |
 | Record modified vendored crates `cargo vendor` and `cargo-auditable`, so SBOMs don't report them as the upstream version | @CAD97 |  |
-| Audit tool: diff a registry against its declared upstream, flag undeclared divergence | @vladh | |
-| Improvements to reachability analysis for CVEs with downstream registry releases | @vladh | |
-| Represent registry releases and modified vendored crates with a distinct [PURL](https://github.com/package-url/purl-spec) in SBOM tooling | @vladh | |
-| Blog post: discussion of the producer/consumer tooling, some ways people are using it, how to audit a mirror | @vladh, @CAD97 | This likely will go on the Software Stewardship Lab or Canonical blog. |
+| Audit tool: diff a registry against its declared upstream, flag undeclared divergence | [@vladh] | |
+| Improvements to reachability analysis for CVEs with downstream registry releases | [@vladh] | |
+| Represent registry releases and modified vendored crates with a distinct [PURL](https://github.com/package-url/purl-spec) in SBOM tooling | [@vladh] | |
+| Blog post: discussion of the producer/consumer tooling, some ways people are using it, how to audit a mirror | [@vladh], @CAD97 | This likely will go on the Software Stewardship Lab or Canonical blog. |
 
 #### Self-hosted downstream registry implementation
 
@@ -114,14 +114,14 @@ This work all will hosted outside of the Rust Project, with no Project endorseme
 
 | Task | Owner(s) | Notes |
 | :-- | :-- | :-- |
-| Design: self-hosted downstream that serves registry releases | @smrckln | High level, focuses on interfaces + architecture |
-| Design: event feed of registry releases, signing | @andrew | |
-| Application code for self-hosted downstream registry | @smrckln | |
-| Infrastructure code for self-hosted downstream registry | @andrew | |
-| Prepare a series of registry releases to fix historical CVEs on old versions | @vladh | |
-| Launch sample downstream registry serving the historical CVE fixes | @andrew | |
-| Integrate event feed from downstream registry with ecosyste.ms | @andrew | |
-| Blog post: sample downstream downstream, what we learned along the way, next steps | @andrew, @smrckln | This will likely go on Andrew or ecosyste.ms's blog, or maybe the AWS Open Source blog |
+| Design: self-hosted downstream that serves registry releases | [@smrckln] | High level, focuses on interfaces + architecture |
+| Design: event feed of registry releases, signing | [@andrew] | |
+| Application code for self-hosted downstream registry | [@smrckln] | |
+| Infrastructure code for self-hosted downstream registry | [@andrew] | |
+| Prepare a series of registry releases to fix historical CVEs on old versions | [@vladh] | |
+| Launch sample downstream registry serving the historical CVE fixes | [@andrew] | |
+| Integrate event feed from downstream registry with ecosyste.ms | [@andrew] | |
+| Blog post: sample downstream downstream, what we learned along the way, next steps | [@andrew], [@smrckln] | This will likely go on Andrew or ecosyste.ms's blog, or maybe the AWS Open Source blog |
 
 ## Team asks
 
@@ -192,3 +192,7 @@ Needs to be discussed in the RFC, but almost certainly not. There might be an op
 To some extent. We want to add nicer support for distro packagers that want clearer provenance of their patched dependencies, for instance with `cargo-auditable`.
 
 That said, we expect that normative guidance will distinguish between undeclared divergence in dependencies served directly to end users, versus only used for bundling binaries. Linux packagers applying patches when bundling binaries, is not a dependency confusion attack in the same way as serving modified releases via a mirror that claims to match upstream.
+
+[@andrew]: https://github.com/andrew
+[@smrckln]: https://github.com/smrckln
+[@vladh]: https://github.com/vladh
