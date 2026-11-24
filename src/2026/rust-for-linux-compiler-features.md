@@ -2,7 +2,7 @@
 
 | Metadata            |                                    |
 |:--------------------|------------------------------------|
-| Contact    | @tomassedovic                      |
+| Contact    | @ojeda                      |
 | Status              | Accepted                           |
 | What and why        | Stabilize compiler features the Linux kernel depends on so it can build with only stable Rust |
 | Timespan            | 2026-2027                          |
