@@ -172,7 +172,7 @@ teams running internal mirrors; caching proxies such as Haven; Linux packagers. 
 
 ### Does this hurt maintainer autonomy?
 
-No; we don't know the solution yet, but we will be discussing this with a variety of maintainers during research tasks and we expect that any viable approach will need to be respectful of people's ownership of their projects. We shouldn't incentivize downstream registries bundling releases using larger and larger stacks of patches that they don't upstream. We expect that any Cargo resolver changes would prioritize newer semver-compatible releases from maintainers over existing registries releass, unles a registry explicitly packages further registry release on top of newer upstream.
+No; we don't know the solution yet, but we will be discussing this with a variety of maintainers during research tasks and we expect that any viable approach will need to be respectful of people's ownership of their projects. We shouldn't incentivize downstream registries bundling releases using larger and larger stacks of patches that they don't upstream. We expect that any Cargo resolver changes would prioritize newer semver-compatible releases from maintainers over existing registries releases, unless a registry explicitly packages further registry release on top of newer upstream.
 
 ### Does crates.io have to do anything?
 
