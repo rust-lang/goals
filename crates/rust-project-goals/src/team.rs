@@ -99,7 +99,7 @@ impl TeamName {
     pub fn url(&self) -> String {
         if let Some(website) = &self.data().website_data {
             if let Some(url) = &website.repo {
-                return url.to_string();
+                return url.clone();
             }
         }
 

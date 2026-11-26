@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use anyhow::Context;
 use chrono::{self, Datelike};
@@ -21,6 +21,8 @@ use rust_project_goals::{
     re,
     team::TeamName,
 };
+
+static HEADING_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(?m)^(#+)\s").unwrap());
 
 /// Extension trait to convert `spanned::Result<T>` into `anyhow::Result<T>`.
 trait IntoAnyhow<T> {
@@ -122,9 +124,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                 Ok(())
             }
 
-            BookItem::Separator => Ok(()),
-
-            BookItem::PartTitle(_) => Ok(()),
+            BookItem::Separator | BookItem::PartTitle(_) => Ok(()),
         }
     }
 
@@ -397,13 +397,11 @@ impl<'c> GoalPreprocessorWithContext<'c> {
 
             filtered_goals.sort_by_key(|g| g.metadata.title.content.clone());
 
-            let heading_re = Regex::new(r"(?m)^(#+)\s").unwrap();
             let preceding = &chapter.content[..range.start];
-            let context_level = heading_re
+            let context_level = HEADING_RE
                 .find_iter(preceding)
                 .last()
-                .map(|m| m.as_str().trim().len())
-                .unwrap_or(1);
+                .map_or(1, |m| m.as_str().trim().len());
 
             let output = if capture_value == "Funding" {
                 goal::format_funding_goal_sections(&filtered_goals, context_level + 1)
@@ -593,13 +591,11 @@ impl<'c> GoalPreprocessorWithContext<'c> {
 
             // Search backwards from the directive for the most recent heading to
             // determine the level at which to emit goal sub-headings.
-            let heading_re = Regex::new(r"(?m)^(#+)\s").unwrap();
             let preceding = &chapter.content[..range.start];
-            let context_level = heading_re
+            let context_level = HEADING_RE
                 .find_iter(preceding)
                 .last()
-                .map(|m| m.as_str().trim().len())
-                .unwrap_or(1);
+                .map_or(1, |m| m.as_str().trim().len());
 
             let output = goal::format_highlight_goal_sections(&filtered_goals, context_level + 1)
                 .into_anyhow()?;
@@ -652,12 +648,15 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         }
 
         let goals = self.goal_documents(chapter_path)?;
-        let mut goals_with_status: Vec<&GoalDocument> = goals
-            .iter()
-            .filter(|g| g.metadata.status.content.is_not_not_accepted())
-            .collect();
+        let mut goals_with_status: Vec<&GoalDocument> = goals.iter().collect();
 
-        goals_with_status.sort_by_key(|g| g.metadata.title.content.clone());
+        // note: false < true, so, accepted < not accepted
+        goals_with_status.sort_by_key(|g| {
+            (
+                g.metadata.title.content.clone(),
+                !g.metadata.status.content.is_not_not_accepted(),
+            )
+        });
 
         // Create subchapters for each goal
         let mut parent_names = chapter.parent_names.clone();
@@ -772,10 +771,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
                     match self.get_or_load_milestone_issues(milestone) {
                         Ok(issues) => Some(issues),
                         Err(e) => {
-                            eprintln!(
-                                "⚠️ Failed to load milestone issues for {}: {}",
-                                milestone, e
-                            );
+                            eprintln!("⚠️ Failed to load milestone issues for {milestone}: {e}");
                             None
                         }
                     }
@@ -892,8 +888,8 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         .chain(config.team_asks.iter().map(|(name, details)| {
             vec![
                 Spanned::here(format!("{name:?}")),
-                Spanned::here(details.short.to_string()),
-                Spanned::here(details.about.to_string()),
+                Spanned::here(details.short.clone()),
+                Spanned::here(details.about.clone()),
             ]
         }))
         .collect::<Vec<Vec<Spanned<String>>>>();
@@ -907,7 +903,10 @@ impl<'c> GoalPreprocessorWithContext<'c> {
     /// e.g., if invoked with `2024h2/xxx.md`, will find all goal documents in `2024h2`.
     fn goal_documents(&mut self, chapter_path: &Path) -> anyhow::Result<Arc<Vec<GoalDocument>>> {
         let Some(milestone_path) = chapter_path.parent() else {
-            anyhow::bail!("cannot get goal documents from `{chapter_path:?}`")
+            anyhow::bail!(
+                "cannot get goal documents from `{}`",
+                chapter_path.display()
+            )
         };
 
         if let Some(goals) = self.goal_document_map.get(milestone_path) {
@@ -928,7 +927,10 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         chapter_path: &Path,
     ) -> anyhow::Result<Arc<Vec<RoadmapDocument>>> {
         let Some(milestone_path) = chapter_path.parent() else {
-            anyhow::bail!("cannot get roadmap documents from `{chapter_path:?}`")
+            anyhow::bail!(
+                "cannot get roadmap documents from `{}`",
+                chapter_path.display()
+            )
         };
 
         if let Some(roadmaps) = self.roadmap_document_map.get(milestone_path) {
@@ -950,19 +952,16 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         milestone: &str,
     ) -> anyhow::Result<Arc<Vec<rust_project_goals::gh::issues::ExistingGithubIssue>>> {
         if let Some(cached_issues) = self.milestone_issues_cache.get(milestone) {
-            eprintln!("📦 Using cached issues for milestone: {}", milestone);
+            eprintln!("📦 Using cached issues for milestone: {milestone}");
             return Ok(cached_issues.clone());
         }
 
-        eprintln!(
-            "🌐 Loading issues from GitHub API for milestone: {}",
-            milestone
-        );
+        eprintln!("🌐 Loading issues from GitHub API for milestone: {milestone}");
         let repository = rust_project_goals::gh::issue_id::Repository::new("rust-lang", "goals");
         let issues =
             rust_project_goals::gh::issues::list_issues_in_milestone(&repository, milestone)
                 .map_err(|e| {
-                    anyhow::anyhow!("Failed to load milestone issues for {}: {}", milestone, e)
+                    anyhow::anyhow!("Failed to load milestone issues for {milestone}: {e}")
                 })?;
 
         eprintln!(
@@ -990,16 +989,15 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         let table_end = lines[table_start..]
             .iter()
             .position(|line| !line.trim_start().starts_with('|'))
-            .map(|pos| table_start + pos)
-            .unwrap_or(lines.len());
+            .map_or(lines.len(), |pos| table_start + pos);
 
         // Calculate byte offset to the start of the table_end line
         let mut offset = 0;
-        for i in 0..table_end {
+        for (i, line) in lines.iter().enumerate().take(table_end) {
             if i > 0 {
                 offset += 1; // newline
             }
-            offset += lines[i].len();
+            offset += line.len();
         }
 
         if table_end < lines.len() {
@@ -1069,8 +1067,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
 
             if let Some(table_end) = Self::find_markdown_table_end(&chapter.content) {
                 let insertion_text = format!(
-                    "| Teams            | {} |\n| Task owners      | {} |\n",
-                    teams_text, task_owners_text
+                    "| Teams            | {teams_text} |\n| Task owners      | {task_owners_text} |\n"
                 );
                 chapter.content.insert_str(table_end, &insertion_text);
             }
@@ -1097,7 +1094,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             };
 
             if let Some(table_end) = Self::find_markdown_table_end(&chapter.content) {
-                let insertion_text = format!("| Task owners      | {} |\n", task_owners_text);
+                let insertion_text = format!("| Task owners      | {task_owners_text} |\n");
                 chapter.content.insert_str(table_end, &insertion_text);
             }
         }
@@ -1165,8 +1162,8 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             .and_then(|n| n.to_str())
             .ok_or_else(|| {
                 anyhow::anyhow!(
-                    "Could not determine milestone from chapter path: {:?}",
-                    chapter_path
+                    "Could not determine milestone from chapter path: {}",
+                    chapter_path.display()
                 )
             })?;
 
@@ -1179,8 +1176,8 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             // Reverse to show newest first
             let blog_content = self.generate_blog_post_content(milestone, *year, *month)?;
 
-            let chapter_name = format!("{} Blog Post", month_name);
-            let virtual_path = format!("blog-post-{:04}-{:02}.md", year, month);
+            let chapter_name = format!("{month_name} Blog Post");
+            let virtual_path = format!("blog-post-{year:04}-{month:02}.md");
             let path = Path::new(&virtual_path);
 
             let mut blog_chapter =
@@ -1201,11 +1198,11 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         for team_name in teams_with_champions {
             let team_name_str = &team_name.data().name;
             // Create a team folder chapter
-            let team_chapter_name = format!("{} Team Reports", team_name_str);
-            let team_virtual_path = format!("{}/index.md", team_name_str);
+            let team_chapter_name = format!("{team_name_str} Team Reports");
+            let team_virtual_path = format!("{team_name_str}/index.md");
             let team_path = Path::new(&team_virtual_path);
 
-            let team_content = format!("# {} Team Champion Reports\n\nThis section contains champion reports for the {} team.", team_name_str, team_name_str);
+            let team_content = format!("# {team_name_str} Team Champion Reports\n\nThis section contains champion reports for the {team_name_str} team.");
             let mut team_chapter = Chapter::new(
                 &team_chapter_name,
                 team_content,
@@ -1265,21 +1262,18 @@ impl<'c> GoalPreprocessorWithContext<'c> {
     ) -> anyhow::Result<String> {
         use chrono::NaiveDate;
 
-        eprintln!(
-            "📝 Generating blog post for {}-{:02} (milestone: {})",
-            year, month, milestone
-        );
+        eprintln!("📝 Generating blog post for {year}-{month:02} (milestone: {milestone})");
 
         // Calculate start and end dates for the month
         let start_date = NaiveDate::from_ymd_opt(year, month, 1)
-            .ok_or_else(|| anyhow::anyhow!("Invalid date: {}-{:02}-01", year, month))?;
+            .ok_or_else(|| anyhow::anyhow!("Invalid date: {year}-{month:02}-01"))?;
         // The `end_date` is an exclusive range, so this will match comments within the given `month`
         let end_date = if month == 12 {
             NaiveDate::from_ymd_opt(year + 1, 1, 1)
         } else {
             NaiveDate::from_ymd_opt(year, month + 1, 1)
         }
-        .ok_or_else(|| anyhow::anyhow!("Invalid end date calculation for {}-{:02}", year, month))?;
+        .ok_or_else(|| anyhow::anyhow!("Invalid end date calculation for {year}-{month:02}"))?;
 
         // Get repository from context - assuming rust-lang/goals as default
         let repository = rust_project_goals::gh::issue_id::Repository::new("rust-lang", "goals");
@@ -1298,7 +1292,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             false,
             Order::OldestFirst,
         )
-        .map_err(|e| anyhow::anyhow!("Failed to generate blog post content: {}", e))?;
+        .map_err(|e| anyhow::anyhow!("Failed to generate blog post content: {e}"))?;
 
         Ok(content)
     }
@@ -1313,8 +1307,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
         let start_date = end_date - chrono::TimeDelta::days(90);
 
         eprintln!(
-            "👥 Generating champion report for {} team, {start_date} - {end_date} (milestone: {})",
-            team_name, milestone
+            "👥 Generating champion report for {team_name} team, {start_date} - {end_date} (milestone: {milestone})"
         );
 
         // Get repository from context - assuming rust-lang/goals as default
@@ -1334,7 +1327,7 @@ impl<'c> GoalPreprocessorWithContext<'c> {
             false,
             Order::NewestFirst,
         )
-        .map_err(|e| anyhow::anyhow!("Failed to generate champion report content: {}", e))?;
+        .map_err(|e| anyhow::anyhow!("Failed to generate champion report content: {e}"))?;
 
         Ok(content)
     }

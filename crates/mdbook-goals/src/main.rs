@@ -44,7 +44,7 @@ fn handle_supports(pre: &dyn Preprocessor, renderer: &str) -> anyhow::Result<()>
     if supported {
         Ok(())
     } else {
-        anyhow::bail!("renderer `{}` unsupported", renderer)
+        anyhow::bail!("renderer `{renderer}` unsupported")
     }
 }
 

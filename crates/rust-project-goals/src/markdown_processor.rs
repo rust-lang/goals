@@ -71,7 +71,7 @@ impl MarkdownProcessor {
         let mut content = content;
         for username in &usernames {
             if let Ok(display_name) = self.get_display_name(username, state) {
-                content = content.replace(username, &format!("[{}][]", display_name));
+                content = content.replace(username, &format!("[{display_name}][]"));
             }
         }
 
@@ -124,7 +124,7 @@ impl MarkdownProcessor {
     fn insert_links(&self, mut content: String) -> anyhow::Result<String> {
         content.push_str("\n\n");
         for (name, url) in &self.config.links {
-            content.push_str(&format!("[{}]: {}\n", name, url));
+            content.push_str(&format!("[{name}]: {url}\n"));
         }
         Ok(content)
     }
