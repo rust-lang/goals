@@ -91,7 +91,7 @@ Once we have reflection providing a stable interface to the compiler, we can ext
 | [compiler] | Medium        | Standard reviews                                         |
 | [lang]     | Large         | Design meeting, Stabilization                            |
 | [libs]     | Medium        | ACP discussion & approval                                |
-| [types]    | Small         | General discussion on any additional type-system changes |
+| [types]    | Medium        | Check design, Discussions                                |
 
 ## Funding
 
