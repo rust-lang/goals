@@ -14,7 +14,7 @@
 
 ## Summary
 
-Cargo's stable source replacement functionality is under-documented and powerful. It is being used in many ways, including some not considered when the feature was last documented. We will inventory how it is being used and abused, and update the documentation to describe what tangible risks to look out for under "use at your own risk". Many companies rely on source replacement to emergency-replace open source code when a vulnerability is found in it. Given that this is already technically possible, we will propose a RFC, for a recommended way to do so, with Cargo support, that can be distinguished from a malicious dependency confusion attack. Outside of Cargo and the Rust Project, we will experiment with supporting tooling such as for auditing registries for undeclared divergence, and sample implementation of a self-hosted dowstream registry that serves registry releases.
+Cargo's stable source replacement functionality is under-documented and powerful. It is being used in many ways, including some not considered when the feature was last documented. We will inventory how it is being used and abused, and update the documentation to describe what tangible risks to look out for under "use at your own risk". Many companies rely on source replacement to emergency-replace open source code when a vulnerability is found in it. Given that this is already technically possible, we will propose a RFC for a recommended way to do so, with Cargo support, that can be distinguished from a malicious dependency confusion attack. Outside of Cargo and the Rust Project, we will experiment with supporting tooling, such as a way to audit registries for undeclared divergence, as well as with a sample implementation of a downstream registry that serves releases with clearly advertised modifications.
 
 ## Motivation
 
@@ -172,7 +172,7 @@ teams running internal mirrors; caching proxies such as Haven; Linux packagers. 
 
 ### Does this hurt maintainer autonomy?
 
-No; we don't know the solution yet, but we will be discussing this with a variety of maintainers during research tasks and we expect that any viable approach will need to be respectful of people's ownership of their projects. We shouldn't incentivize downstream registries bundling releases using larger and larger stacks of patches that they don't upstream. We expect that any Cargo resolver changes would prioritize newer semver-compatible releases from maintainers over existing registries releass, unles a registry explicitly packages further registry release on top of newer upstream.
+No; we don't know the solution yet, but we will be discussing this with a variety of maintainers during research tasks and we expect that any viable approach will need to be respectful of people's ownership of their projects. We shouldn't incentivize downstream registries bundling releases using larger and larger stacks of patches that they don't upstream. We expect that any Cargo resolver changes would prioritize newer semver-compatible releases from maintainers over existing registries releases, unless a registry explicitly packages further registry release on top of newer upstream.
 
 ### Does crates.io have to do anything?
 
