@@ -29,6 +29,7 @@ The reflection API (see [min-type-reflection](https://goals.rust-lang.org/2026/m
 Code-analysis being restricting to const-eval handicaps it, given:
 - Const-eval is inherently limited in what it can evaluate. There are no statics, and lots of language-features are still unstable (no traits) and will be so for a long time. This means large parts of the ecosystem do not support const.
 - Const-eval is not designed for speed, it focuses on type system correctness. While execution speed will not be noticeable for simple applications we want users to be able to write performant complex code-analysis such as model-checking. A similar performance consideration exists for some use cases of const eval. For example converting assets like images to a common format during compilation these can then be made part of the binary.
+- Type system correctness and therefore const-eval is incompatible with the non-deterministic behavior needed for some code-analysis applications. For example sometimes it is necessary for tools to make network calls.
 
 While this may be resolved by adding the ability for const-eval to call out to external tools that has other downsides:
 - External tools can have complex runtime dependencies (e.g. dylibs written in other languages) and can be platform dependent. This makes them hard to use.
@@ -38,7 +39,7 @@ We've long wanted Wasm in the compiler to distribute proc macros and build scrip
  
 ### What we propose to do about it
 
-Experiment with adding Wasm based compiler plugins. These would be triggered from a new code-analysis interface and from const-eval directly. The new interface would allow the Wasm code access to the reflection API for code-analysis. Since Wasm is optimized in LLVM and Wasm-opt and Wasm interpreters often support JIT to speed up frequently executed Wasm code, this can result in near native performance. This enables writing fast code-analysis in normal Rust without the limitations of const-eval. In addition tooling written in other languages can be compiled to Wasm as well. The reflection interface would then function like a small shim between that tooling and the compiler.
+Experiment with adding Wasm based compiler plugins. These would be triggered from a new code-analysis interface and from const-eval directly. The new interface would allow the Wasm code access to the reflection API for code-analysis. Since Wasm is optimized in LLVM and Wasm-opt and Wasm interpreters often support JIT to speed up frequently executed Wasm code, this can result in near native performance. This enables writing fast code-analysis in normal Rust without the limitations of const-eval. In addition tooling written in other languages can be compiled to Wasm as well. The reflection interface would then function like a small shim between that tooling and the compiler. When used for code-analysis Wasm will be free to access the network, do file-IO or show other non-deterministic behavior.
 
 We will reuse and build upon the exploration done for proc macros. We will make sure to add a Wasm runtime such that it can easily be extended for later use to speed up proc macros and build-scripts. 
 
